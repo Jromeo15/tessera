@@ -1,30 +1,45 @@
-export default function Board() {
+import { CELL_SIZE } from "../constants";
+
+export default function Board({ children }) {
   const cols = 7;
   const rows = 10;
 
-  const cells = Array.from({ length: cols * rows });
-
   return (
     <div
+      className="board"
       style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${cols}, 50px)`,
-        gap: 2,
-        padding: 10,
+        position: "relative",
+        width: cols * CELL_SIZE,
+        height: rows * CELL_SIZE,
+        margin: "0 auto",
         border: "2px solid black",
+        backgroundColor: "#f2f2f2",
       }}
     >
-      {cells.map((_, i) => (
-        <div
-          key={i}
-          style={{
-            width: 50,
-            height: 50,
-            background: "#f0f0f0",
-            border: "1px solid #ddd",
-          }}
-        />
-      ))}
+      {/* grid visual SOLO decorativo */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "grid",
+          gridTemplateColumns: `repeat(${cols}, ${CELL_SIZE}px)`,
+          gridTemplateRows: `repeat(${rows}, ${CELL_SIZE}px)`,
+        }}
+      >
+        {Array.from({ length: cols * rows }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+              outline: "1px solid #ddd",
+              boxSizing: "border-box",
+            }}
+          />
+        ))}
+      </div>
+
+      {children}
     </div>
   );
 }
