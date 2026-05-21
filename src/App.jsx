@@ -80,7 +80,7 @@ export default function App() {
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-end",
-          paddingBottom: 60,
+          paddingBottom: 200,
         }}
       >
         <Board>
