@@ -7,7 +7,7 @@ import { CELL_SIZE } from "../constants";
 const BOARD_COLS = 7;
 const BOARD_ROWS = 10;
 
-export default function App() {
+export default function App({ onBack }) {
   const [showVictory, setShowVictory] = useState(false);
 
   const [pieces] = useState([
@@ -17,7 +17,7 @@ export default function App() {
     { id: 4, color: "orange", shape: SHAPES[3] },
   ]);
 
-  // 🔥 AHORA MANUAL
+  // 🔥 CHECK VICTORIA
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;
@@ -52,10 +52,7 @@ export default function App() {
       });
     });
 
-    const win = grid.every((row) =>
-      row.every((cell) => cell)
-    );
-
+    const win = grid.every((row) => row.every(Boolean));
     setShowVictory(win);
   };
 
@@ -67,10 +64,33 @@ export default function App() {
         flexDirection: "column",
       }}
     >
-      <h1 style={{ textAlign: "center" }}>
-        Tessera
-      </h1>
+      {/* HEADER */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "10px 20px",
+        }}
+      >
+        <h1 style={{ margin: 0 }}>Puzle 1</h1>
 
+        <button
+          onClick={onBack}
+          style={{
+            padding: "8px 14px",
+            borderRadius: 8,
+            border: "none",
+            cursor: "pointer",
+            background: "#333",
+            color: "white",
+          }}
+        >
+          ← Volver
+        </button>
+      </div>
+
+      {/* BOARD */}
       <div
         style={{
           flex: 1,
@@ -87,14 +107,13 @@ export default function App() {
               id={p.id}
               color={p.color}
               shape={p.shape}
-
-              // 🔥 NUEVO
               onDrop={checkVictory}
             />
           ))}
         </Board>
       </div>
 
+      {/* VICTORIA */}
       {showVictory && (
         <div
           style={{
@@ -115,14 +134,11 @@ export default function App() {
               minWidth: 300,
               position: "relative",
               textAlign: "center",
-              boxShadow:
-                "0 0 20px rgba(0,0,0,0.3)",
+              boxShadow: "0 0 20px rgba(0,0,0,0.3)",
             }}
           >
             <button
-              onClick={() =>
-                window.location.reload()
-              }
+              onClick={() => setShowVictory(false)}
               style={{
                 position: "absolute",
                 top: 10,
@@ -137,9 +153,22 @@ export default function App() {
             </button>
 
             <h2>VICTORIA</h2>
-            <p>
-              Has rellenado todo el tablero.
-            </p>
+            <p>Has rellenado todo el tablero.</p>
+
+            <button
+              onClick={onBack}
+              style={{
+                marginTop: 20,
+                padding: "10px 16px",
+                borderRadius: 8,
+                border: "none",
+                cursor: "pointer",
+                background: "#ff2e63",
+                color: "white",
+              }}
+            >
+              Volver al menú
+            </button>
           </div>
         </div>
       )}

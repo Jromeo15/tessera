@@ -10,7 +10,11 @@ export default function App() {
   }
 
   if (screen === "puzzle1") {
-    return <Puzzle1 onBack={() => setScreen("home")} />;
+    return (
+      <Puzzle1
+        onBack={() => setScreen("home")}
+      />
+    );
   }
 
   return null;
