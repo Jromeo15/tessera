@@ -30,10 +30,12 @@ export default function Piece({
   shape,
   color,
   id,
+  shapeMode = "square",
   initialX = 0,
   initialY = -240,
   onDrop,
 }) {
+  const isTriangle = shapeMode === "triangle";
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE) + 1,
     row: Math.round(initialY / CELL_SIZE),
@@ -167,7 +169,9 @@ export default function Piece({
 
     if (moved.current) return;
 
-    setRot((r) => (r + 1) % 4);
+    if (!isTriangle) {
+      setRot((r) => (r + 1) % 4);
+    }
   };
 
   // -------------------------
@@ -258,39 +262,36 @@ export default function Piece({
         pointerEvents: "none",
       }}
     >
-      {rotatedShape.flat().map((cell, i) =>
-        cell ? (
-          <div
-            key={i}
-            className="piece-cell"
-            style={{
-              width: CELL_SIZE,
-              height: CELL_SIZE,
-
-              background: color,
-
-              outline:
-                "1px solid rgba(0,0,0,0.2)",
-
-              boxSizing: "border-box",
-
-              // 🔥 SOLO LOS 1s CAPTURAN
-              pointerEvents: "auto",
-            }}
-          />
-        ) : (
+    {rotatedShape.flat().map((cell, i) => {
+      if (!cell) {
+        return (
           <div
             key={i}
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
-
-              // 🔥 LOS 0s SON TRANSPARENTES
               pointerEvents: "none",
             }}
           />
-        )
-      )}
+        );
+      }
+
+      return (
+        <div
+          key={i}
+          className={`piece-cell type-${cell}`}
+          style={{
+            width: CELL_SIZE,
+            height: CELL_SIZE,
+
+            background: color,
+
+            boxSizing: "border-box",
+            pointerEvents: "auto",
+          }}
+        />
+      );
+    })}
     </div>
   );
 }

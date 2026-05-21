@@ -140,6 +140,11 @@ code {
 
   max-width: 420px;
   width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 /* Título */
@@ -183,4 +188,36 @@ code {
 
 .home__button:active {
   transform: scale(0.98);
+}
+.piece-cell.type-0 {
+  background: transparent;
+  pointer-events: none;
+}
+
+.piece-cell.type-1 {
+  background: var(--accent);
+}
+
+.piece-cell {
+  background: var(--accent);
+}
+
+.piece-cell.type-2 {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.piece-cell.type-3 {
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.piece-cell.type-4 {
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+.piece-cell.type-5 {
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.piece-cell.type-6 {
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
