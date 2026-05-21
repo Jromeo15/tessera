@@ -1,7 +1,7 @@
 import { CELL_SIZE } from "../constants";
 
 export default function Board({ children }) {
-  const cols = 7;
+  const cols = 8;
   const rows = 10;
 
   return (

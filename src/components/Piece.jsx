@@ -33,7 +33,7 @@ const findTopLeft = (shape) => {
 };
 
 export default function Piece({ shape, color, id }) {
-  const [pos, setPos] = useState({ x: 0, y: -200 });
+  const [pos, setPos] = useState({ x: 0, y: -240 });
   const [rot, setRot] = useState(0);
 
   const dragging = useRef(false);
