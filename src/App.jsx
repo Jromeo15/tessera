@@ -23,12 +23,10 @@ export default function App() {
       const board = document.querySelector(".board");
       if (!board) return;
 
-      // grid lógico vacío
       const grid = Array.from({ length: BOARD_ROWS }, () =>
         Array(BOARD_COLS).fill(false)
       );
 
-      // todas las piezas
       const piecesDom = document.querySelectorAll(".piece");
 
       piecesDom.forEach((piece) => {
@@ -55,7 +53,6 @@ export default function App() {
         });
       });
 
-      // comprobar si todo está cubierto
       const win = grid.every((row) =>
         row.every((cell) => cell)
       );
@@ -64,7 +61,6 @@ export default function App() {
     };
 
     const interval = setInterval(checkVictory, 200);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -83,7 +79,8 @@ export default function App() {
           flex: 1,
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "flex-end",
+          paddingBottom: 20,
         }}
       >
         <Board>
@@ -137,7 +134,6 @@ export default function App() {
             </button>
 
             <h2>VICTORIA</h2>
-
             <p>Has rellenado todo el tablero.</p>
           </div>
         </div>
