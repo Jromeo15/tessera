@@ -23,13 +23,16 @@ const rotateMatrix = (matrix) => {
 const findTopLeft = (shape) => {
   for (let r = 0; r < shape.length; r++) {
     for (let c = 0; c < shape[0].length; c++) {
-      if (shape[r][c]) {
-        return { r, c };
-      }
+      if (shape[r][c]) return { r, c };
     }
   }
-
   return { r: 0, c: 0 };
+};
+
+// 🔥 HIT TEST GLOBAL REAL
+const getCellFromPoint = (x, y) => {
+  const el = document.elementFromPoint(x, y);
+  return el?.closest?.(".piece-cell") || null;
 };
 
 export default function Piece({ shape, color, id }) {
@@ -44,11 +47,9 @@ export default function Piece({ shape, color, id }) {
 
   const rotatedShape = useMemo(() => {
     let s = shape;
-
     for (let i = 0; i < rot; i++) {
       s = rotateMatrix(s);
     }
-
     return s;
   }, [shape, rot]);
 
@@ -58,10 +59,7 @@ export default function Piece({ shape, color, id }) {
 
     activePieceId = id;
 
-    start.current = {
-      x: clientX,
-      y: clientY,
-    };
+    start.current = { x: clientX, y: clientY };
 
     offset.current = {
       x: clientX - pos.x,
@@ -91,7 +89,6 @@ export default function Piece({ shape, color, id }) {
     if (activePieceId !== id) return;
 
     const board = document.querySelector(".board");
-
     if (!board) return;
 
     const rect = board.getBoundingClientRect();
@@ -123,44 +120,46 @@ export default function Piece({ shape, color, id }) {
     activePieceId = null;
   };
 
+  // -------------------------
+  // POINTER START (mouse/touch)
+  // -------------------------
   const onMouseDown = (e) => {
-    if (!e.target.closest(".piece-cell")) return;
+    const cell = getCellFromPoint(e.clientX, e.clientY);
+    if (!cell) return;
+
     startDrag(e.clientX, e.clientY);
   };
 
   const onTouchStart = (e) => {
     const touch = e.touches[0];
-  
-    if (!e.target.closest(".piece-cell")) return;
-  
+
+    const cell = getCellFromPoint(touch.clientX, touch.clientY);
+    if (!cell) return;
+
     startDrag(touch.clientX, touch.clientY);
   };
 
+  // -------------------------
+  // ROTATION CLICK
+  // -------------------------
   const onClick = (e) => {
-    if (!e.target.closest(".piece-cell")) return;
+    const cell = getCellFromPoint(e.clientX, e.clientY);
+    if (!cell) return;
+
     if (moved.current) return;
-  
+
     setRot((r) => (r + 1) % 4);
   };
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      moveDrag(e.clientX, e.clientY);
-    };
-
+    const handleMouseMove = (e) => moveDrag(e.clientX, e.clientY);
     const handleTouchMove = (e) => {
-      const touch = e.touches[0];
-
-      moveDrag(touch.clientX, touch.clientY);
+      const t = e.touches[0];
+      moveDrag(t.clientX, t.clientY);
     };
 
-    const handleMouseUp = () => {
-      endDrag();
-    };
-
-    const handleTouchEnd = () => {
-      endDrag();
-    };
+    const handleMouseUp = () => endDrag();
+    const handleTouchEnd = () => endDrag();
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
@@ -217,7 +216,7 @@ export default function Piece({ shape, color, id }) {
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
-              pointerEvents: "none", // <- importante
+              pointerEvents: "none",
             }}
           />
         )
