@@ -20,23 +20,25 @@ const rotateMatrix = (matrix) => {
   return rotated;
 };
 
-const findTopLeft = (shape) => {
-  for (let r = 0; r < shape.length; r++) {
-    for (let c = 0; c < shape[0].length; c++) {
-      if (shape[r][c]) return { r, c };
-    }
-  }
-  return { r: 0, c: 0 };
-};
-
-// 🔥 HIT TEST GLOBAL REAL (lo dejo porque lo usas)
+// hit test
 const getCellFromPoint = (x, y) => {
   const el = document.elementFromPoint(x, y);
   return el?.closest?.(".piece-cell") || null;
 };
 
-export default function Piece({ shape, color, id }) {
-  const [pos, setPos] = useState({ x: 0, y: -240 });
+export default function Piece({
+  shape,
+  color,
+  id,
+  initialX = 0,
+  initialY = -240,
+}) {
+  // 🔥 posición estable en grid (derivada del spawn inicial)
+  const [gridPos, setGridPos] = useState(() => ({
+    col: Math.round(initialX / CELL_SIZE) + 1,
+    row: Math.round(initialY / CELL_SIZE),
+  }));
+
   const [rot, setRot] = useState(0);
 
   const dragging = useRef(false);
@@ -53,6 +55,9 @@ export default function Piece({ shape, color, id }) {
     return s;
   }, [shape, rot]);
 
+  // -------------------------
+  // DRAG START
+  // -------------------------
   const startDrag = (clientX, clientY) => {
     dragging.current = true;
     moved.current = false;
@@ -62,8 +67,8 @@ export default function Piece({ shape, color, id }) {
     start.current = { x: clientX, y: clientY };
 
     offset.current = {
-      x: clientX - pos.x,
-      y: clientY - pos.y,
+      x: clientX - gridPos.col * CELL_SIZE,
+      y: clientY - gridPos.row * CELL_SIZE,
     };
   };
 
@@ -76,9 +81,9 @@ export default function Piece({ shape, color, id }) {
     if (dx > 3 || dy > 3) {
       moved.current = true;
 
-      setPos({
-        x: clientX - offset.current.x,
-        y: clientY - offset.current.y,
+      setGridPos({
+        col: Math.round((clientX - offset.current.x) / CELL_SIZE),
+        row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
     }
   };
@@ -93,9 +98,8 @@ export default function Piece({ shape, color, id }) {
 
     const rect = board.getBoundingClientRect();
 
-    // 🔥 FIX CLAVE: usar posición REAL dentro del board
-    const xInside = pos.x;
-    const yInside = pos.y;
+    const xInside = gridPos.col * CELL_SIZE;
+    const yInside = gridPos.row * CELL_SIZE;
 
     const inside =
       xInside >= 0 &&
@@ -108,22 +112,17 @@ export default function Piece({ shape, color, id }) {
       return;
     }
 
-    // 🔥 SNAP CORRECTO (referencia estable al board)
-    const col = Math.round(xInside / CELL_SIZE);
-    const row = Math.round(yInside / CELL_SIZE);
-
-    const { r, c } = findTopLeft(rotatedShape);
-
-    setPos({
-      x: col * CELL_SIZE,
-      y: row * CELL_SIZE,
+    // snap final estable
+    setGridPos({
+      col: Math.round(xInside / CELL_SIZE),
+      row: Math.round(yInside / CELL_SIZE),
     });
 
     activePieceId = null;
   };
 
   // -------------------------
-  // POINTER START (mouse/touch)
+  // INPUTS
   // -------------------------
   const onMouseDown = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
@@ -141,46 +140,18 @@ export default function Piece({ shape, color, id }) {
     startDrag(touch.clientX, touch.clientY);
   };
 
-  // -------------------------
-  // ROTATION CLICK
-  // -------------------------
   const onClick = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
     if (!cell) return;
-  
+
     if (moved.current) return;
-  
-    const board = document.querySelector(".board");
-    if (!board) return;
-  
-    const rect = board.getBoundingClientRect();
-  
-    // posición actual en grid
-    const col = Math.round(pos.x / CELL_SIZE);
-    const row = Math.round(pos.y / CELL_SIZE);
-  
-    // rotamos primero
-    setRot((r) => {
-      const newRot = (r + 1) % 4;
-  
-      // recalculamos shape rotado manualmente
-      let s = shape;
-      for (let i = 0; i < newRot; i++) {
-        s = rotateMatrix(s);
-      }
-  
-      const { r: rr, c: cc } = findTopLeft(s);
-  
-      // 🔥 mantenemos la pieza en el mismo tile lógico
-      setPos({
-        x: col * CELL_SIZE - cc * CELL_SIZE,
-        y: row * CELL_SIZE - rr * CELL_SIZE,
-      });
-  
-      return newRot;
-    });
+
+    setRot((r) => (r + 1) % 4);
   };
 
+  // -------------------------
+  // GLOBAL EVENTS
+  // -------------------------
   useEffect(() => {
     const handleMouseMove = (e) => moveDrag(e.clientX, e.clientY);
 
@@ -204,11 +175,10 @@ export default function Piece({ shape, color, id }) {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
-
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [pos, rotatedShape]);
+  }, [gridPos, rot]);
 
   return (
     <div
@@ -218,11 +188,10 @@ export default function Piece({ shape, color, id }) {
       onClick={onClick}
       style={{
         position: "absolute",
-        left: pos.x,
-        top: pos.y,
+        left: gridPos.col * CELL_SIZE,
+        top: gridPos.row * CELL_SIZE,
         display: "grid",
         gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
-        gap: 0,
         cursor: "grab",
         userSelect: "none",
         touchAction: "none",
@@ -232,8 +201,8 @@ export default function Piece({ shape, color, id }) {
       {rotatedShape.flat().map((cell, i) =>
         cell ? (
           <div
-            className="piece-cell"
             key={i}
+            className="piece-cell"
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
