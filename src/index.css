@@ -109,3 +109,51 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.home {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at top, #919cbc, #3353a5);
+}
+
+.home__card {
+  text-align: center;
+  padding: 40px 50px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.home__title {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.home__subtitle {
+  opacity: 1;
+  color: black;
+  margin-bottom: 30px;
+}
+
+.home__button {
+  padding: 14px 28px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #ff6a00, #ff2e63);
+  color: white;
+
+  transition: 0.2s;
+}
+
+.home__button:hover {
+  transform: scale(1.05);
+}

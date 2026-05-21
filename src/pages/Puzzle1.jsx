@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Board from "./components/Board";
-import Piece from "./components/Piece";
-import { SHAPES } from "./shapes";
-import { CELL_SIZE } from "./constants";
+import Board from "../components/Board";
+import Piece from "../components/Piece";
+import { SHAPES } from "../shapes";
+import { CELL_SIZE } from "../constants";
 
 const BOARD_COLS = 7;
 const BOARD_ROWS = 10;
