@@ -32,7 +32,7 @@ const findTopLeft = (shape) => {
   return { r: 0, c: 0 };
 };
 
-export default function Piece({shape,color,id,checkVictory}) {
+export default function Piece({ shape, color, id }) {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [rot, setRot] = useState(0);
 
@@ -106,7 +106,7 @@ export default function Piece({shape,color,id,checkVictory}) {
       relativeY <= rect.height;
 
     if (!inside) {
-      checkVictory();
+      activePieceId = null;
       return;
     }
 
