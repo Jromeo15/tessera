@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Board from "./components/Board";
 import Piece from "./components/Piece";
 import { SHAPES } from "./shapes";
@@ -17,52 +17,47 @@ export default function App() {
     { id: 4, color: "orange", shape: SHAPES[3] },
   ]);
 
-  // comprueba victoria continuamente
-  useEffect(() => {
-    const checkVictory = () => {
-      const board = document.querySelector(".board");
-      if (!board) return;
+  // 🔥 AHORA MANUAL
+  const checkVictory = () => {
+    const board = document.querySelector(".board");
+    if (!board) return;
 
-      const grid = Array.from({ length: BOARD_ROWS }, () =>
-        Array(BOARD_COLS).fill(false)
-      );
+    const grid = Array.from({ length: BOARD_ROWS }, () =>
+      Array(BOARD_COLS).fill(false)
+    );
 
-      const piecesDom = document.querySelectorAll(".piece");
+    const piecesDom = document.querySelectorAll(".piece");
 
-      piecesDom.forEach((piece) => {
-        const cells = piece.querySelectorAll(".piece-cell");
+    piecesDom.forEach((piece) => {
+      const cells = piece.querySelectorAll(".piece-cell");
 
-        cells.forEach((cell) => {
-          const rect = cell.getBoundingClientRect();
-          const boardRect = board.getBoundingClientRect();
+      cells.forEach((cell) => {
+        const rect = cell.getBoundingClientRect();
+        const boardRect = board.getBoundingClientRect();
 
-          const x = rect.left - boardRect.left;
-          const y = rect.top - boardRect.top;
+        const x = rect.left - boardRect.left;
+        const y = rect.top - boardRect.top;
 
-          const col = Math.round(x / CELL_SIZE);
-          const row = Math.round(y / CELL_SIZE);
+        const col = Math.round(x / CELL_SIZE);
+        const row = Math.round(y / CELL_SIZE);
 
-          if (
-            row >= 0 &&
-            row < BOARD_ROWS &&
-            col >= 0 &&
-            col < BOARD_COLS
-          ) {
-            grid[row][col] = true;
-          }
-        });
+        if (
+          row >= 0 &&
+          row < BOARD_ROWS &&
+          col >= 0 &&
+          col < BOARD_COLS
+        ) {
+          grid[row][col] = true;
+        }
       });
+    });
 
-      const win = grid.every((row) =>
-        row.every((cell) => cell)
-      );
+    const win = grid.every((row) =>
+      row.every((cell) => cell)
+    );
 
-      setShowVictory(win);
-    };
-
-    const interval = setInterval(checkVictory, 200);
-    return () => clearInterval(interval);
-  }, []);
+    setShowVictory(win);
+  };
 
   return (
     <div
@@ -72,7 +67,9 @@ export default function App() {
         flexDirection: "column",
       }}
     >
-      <h1 style={{ textAlign: "center" }}>Tessera</h1>
+      <h1 style={{ textAlign: "center" }}>
+        Tessera
+      </h1>
 
       <div
         style={{
@@ -90,6 +87,9 @@ export default function App() {
               id={p.id}
               color={p.color}
               shape={p.shape}
+
+              // 🔥 NUEVO
+              onDrop={checkVictory}
             />
           ))}
         </Board>
@@ -115,11 +115,14 @@ export default function App() {
               minWidth: 300,
               position: "relative",
               textAlign: "center",
-              boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+              boxShadow:
+                "0 0 20px rgba(0,0,0,0.3)",
             }}
           >
             <button
-              onClick={() => window.location.reload()}
+              onClick={() =>
+                window.location.reload()
+              }
               style={{
                 position: "absolute",
                 top: 10,
@@ -134,7 +137,9 @@ export default function App() {
             </button>
 
             <h2>VICTORIA</h2>
-            <p>Has rellenado todo el tablero.</p>
+            <p>
+              Has rellenado todo el tablero.
+            </p>
           </div>
         </div>
       )}

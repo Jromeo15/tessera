@@ -32,6 +32,7 @@ export default function Piece({
   id,
   initialX = 0,
   initialY = -240,
+  onDrop,
 }) {
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE) + 1,
@@ -126,6 +127,7 @@ export default function Piece({
     });
 
     activePieceId = null;
+    onDrop?.();
   };
 
   // -------------------------
