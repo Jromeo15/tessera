@@ -1,16 +1,17 @@
 export default function Board() {
-  const size = 5;
+  const cols = 7;
+  const rows = 10;
 
-  const cells = Array.from({ length: size * size });
+  const cells = Array.from({ length: cols * rows });
 
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(5, 50px)",
-        width: "fit-content",
+        gridTemplateColumns: `repeat(${cols}, 50px)`,
+        gap: 2,
+        padding: 10,
         border: "2px solid black",
-        marginTop: 20,
       }}
     >
       {cells.map((_, i) => (
@@ -19,8 +20,8 @@ export default function Board() {
           style={{
             width: 50,
             height: 50,
-            border: "1px solid #ccc",
-            boxSizing: "border-box",
+            background: "#f0f0f0",
+            border: "1px solid #ddd",
           }}
         />
       ))}

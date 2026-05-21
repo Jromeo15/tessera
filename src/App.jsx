@@ -3,14 +3,28 @@ import Piece from "./components/Piece";
 
 export default function App() {
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Tessera</h1>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+      <h1 style={{ textAlign: "center" }}>Tessera</h1>
 
-      <Board />
+      {/* TABLERO CENTRADO */}
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Board />
+      </div>
 
-      <div style={{ display: "flex", gap: 20, marginTop: 20 }}>
-        <Piece />
-        <Piece />
+      {/* PIEZAS ABAJO */}
+      <div
+        style={{
+          height: 200,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
+        <Piece color="red" shape={[ [1,1], [1,1] ]} />
+        <Piece color="blue" shape={[ [1,1,1], [0,1,0] ]} />
+        <Piece color="green" shape={[ [1,1,0], [0,1,1] ]} />
+        <Piece color="orange" shape={[ [1], [1], [1] ]} />
       </div>
     </div>
   );

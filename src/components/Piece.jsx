@@ -1,98 +1,70 @@
 import { useState, useRef, useEffect } from "react";
 
-export default function Piece() {
-  const [pos, setPos] = useState({ x: 100, y: 100 });
-  const draggingRef = useRef(false);
+export default function Piece({ shape, color }) {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
 
-  const offsetRef = useRef({ x: 0, y: 0 });
+  const dragging = useRef(false);
+  const offset = useRef({ x: 0, y: 0 });
 
-  // -------------------------
-  // MOUSE
-  // -------------------------
+  const cellSize = 20;
+
   const onMouseDown = (e) => {
-    draggingRef.current = true;
+    dragging.current = true;
 
-    offsetRef.current = {
+    offset.current = {
       x: e.clientX - pos.x,
       y: e.clientY - pos.y,
     };
   };
 
   const onMouseMove = (e) => {
-    if (!draggingRef.current) return;
+    if (!dragging.current) return;
 
     setPos({
-      x: e.clientX - offsetRef.current.x,
-      y: e.clientY - offsetRef.current.y,
+      x: e.clientX - offset.current.x,
+      y: e.clientY - offset.current.y,
     });
   };
 
   const onMouseUp = () => {
-    draggingRef.current = false;
-  };
-
-  // -------------------------
-  // TOUCH (DEDOS)
-  // -------------------------
-  const onTouchStart = (e) => {
-    const t = e.touches[0];
-
-    draggingRef.current = true;
-
-    offsetRef.current = {
-      x: t.clientX - pos.x,
-      y: t.clientY - pos.y,
-    };
-  };
-
-  const onTouchMove = (e) => {
-    if (!draggingRef.current) return;
-
-    const t = e.touches[0];
-
-    setPos({
-      x: t.clientX - offsetRef.current.x,
-      y: t.clientY - offsetRef.current.y,
-    });
-  };
-
-  const onTouchEnd = () => {
-    draggingRef.current = false;
+    dragging.current = false;
   };
 
   useEffect(() => {
-    // mouse
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
-
-    // touch
-    window.addEventListener("touchmove", onTouchMove);
-    window.addEventListener("touchend", onTouchEnd);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
-
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchend", onTouchEnd);
     };
   }, []);
 
   return (
     <div
       onMouseDown={onMouseDown}
-      onTouchStart={onTouchStart}
       style={{
-        width: 50,
-        height: 50,
-        background: "red",
         position: "absolute",
         left: pos.x,
         top: pos.y,
+        display: "grid",
+        gridTemplateColumns: `repeat(${shape[0].length}, 20px)`,
+        gap: 2,
         cursor: "grab",
         userSelect: "none",
-        touchAction: "none",
       }}
-    />
+    >
+      {shape.flat().map((cell, i) => (
+        <div
+          key={i}
+          style={{
+            width: 20,
+            height: 20,
+            background: cell ? color : "transparent",
+            borderRadius: 3,
+          }}
+        />
+      ))}
+    </div>
   );
 }
