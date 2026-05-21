@@ -29,7 +29,7 @@ const findTopLeft = (shape) => {
   return { r: 0, c: 0 };
 };
 
-// 🔥 HIT TEST GLOBAL REAL
+// 🔥 HIT TEST GLOBAL REAL (lo dejo porque lo usas)
 const getCellFromPoint = (x, y) => {
   const el = document.elementFromPoint(x, y);
   return el?.closest?.(".piece-cell") || null;
@@ -93,28 +93,30 @@ export default function Piece({ shape, color, id }) {
 
     const rect = board.getBoundingClientRect();
 
-    const relativeX = pos.x;
-    const relativeY = pos.y;
+    // 🔥 FIX CLAVE: usar posición REAL dentro del board
+    const xInside = pos.x;
+    const yInside = pos.y;
 
     const inside =
-      relativeX >= 0 &&
-      relativeY >= 0 &&
-      relativeX <= rect.width &&
-      relativeY <= rect.height;
+      xInside >= 0 &&
+      yInside >= 0 &&
+      xInside <= rect.width &&
+      yInside <= rect.height;
 
     if (!inside) {
       activePieceId = null;
       return;
     }
 
-    const col = Math.round(relativeX / CELL_SIZE);
-    const row = Math.round(relativeY / CELL_SIZE);
+    // 🔥 SNAP CORRECTO (referencia estable al board)
+    const col = Math.round(xInside / CELL_SIZE);
+    const row = Math.round(yInside / CELL_SIZE);
 
     const { r, c } = findTopLeft(rotatedShape);
 
     setPos({
-      x: col * CELL_SIZE - c * CELL_SIZE,
-      y: row * CELL_SIZE - r * CELL_SIZE,
+      x: col * CELL_SIZE,
+      y: row * CELL_SIZE,
     });
 
     activePieceId = null;
@@ -145,14 +147,43 @@ export default function Piece({ shape, color, id }) {
   const onClick = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
     if (!cell) return;
-
+  
     if (moved.current) return;
-
-    setRot((r) => (r + 1) % 4);
+  
+    const board = document.querySelector(".board");
+    if (!board) return;
+  
+    const rect = board.getBoundingClientRect();
+  
+    // posición actual en grid
+    const col = Math.round(pos.x / CELL_SIZE);
+    const row = Math.round(pos.y / CELL_SIZE);
+  
+    // rotamos primero
+    setRot((r) => {
+      const newRot = (r + 1) % 4;
+  
+      // recalculamos shape rotado manualmente
+      let s = shape;
+      for (let i = 0; i < newRot; i++) {
+        s = rotateMatrix(s);
+      }
+  
+      const { r: rr, c: cc } = findTopLeft(s);
+  
+      // 🔥 mantenemos la pieza en el mismo tile lógico
+      setPos({
+        x: col * CELL_SIZE - cc * CELL_SIZE,
+        y: row * CELL_SIZE - rr * CELL_SIZE,
+      });
+  
+      return newRot;
+    });
   };
 
   useEffect(() => {
     const handleMouseMove = (e) => moveDrag(e.clientX, e.clientY);
+
     const handleTouchMove = (e) => {
       const t = e.touches[0];
       moveDrag(t.clientX, t.clientY);
@@ -195,6 +226,7 @@ export default function Piece({ shape, color, id }) {
         cursor: "grab",
         userSelect: "none",
         touchAction: "none",
+        zIndex: activePieceId === id ? 1000 : 1,
       }}
     >
       {rotatedShape.flat().map((cell, i) =>
