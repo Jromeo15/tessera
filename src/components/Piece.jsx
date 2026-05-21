@@ -33,7 +33,6 @@ export default function Piece({
   initialX = 0,
   initialY = -240,
 }) {
-  // 🔥 posición estable en grid (derivada del spawn inicial)
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE) + 1,
     row: Math.round(initialY / CELL_SIZE),
@@ -49,9 +48,11 @@ export default function Piece({
 
   const rotatedShape = useMemo(() => {
     let s = shape;
+
     for (let i = 0; i < rot; i++) {
       s = rotateMatrix(s);
     }
+
     return s;
   }, [shape, rot]);
 
@@ -64,7 +65,10 @@ export default function Piece({
 
     activePieceId = id;
 
-    start.current = { x: clientX, y: clientY };
+    start.current = {
+      x: clientX,
+      y: clientY,
+    };
 
     offset.current = {
       x: clientX - gridPos.col * CELL_SIZE,
@@ -82,8 +86,12 @@ export default function Piece({
       moved.current = true;
 
       setGridPos({
-        col: Math.round((clientX - offset.current.x) / CELL_SIZE),
-        row: Math.round((clientY - offset.current.y) / CELL_SIZE),
+        col: Math.round(
+          (clientX - offset.current.x) / CELL_SIZE
+        ),
+        row: Math.round(
+          (clientY - offset.current.y) / CELL_SIZE
+        ),
       });
     }
   };
@@ -112,7 +120,6 @@ export default function Piece({
       return;
     }
 
-    // snap final estable
     setGridPos({
       col: Math.round(xInside / CELL_SIZE),
       row: Math.round(yInside / CELL_SIZE),
@@ -126,7 +133,10 @@ export default function Piece({
   // -------------------------
   const onMouseDown = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
+
     if (!cell) return;
+
+    if (!cell.closest(`.piece-${id}`)) return;
 
     startDrag(e.clientX, e.clientY);
   };
@@ -134,15 +144,24 @@ export default function Piece({
   const onTouchStart = (e) => {
     const touch = e.touches[0];
 
-    const cell = getCellFromPoint(touch.clientX, touch.clientY);
+    const cell = getCellFromPoint(
+      touch.clientX,
+      touch.clientY
+    );
+
     if (!cell) return;
+
+    if (!cell.closest(`.piece-${id}`)) return;
 
     startDrag(touch.clientX, touch.clientY);
   };
 
   const onClick = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
+
     if (!cell) return;
+
+    if (!cell.closest(`.piece-${id}`)) return;
 
     if (moved.current) return;
 
@@ -153,36 +172,68 @@ export default function Piece({
   // GLOBAL EVENTS
   // -------------------------
   useEffect(() => {
-    const handleMouseMove = (e) => moveDrag(e.clientX, e.clientY);
+    const handleMouseMove = (e) => {
+      moveDrag(e.clientX, e.clientY);
+    };
 
     const handleTouchMove = (e) => {
       const t = e.touches[0];
+
       moveDrag(t.clientX, t.clientY);
     };
 
     const handleMouseUp = () => endDrag();
     const handleTouchEnd = () => endDrag();
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener(
+      "mousemove",
+      handleMouseMove
+    );
 
-    window.addEventListener("touchmove", handleTouchMove, {
-      passive: false,
-    });
+    window.addEventListener(
+      "mouseup",
+      handleMouseUp
+    );
 
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener(
+      "touchmove",
+      handleTouchMove,
+      {
+        passive: false,
+      }
+    );
+
+    window.addEventListener(
+      "touchend",
+      handleTouchEnd
+    );
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener(
+        "mousemove",
+        handleMouseMove
+      );
+
+      window.removeEventListener(
+        "mouseup",
+        handleMouseUp
+      );
+
+      window.removeEventListener(
+        "touchmove",
+        handleTouchMove
+      );
+
+      window.removeEventListener(
+        "touchend",
+        handleTouchEnd
+      );
     };
   }, [gridPos, rot]);
 
   return (
     <div
-      className="piece"
+      className={`piece piece-${id}`}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
       onClick={onClick}
@@ -190,12 +241,19 @@ export default function Piece({
         position: "absolute",
         left: gridPos.col * CELL_SIZE,
         top: gridPos.row * CELL_SIZE,
+
         display: "grid",
+
         gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
+
         cursor: "grab",
         userSelect: "none",
         touchAction: "none",
+
         zIndex: activePieceId === id ? 1000 : 1,
+
+        // 🔥 CLAVE
+        pointerEvents: "none",
       }}
     >
       {rotatedShape.flat().map((cell, i) =>
@@ -206,9 +264,16 @@ export default function Piece({
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
+
               background: color,
-              outline: "1px solid rgba(0,0,0,0.2)",
+
+              outline:
+                "1px solid rgba(0,0,0,0.2)",
+
               boxSizing: "border-box",
+
+              // 🔥 SOLO LOS 1s CAPTURAN
+              pointerEvents: "auto",
             }}
           />
         ) : (
@@ -217,6 +282,8 @@ export default function Piece({
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
+
+              // 🔥 LOS 0s SON TRANSPARENTES
               pointerEvents: "none",
             }}
           />
