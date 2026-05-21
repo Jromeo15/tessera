@@ -52,40 +52,40 @@ export default function Piece({ shape, color, id }) {
     return s;
   }, [shape, rot]);
 
-  const onMouseDown = (e) => {
+  const startDrag = (clientX, clientY) => {
     dragging.current = true;
     moved.current = false;
 
     activePieceId = id;
 
     start.current = {
-      x: e.clientX,
-      y: e.clientY,
+      x: clientX,
+      y: clientY,
     };
 
     offset.current = {
-      x: e.clientX - pos.x,
-      y: e.clientY - pos.y,
+      x: clientX - pos.x,
+      y: clientY - pos.y,
     };
   };
 
-  const onMouseMove = (e) => {
+  const moveDrag = (clientX, clientY) => {
     if (!dragging.current) return;
 
-    const dx = Math.abs(e.clientX - start.current.x);
-    const dy = Math.abs(e.clientY - start.current.y);
+    const dx = Math.abs(clientX - start.current.x);
+    const dy = Math.abs(clientY - start.current.y);
 
     if (dx > 3 || dy > 3) {
       moved.current = true;
 
       setPos({
-        x: e.clientX - offset.current.x,
-        y: e.clientY - offset.current.y,
+        x: clientX - offset.current.x,
+        y: clientY - offset.current.y,
       });
     }
   };
 
-  const onMouseUp = () => {
+  const endDrag = () => {
     dragging.current = false;
 
     if (activePieceId !== id) return;
@@ -123,6 +123,16 @@ export default function Piece({ shape, color, id }) {
     activePieceId = null;
   };
 
+  const onMouseDown = (e) => {
+    startDrag(e.clientX, e.clientY);
+  };
+
+  const onTouchStart = (e) => {
+    const touch = e.touches[0];
+
+    startDrag(touch.clientX, touch.clientY);
+  };
+
   const onClick = () => {
     if (moved.current) return;
 
@@ -130,18 +140,47 @@ export default function Piece({ shape, color, id }) {
   };
 
   useEffect(() => {
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
+    const handleMouseMove = (e) => {
+      moveDrag(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0];
+
+      moveDrag(touch.clientX, touch.clientY);
+    };
+
+    const handleMouseUp = () => {
+      endDrag();
+    };
+
+    const handleTouchEnd = () => {
+      endDrag();
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    window.addEventListener("touchmove", handleTouchMove, {
+      passive: false,
+    });
+
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [pos, rotatedShape]);
 
   return (
     <div
+      className="piece"
       onMouseDown={onMouseDown}
+      onTouchStart={onTouchStart}
       onClick={onClick}
       style={{
         position: "absolute",
@@ -152,11 +191,13 @@ export default function Piece({ shape, color, id }) {
         gap: 0,
         cursor: "grab",
         userSelect: "none",
+        touchAction: "none",
       }}
     >
       {rotatedShape.flat().map((cell, i) =>
         cell ? (
           <div
+            className="piece-cell"
             key={i}
             style={{
               width: CELL_SIZE,
