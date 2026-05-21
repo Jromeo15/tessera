@@ -124,18 +124,22 @@ export default function Piece({ shape, color, id }) {
   };
 
   const onMouseDown = (e) => {
+    if (!e.target.closest(".piece-cell")) return;
     startDrag(e.clientX, e.clientY);
   };
 
   const onTouchStart = (e) => {
     const touch = e.touches[0];
-
+  
+    if (!e.target.closest(".piece-cell")) return;
+  
     startDrag(touch.clientX, touch.clientY);
   };
 
-  const onClick = () => {
+  const onClick = (e) => {
+    if (!e.target.closest(".piece-cell")) return;
     if (moved.current) return;
-
+  
     setRot((r) => (r + 1) % 4);
   };
 
@@ -213,6 +217,7 @@ export default function Piece({ shape, color, id }) {
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
+              pointerEvents: "none", // <- importante
             }}
           />
         )
