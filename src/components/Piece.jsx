@@ -85,7 +85,7 @@ export default function Piece() {
       style={{
         width: 50,
         height: 50,
-        background: "black",
+        background: "red",
         position: "absolute",
         left: pos.x,
         top: pos.y,
