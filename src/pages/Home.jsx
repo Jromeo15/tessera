@@ -21,6 +21,13 @@ export default function Home({ onPlay }) {
           >
             Jugar Puzle 2
           </button>
+
+          <button
+            className="home__button"
+            onClick={() => onPlay("random")}
+            >
+            Jugar Puzle Random
+          </button>
         </div>
       </div>
     );
