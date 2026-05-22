@@ -221,3 +221,20 @@ code {
 .piece-cell.type-6 {
   clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
+
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 220px;
+  text-align: center;
+}
