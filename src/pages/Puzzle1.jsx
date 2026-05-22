@@ -3,11 +3,13 @@ import Board from "../components/Board";
 import Piece from "../components/Piece";
 import { SHAPES } from "../shapes";
 import { CELL_SIZE } from "../constants";
+import PuzzleLayout from "../layout/PuzzleLayout";
 
-const BOARD_COLS = 7;
+const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
 
 export default function App({ onBack }) {
+  const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
 
   const [pieces] = useState([
@@ -57,50 +59,25 @@ export default function App({ onBack }) {
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
+    <PuzzleLayout
+      title="Puzle 1"
+      onBack={onBack}
+      onReset={() => {
+        setShowVictory(false);
+        setResetKey((k) => k + 1);
       }}
     >
-      {/* HEADER */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "10px 20px",
-        }}
-      >
-        <h1 style={{ margin: 0 }}>Puzle 1</h1>
-
-        <button
-          onClick={onBack}
-          style={{
-            padding: "8px 14px",
-            borderRadius: 8,
-            border: "none",
-            cursor: "pointer",
-            background: "#333",
-            color: "white",
-          }}
-        >
-          ← Volver
-        </button>
-      </div>
-
       {/* BOARD */}
       <div
         style={{
-          flex: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-end",
           paddingBottom: 100,
+          height: "100%",
         }}
       >
-        <Board>
+        <Board key={resetKey}>
           {pieces.map((p) => (
             <Piece
               key={p.id}
@@ -172,6 +149,6 @@ export default function App({ onBack }) {
           </div>
         </div>
       )}
-    </div>
+    </PuzzleLayout>
   );
 }

@@ -3,11 +3,13 @@ import Board from "../components/Board";
 import Piece from "../components/Piece";
 import { SHAPES } from "../shapes2";
 import { CELL_SIZE } from "../constants";
+import PuzzleLayout from "../layout/PuzzleLayout";
 
-const BOARD_COLS = 7;
+const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
 
 export default function App({ onBack }) {
+  const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
 
   const [pieces] = useState([
@@ -27,26 +29,28 @@ export default function App({ onBack }) {
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;
-
+  
     const grid = Array.from({ length: BOARD_ROWS }, () =>
       Array(BOARD_COLS).fill(false)
     );
-
+  
+    const boardRect = board.getBoundingClientRect();
+  
     const piecesDom = document.querySelectorAll(".piece");
-
+  
     piecesDom.forEach((piece) => {
       const cells = piece.querySelectorAll(".piece-cell");
-
+  
       cells.forEach((cell) => {
         const rect = cell.getBoundingClientRect();
-        const boardRect = board.getBoundingClientRect();
-
-        const x = rect.left - boardRect.left;
-        const y = rect.top - boardRect.top;
-
-        const col = Math.round(x / CELL_SIZE);
-        const row = Math.round(y / CELL_SIZE);
-
+  
+        // 🔥 usar centro de la celda (MUY importante)
+        const x = rect.left + rect.width / 2 - boardRect.left;
+        const y = rect.top + rect.height / 2 - boardRect.top;
+  
+        const col = Math.floor(x / CELL_SIZE);
+        const row = Math.floor(y / CELL_SIZE);
+  
         if (
           row >= 0 &&
           row < BOARD_ROWS &&
@@ -57,45 +61,20 @@ export default function App({ onBack }) {
         }
       });
     });
-
+  
     const win = grid.every((row) => row.every(Boolean));
     setShowVictory(win);
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
+    <PuzzleLayout
+      title="Puzle 1"
+      onBack={onBack}
+      onReset={() => {
+        setShowVictory(false);
+        setResetKey((k) => k + 1);
       }}
     >
-      {/* HEADER */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "10px 20px",
-        }}
-      >
-        <h1 style={{ margin: 0 }}>Puzle 2</h1>
-
-        <button
-          onClick={onBack}
-          style={{
-            padding: "8px 14px",
-            borderRadius: 8,
-            border: "none",
-            cursor: "pointer",
-            background: "#333",
-            color: "white",
-          }}
-        >
-          ← Volver
-        </button>
-      </div>
-
       {/* BOARD */}
       <div
         style={{
@@ -104,17 +83,18 @@ export default function App({ onBack }) {
           justifyContent: "center",
           alignItems: "flex-end",
           paddingBottom: 100,
+          width: "100%",
         }}
       >
-        <Board>
+        <Board key={resetKey}>
           {pieces.map((p) => (
             <Piece
-            key={p.id}
-            id={p.id}
-            color={p.color}
-            shape={p.shape}
-            shapeMode={p.shapeMode}
-            onDrop={checkVictory}
+              key={p.id}
+              id={p.id}
+              color={p.color}
+              shape={p.shape}
+              shapeMode={p.shapeMode}
+              onDrop={checkVictory}
             />
           ))}
         </Board>
@@ -179,6 +159,6 @@ export default function App({ onBack }) {
           </div>
         </div>
       )}
-    </div>
+    </PuzzleLayout>
   );
 }
