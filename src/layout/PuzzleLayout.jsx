@@ -81,13 +81,14 @@ export default function PuzzleLayout({
         </div>
       </div>
 
-      {/* CONTENIDO */}
+      {/* CONTENIDO (CENTRADO EN PANTALLA) */}
       <div
         style={{
           flex: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          overflow: "hidden",
         }}
       >
         {children}
@@ -134,13 +135,13 @@ export default function PuzzleLayout({
             <h3>Ayuda</h3>
 
             <p style={{ marginTop: 15, textAlign: "left" }}>
-              • Arrastra las piezas para colocarlas sobre el tablero
+              Arrastra las piezas para colocarlas sobre el tablero
               <br />
               <br />
-              • Pulsa sobre una pieza para rotarla
+              Pulsa sobre una pieza para rotarla
               <br />
               <br />
-              • Rellena todas las casillas del tablero con las piezas
+              Rellena todas las casillas del tablero con las piezas
             </p>
 
             <button
