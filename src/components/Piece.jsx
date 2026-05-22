@@ -32,7 +32,7 @@ export default function Piece({
   id,
   shapeMode = "square",
   initialX = 0,
-  initialY = -240,
+  initialY = 0,
   onDrop,
 }) {
   const isTriangle = shapeMode === "triangle";
