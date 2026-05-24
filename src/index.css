@@ -200,6 +200,20 @@ code {
 
 .piece-cell {
   background: var(--accent);
+
+  border: 1.5px solid rgba(0,0,0,0.75);
+
+  border-radius: 4px;
+
+  box-sizing: border-box;
+}
+
+.piece-cell.type-2,
+.piece-cell.type-3,
+.piece-cell.type-4,
+.piece-cell.type-5,
+.piece-cell.type-6 {
+  overflow: hidden;
 }
 
 .piece-cell.type-2 {
