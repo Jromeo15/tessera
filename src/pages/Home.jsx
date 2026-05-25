@@ -1,5 +1,6 @@
 import { useState } from "react";
 import logo from "../../images/logo.png";
+import { Shuffle } from "lucide-react";
 
 export default function Home({ onPlay, onRandom }) {
   const [showPopup, setShowPopup] = useState(false);
@@ -9,32 +10,30 @@ export default function Home({ onPlay, onRandom }) {
     <div className="home">
       <div className="home__card">
 
-        <img
-          src={logo}
-          alt="Tessera logo"
-          className="home__logo"
-        />
+      <button
+        className="home__randomBtn"
+        onClick={() => setShowPopup(true)}
+        aria-label="Puzle random"
+        title="Puzle random"
+      >
+        <Shuffle size={20} />
+      </button>
 
-        <h1 className="home__title">TESSERA</h1>
+      <img src={logo} alt="Tessera logo" className="home__logo" />
 
-        <p className="home__subtitle">
-          Encaja las piezas. Completa el tablero.
-        </p>
+      <h1 className="home__title">TESSERA</h1>
 
-        <button className="home__button" onClick={() => onPlay(1)}>
-          Jugar Puzle 1
-        </button>
+      <p className="home__subtitle">
+        Encaja las piezas. Completa el tablero.
+      </p>
 
-        <button className="home__button" onClick={() => onPlay(2)}>
-          Jugar Puzle 2
-        </button>
+      <button className="home__button" onClick={() => onPlay(1)}>
+        Jugar Puzle 1
+      </button>
 
-        <button
-          className="home__button"
-          onClick={() => setShowPopup(true)}
-        >
-          Jugar Puzle Random
-        </button>
+      <button className="home__button" onClick={() => onPlay(2)}>
+        Jugar Puzle 2
+      </button>
       </div>
 
       {/* POPUP */}
