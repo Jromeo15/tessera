@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Board from "../components/Board";
 import Piece from "../components/Piece";
-import { SHAPES } from "../shapes";
+import { SHAPES } from "../shapes-logo";
 import { CELL_SIZE } from "../constants";
 import PuzzleLayout from "../layout/PuzzleLayout";
 
@@ -13,13 +13,14 @@ export default function App({ onBack }) {
   const [showVictory, setShowVictory] = useState(false);
 
   const [pieces] = useState([
-    { id: 1, color: "red", shape: SHAPES[0] },
-    { id: 2, color: "blue", shape: SHAPES[1] },
-    { id: 3, color: "green", shape: SHAPES[2] },
-    { id: 4, color: "orange", shape: SHAPES[3] },
+    { id: 1, color: "orange", shape: SHAPES[0] },
+    { id: 2, color: "green", shape: SHAPES[1] },
+    { id: 3, color: "purple", shape: SHAPES[2] },
+    { id: 4, color: "yellow", shape: SHAPES[3] },
+    { id: 5, color: "blue", shape: SHAPES[4] },
+    { id: 6, color: "red", shape: SHAPES[5] },
   ]);
 
-  // 🔥 CHECK VICTORIA
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;

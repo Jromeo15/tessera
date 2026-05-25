@@ -333,6 +333,26 @@ export default function Piece({
       
             borderBottomRightRadius:
               !bottom && !right ? 8 : 0,
+
+            borderTop:
+              !top
+                ? "1.5px solid rgba(0,0,0,0.75)"
+                : "none",
+            
+            borderBottom:
+              !bottom
+                ? "1.5px solid rgba(0,0,0,0.75)"
+                : "none",
+            
+            borderLeft:
+              !left
+                ? "1.5px solid rgba(0,0,0,0.75)"
+                : "none",
+            
+            borderRight:
+              !right
+                ? "1.5px solid rgba(0,0,0,0.75)"
+                : "none",
           }}
         />
       );

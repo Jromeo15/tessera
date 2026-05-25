@@ -201,8 +201,6 @@ code {
 .piece-cell {
   background: var(--accent);
 
-  border: 1.5px solid rgba(0,0,0,0.75);
-
   box-sizing: border-box;
 }
 
@@ -253,5 +251,4 @@ code {
 
 .piece-wrapper {
   overflow: hidden;
-  border-radius: 3px;
 }

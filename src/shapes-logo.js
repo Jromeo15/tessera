@@ -32,9 +32,9 @@ export const SHAPES = [
   
     // 4ª matriz (sin cambios)
     [
-      [1,1,1],
-      [0,1,1],
-      [1,1,1,],
+      [1,1],
+      [0,1],
+      [1,1],
     ]
   ];
   
