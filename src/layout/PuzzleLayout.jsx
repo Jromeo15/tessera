@@ -37,7 +37,7 @@ export default function PuzzleLayout({
             width: 28,
             height: 28,
             borderRadius: "50%",
-            border: "1px solid #333",
+            border: "none",
             background: "white",
             cursor: "pointer",
             display: "flex",
@@ -46,7 +46,7 @@ export default function PuzzleLayout({
             padding: 0,
           }}
         >
-          <HelpCircle size={18} />
+          <HelpCircle size={30} />
         </button>
         </div>
 

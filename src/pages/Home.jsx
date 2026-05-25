@@ -28,11 +28,11 @@ export default function Home({ onPlay, onRandom }) {
       </p>
 
       <button className="home__button" onClick={() => onPlay(1)}>
-        Jugar Puzle 1
+        Jugar Puzzle 1
       </button>
 
       <button className="home__button" onClick={() => onPlay(2)}>
-        Jugar Puzle 2
+        Jugar Puzzle 2
       </button>
       </div>
 
