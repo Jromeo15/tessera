@@ -86,22 +86,19 @@ export default function App({ onBack }) {
           width: "100%",
         }}
       >
-        <Board key={resetKey}>
-        {pieces.map((p, index) => (
-          <Piece
-            key={p.id}
-            id={p.id}
-            color={p.color}
-            shape={p.shape}
-            shapeMode={p.shapeMode}
-
-            initialX={(index % 5) * 120 - 260}
-            initialY={Math.floor(index / 5) * 120}
-
-            onDrop={checkVictory}
-          />
-        ))}
-        </Board>
+<Board key={resetKey}>
+  {pieces.map((p, index) => (
+    <Piece
+      key={p.id}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={(index % 4) * 120 - (1.5 * 120) / 2}
+      initialY={Math.floor(index / 4) * 120 - (0.5 * 120) / 2}
+      onDrop={checkVictory}
+    />
+  ))}
+</Board>
       </div>
 
       {/* VICTORIA */}

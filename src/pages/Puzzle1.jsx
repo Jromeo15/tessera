@@ -91,8 +91,8 @@ export default function App({ onBack }) {
       id={p.id}
       color={p.color}
       shape={p.shape}
-      initialX={Math.max(-40, Math.min(40, (index % 4) * 120 - (3 * 120) / 2))}
-      initialY={Math.max(-120, Math.min(120, Math.floor(index / 4) * 120))}
+      initialX={(index % 4) * 120 - (1.5 * 120) / 2}
+      initialY={Math.floor(index / 4) * 120 - (0.5 * 120) / 2}
       onDrop={checkVictory}
     />
   ))}
