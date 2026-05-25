@@ -201,6 +201,10 @@ code {
 .piece-cell {
   background: var(--accent);
 
+  border: 1.5px solid rgba(0,0,0,0.75);
+
+  border-radius: 4px;
+
   box-sizing: border-box;
 }
 
@@ -247,8 +251,4 @@ code {
   border-radius: 12px;
   min-width: 220px;
   text-align: center;
-}
-
-.piece-wrapper {
-  overflow: hidden;
 }

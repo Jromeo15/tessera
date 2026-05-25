@@ -264,7 +264,7 @@ export default function Piece({
 
   return (
     <div
-      className={`piece piece-${id} piece-wrapper`}
+      className={`piece piece-${id}`}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
       onClick={onClick}
@@ -301,14 +301,6 @@ export default function Piece({
         );
       }
 
-      const row = Math.floor(i / rotatedShape[0].length);
-      const col = i % rotatedShape[0].length;
-      
-      const top = rotatedShape[row - 1]?.[col];
-      const bottom = rotatedShape[row + 1]?.[col];
-      const left = rotatedShape[row]?.[col - 1];
-      const right = rotatedShape[row]?.[col + 1];
-      
       return (
         <div
           key={i}
@@ -316,43 +308,11 @@ export default function Piece({
           style={{
             width: CELL_SIZE,
             height: CELL_SIZE,
-      
+
             background: color,
-      
+
             boxSizing: "border-box",
             pointerEvents: "auto",
-      
-            borderTopLeftRadius:
-              !top && !left ? 8 : 0,
-      
-            borderTopRightRadius:
-              !top && !right ? 8 : 0,
-      
-            borderBottomLeftRadius:
-              !bottom && !left ? 8 : 0,
-      
-            borderBottomRightRadius:
-              !bottom && !right ? 8 : 0,
-
-            borderTop:
-              !top
-                ? "1.5px solid rgba(0,0,0,0.75)"
-                : "none",
-            
-            borderBottom:
-              !bottom
-                ? "1.5px solid rgba(0,0,0,0.75)"
-                : "none",
-            
-            borderLeft:
-              !left
-                ? "1.5px solid rgba(0,0,0,0.75)"
-                : "none",
-            
-            borderRight:
-              !right
-                ? "1.5px solid rgba(0,0,0,0.75)"
-                : "none",
           }}
         />
       );
