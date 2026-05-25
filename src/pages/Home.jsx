@@ -11,13 +11,24 @@ export default function Home({ onPlay, onRandom }) {
       <div className="home__card">
 
       <button
-        className="home__randomBtn"
-        onClick={() => setShowPopup(true)}
-        aria-label="Puzle random"
-        title="Puzle random"
-      >
-        <Shuffle size={20} />
-      </button>
+  className="home__randomBtn"
+  onClick={() => setShowPopup(true)}
+  aria-label="Puzle random"
+  title="Puzle random"
+  style={{
+    background: "rgba(255,255,255,0.9)",
+    border: "1px solid rgba(0,0,0,0.15)",
+    borderRadius: "50%",
+    width: 36,
+    height: 36,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+  }}
+>
+  <Shuffle size={20} color="#222" />
+</button>
 
       <img src={logo} alt="Tessera logo" className="home__logo" />
 

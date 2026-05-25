@@ -32,22 +32,22 @@ export default function PuzzleLayout({
 
           {/* BOTÓN AYUDA */}
           <button
-          onClick={() => setShowHelp(true)}
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: "50%",
-            border: "none",
-            background: "white",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 0,
-          }}
-        >
-          <HelpCircle size={30} />
-        </button>
+  onClick={() => setShowHelp(true)}
+  style={{
+    width: 28,
+    height: 28,
+    borderRadius: "50%",
+    border: "1px solid rgba(0,0,0,0.15)",
+    background: "rgba(255,255,255,0.9)",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 0,
+  }}
+>
+  <HelpCircle size={20} color="#222" />
+</button>
         </div>
 
         {/* BOTONES DERECHA */}
