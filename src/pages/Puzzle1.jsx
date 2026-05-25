@@ -76,22 +76,25 @@ export default function App({ onBack }) {
       {/* BOARD */}
       <div
         style={{
+          flex: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-end",
           paddingBottom: 100,
-          height: "100%",
+          width: "100%",
         }}
       >
         <Board key={resetKey}>
           {pieces.map((p) => (
             <Piece
-              key={p.id}
-              id={p.id}
-              color={p.color}
-              shape={p.shape}
-              onDrop={checkVictory}
-            />
+            key={p.id}
+            id={p.id}
+            color={p.color}
+            shape={p.shape}
+            initialX={(p.id % 4) * 120 - 180}
+            initialY={Math.floor(p.id / 4) * 120}
+            onDrop={checkVictory}
+          />
           ))}
         </Board>
       </div>
