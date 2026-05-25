@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HelpCircle } from "lucide-react";
 
 export default function PuzzleLayout({
   title,
@@ -31,22 +32,22 @@ export default function PuzzleLayout({
 
           {/* BOTÓN AYUDA */}
           <button
-            onClick={() => setShowHelp(true)}
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: "50%",
-              border: "1px solid #333",
-              background: "white",
-              cursor: "pointer",
-              fontSize: 16,
-              fontWeight: "bold",
-              lineHeight: "28px",
-              textAlign: "center",
-            }}
-          >
-            ?
-          </button>
+          onClick={() => setShowHelp(true)}
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: "50%",
+            border: "1px solid #333",
+            background: "white",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 0,
+          }}
+        >
+          <HelpCircle size={18} />
+        </button>
         </div>
 
         {/* BOTONES DERECHA */}
