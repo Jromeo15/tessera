@@ -11,19 +11,28 @@ export default function Board({ children }) {
         position: "relative",
         width: cols * CELL_SIZE,
         height: rows * CELL_SIZE,
+
         margin: "0 auto",
-        border: "2px solid black",
+
         backgroundColor: "#f2f2f2",
+
+        border: "2px solid black",
+
+        boxSizing: "content-box",
       }}
     >
-      {/* grid visual SOLO decorativo */}
+      {/* GRID VISUAL */}
       <div
         style={{
           position: "absolute",
           inset: 0,
+
           display: "grid",
+
           gridTemplateColumns: `repeat(${cols}, ${CELL_SIZE}px)`,
           gridTemplateRows: `repeat(${rows}, ${CELL_SIZE}px)`,
+
+          pointerEvents: "none",
         }}
       >
         {Array.from({ length: cols * rows }).map((_, i) => (
@@ -32,7 +41,10 @@ export default function Board({ children }) {
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
-              outline: "1px solid #ddd",
+
+              borderRight: "1px solid #d4d4d4",
+              borderBottom: "1px solid #d4d4d4",
+
               boxSizing: "border-box",
             }}
           />

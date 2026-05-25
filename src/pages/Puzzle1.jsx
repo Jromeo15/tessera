@@ -20,10 +20,10 @@ export default function App({ onBack }) {
     { id: 5, color: "#4D96FF", shape: SHAPES[4] }, // violeta
     { id: 6, color: "#FF6B6B", shape: SHAPES[5] }, // naranja
     { id: 7, color: "#9D4EDD", shape: SHAPES[6] }, // turquesa
-    { id: 8, color: "white", shape: SHAPES[7] },
-    { id: 9, color: "white", shape: SHAPES[8] },
-    { id: 10, color: "white", shape: SHAPES[9] },
-    { id: 11, color: "white", shape: SHAPES[10] },
+    { id: 8, color: "#d3d3d3", shape: SHAPES[7] },
+    { id: 9, color: "#d3d3d3", shape: SHAPES[8] },
+    { id: 10, color: "#d3d3d3", shape: SHAPES[9] },
+    { id: 11, color: "#d3d3d3", shape: SHAPES[10] },
   ]);
 
   const checkVictory = () => {
