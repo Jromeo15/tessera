@@ -2,6 +2,7 @@ import { useState } from "react";
 import Board from "../components/Board";
 import Piece from "../components/Piece";
 import { CELL_SIZE } from "../constants";
+import PuzzleLayout from "../layout/PuzzleLayout";
 
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
@@ -210,7 +211,9 @@ export default function PuzzleRandom({
 }) {
   const [showVictory, setShowVictory] = useState(false);
 
-  const [pieces] = useState(() =>
+  const [resetKey, setResetKey] = useState(0);
+
+  const [pieces, setPieces] = useState(() =>
     generatePieces(piecesCount)
   );
 
@@ -253,25 +256,15 @@ export default function PuzzleRandom({
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
+    <PuzzleLayout
+      title="Puzzle Random"
+      onBack={onBack}
+      onReset={() => {
+        setShowVictory(false);
+        setResetKey((k) => k + 1);
+        setPieces(generatePieces(piecesCount));
       }}
     >
-      {/* HEADER */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: 10,
-        }}
-      >
-        <h1>Puzzle Random</h1>
-        <button onClick={onBack}>← Volver</button>
-      </div>
-
       {/* BOARD */}
       <div
         style={{
@@ -280,9 +273,10 @@ export default function PuzzleRandom({
           justifyContent: "center",
           alignItems: "flex-end",
           paddingBottom: 140,
+          height: "100%",
         }}
       >
-        <Board>
+        <Board key={resetKey}>
           {pieces.map((p) => (
             <Piece
               key={p.id}
@@ -295,7 +289,7 @@ export default function PuzzleRandom({
           ))}
         </Board>
       </div>
-
+  
       {/* VICTORY */}
       {showVictory && (
         <div
@@ -306,14 +300,44 @@ export default function PuzzleRandom({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 999,
           }}
         >
-          <div style={{ background: "white", padding: 30 }}>
+          <div
+            style={{
+              background: "white",
+              padding: 30,
+              borderRadius: 12,
+              minWidth: 300,
+              position: "relative",
+              textAlign: "center",
+              boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+            }}
+          >
+            <button
+              onClick={() => setShowVictory(false)}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                border: "none",
+                background: "transparent",
+                fontSize: 20,
+                cursor: "pointer",
+              }}
+            >
+              ×
+            </button>
+  
             <h2>VICTORIA</h2>
-            <button onClick={onBack}>Volver</button>
+            <p>Has rellenado todo el tablero.</p>
+  
+            <button onClick={onBack}>
+              Volver
+            </button>
           </div>
         </div>
       )}
-    </div>
+    </PuzzleLayout>
   );
 }
