@@ -14,12 +14,12 @@ export default function App({ onBack }) {
 
   const [pieces] = useState([
     { id: 1, color: "red", shape: SHAPES[0].shape, shapeMode: SHAPES[0].mode },
-    { id: 2, color: "black", shape: SHAPES[1].shape, shapeMode: SHAPES[1].mode },
+    { id: 2, color: "grey", shape: SHAPES[1].shape, shapeMode: SHAPES[1].mode },
     { id: 3, color: "green", shape: SHAPES[2].shape, shapeMode: SHAPES[2].mode },
     { id: 4, color: "orange", shape: SHAPES[3].shape, shapeMode: SHAPES[3].mode },
     { id: 5, color: "pink", shape: SHAPES[4].shape, shapeMode: SHAPES[4].mode },
     { id: 6, color: "yellow", shape: SHAPES[5].shape, shapeMode: SHAPES[5].mode },
-    { id: 7, color: "black", shape: SHAPES[1].shape, shapeMode: SHAPES[1].mode },
+    { id: 7, color: "grey", shape: SHAPES[1].shape, shapeMode: SHAPES[1].mode },
     { id: 8, color: "purple", shape: SHAPES[6].shape, shapeMode: SHAPES[6].mode },
     { id: 9, color: "blue", shape: SHAPES[7].shape, shapeMode: SHAPES[7].mode },
     { id: 10, color: "brown", shape: SHAPES[8].shape, shapeMode: SHAPES[8].mode },

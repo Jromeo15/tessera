@@ -1,5 +1,4 @@
 export const SHAPES = [
-    // 🟦 CUADRADO 1 (3x3 sólido)
     {
       shape: [
         [0,0,0,1],
@@ -10,8 +9,6 @@ export const SHAPES = [
       ],
       mode: "triangle",
     },
-  
-    // 🟦 CUADRADO 2 (2x2 sólido)
     {
       shape: [
         [1],
@@ -19,8 +16,6 @@ export const SHAPES = [
       ],
       mode: "square",
     },
-  
-    // 🟦 CUADRADO 3 (rectangular 2x3 sólido)
     {
       shape: [
         [0,0,1,3],

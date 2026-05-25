@@ -3,17 +3,42 @@ import { CELL_SIZE } from "../constants";
 
 let activePieceId = null;
 
+const rotateTriangleType = (value) => {
+  switch (value) {
+    case 3:
+      return 5;
+
+    case 5:
+      return 6;
+
+    case 6:
+      return 4;
+
+    case 4:
+      return 3;
+
+    default:
+      return value;
+  }
+};
+
 const rotateMatrix = (matrix) => {
   const rows = matrix.length;
   const cols = matrix[0].length;
 
-  const rotated = Array.from({ length: cols }, () =>
-    Array(rows).fill(0)
+  const rotated = Array.from(
+    { length: cols },
+    () => Array(rows).fill(0)
   );
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      rotated[c][rows - 1 - r] = matrix[r][c];
+
+      const rotatedValue =
+        rotateTriangleType(matrix[r][c]);
+
+      rotated[c][rows - 1 - r] =
+        rotatedValue;
     }
   }
 
@@ -169,9 +194,9 @@ export default function Piece({
 
     if (moved.current) return;
 
-    if (!isTriangle) {
-      setRot((r) => (r + 1) % 4);
-    }
+
+    setRot((r) => (r + 1) % 4);
+
   };
 
   // -------------------------
@@ -239,7 +264,7 @@ export default function Piece({
 
   return (
     <div
-      className={`piece piece-${id}`}
+      className={`piece piece-${id} piece-wrapper`}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
       onClick={onClick}
@@ -276,6 +301,14 @@ export default function Piece({
         );
       }
 
+      const row = Math.floor(i / rotatedShape[0].length);
+      const col = i % rotatedShape[0].length;
+      
+      const top = rotatedShape[row - 1]?.[col];
+      const bottom = rotatedShape[row + 1]?.[col];
+      const left = rotatedShape[row]?.[col - 1];
+      const right = rotatedShape[row]?.[col + 1];
+      
       return (
         <div
           key={i}
@@ -283,11 +316,23 @@ export default function Piece({
           style={{
             width: CELL_SIZE,
             height: CELL_SIZE,
-
+      
             background: color,
-
+      
             boxSizing: "border-box",
             pointerEvents: "auto",
+      
+            borderTopLeftRadius:
+              !top && !left ? 8 : 0,
+      
+            borderTopRightRadius:
+              !top && !right ? 8 : 0,
+      
+            borderBottomLeftRadius:
+              !bottom && !left ? 8 : 0,
+      
+            borderBottomRightRadius:
+              !bottom && !right ? 8 : 0,
           }}
         />
       );
