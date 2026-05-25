@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "../../images/logo.png";
 
 export default function Home({ onPlay, onRandom }) {
   const [showPopup, setShowPopup] = useState(false);
@@ -7,6 +8,13 @@ export default function Home({ onPlay, onRandom }) {
   return (
     <div className="home">
       <div className="home__card">
+
+        <img
+          src={logo}
+          alt="Tessera logo"
+          className="home__logo"
+        />
+
         <h1 className="home__title">TESSERA</h1>
 
         <p className="home__subtitle">
@@ -44,9 +52,7 @@ export default function Home({ onPlay, onRandom }) {
             />
 
             <div style={{ display: "flex", gap: 10, marginTop: 15 }}>
-              <button
-                onClick={() => setShowPopup(false)}
-              >
+              <button onClick={() => setShowPopup(false)}>
                 Cancelar
               </button>
 

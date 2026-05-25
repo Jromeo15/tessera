@@ -13,12 +13,13 @@ export default function App({ onBack }) {
   const [showVictory, setShowVictory] = useState(false);
 
   const [pieces] = useState([
-    { id: 1, color: "orange", shape: SHAPES[0] },
-    { id: 2, color: "green", shape: SHAPES[1] },
-    { id: 3, color: "purple", shape: SHAPES[2] },
-    { id: 4, color: "yellow", shape: SHAPES[3] },
-    { id: 5, color: "blue", shape: SHAPES[4] },
-    { id: 6, color: "red", shape: SHAPES[5] },
+    { id: 1, color: "#F7B801", shape: SHAPES[0] }, // coral rojo
+    { id: 2, color: "#FF7F50", shape: SHAPES[1] }, // amarillo
+    { id: 3, color: "#6BCB77", shape: SHAPES[2] }, // verde
+    { id: 4, color: "#2EC4B6", shape: SHAPES[3] }, // azul
+    { id: 5, color: "#4D96FF", shape: SHAPES[4] }, // violeta
+    { id: 6, color: "#FF6B6B", shape: SHAPES[5] }, // naranja
+    { id: 7, color: "#9D4EDD", shape: SHAPES[6] }, // turquesa
   ]);
 
   const checkVictory = () => {

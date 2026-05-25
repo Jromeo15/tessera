@@ -252,3 +252,8 @@ code {
   min-width: 220px;
   text-align: center;
 }
+
+.home__logo {
+  width: 150px;   /* ajusta aquí */
+  height: auto;
+}
