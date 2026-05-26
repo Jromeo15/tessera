@@ -323,6 +323,10 @@ export default function Piece({
   
     window.addEventListener("overlap-change", handle);
   
+    requestAnimationFrame(() => {
+      setIsOverlapping(checkOverlap());
+    });
+  
     return () => {
       window.removeEventListener("overlap-change", handle);
     };
