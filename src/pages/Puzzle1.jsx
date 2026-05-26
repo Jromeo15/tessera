@@ -106,65 +106,41 @@ export default function App({ onBack }) {
 </Board>
       </div>
 
-      {/* VICTORIA */}
-      {showVictory && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 999,
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              padding: 30,
-              borderRadius: 12,
-              minWidth: 300,
-              position: "relative",
-              textAlign: "center",
-              boxShadow: "0 0 20px rgba(0,0,0,0.3)",
-            }}
-          >
-            <button
-              onClick={() => setShowVictory(false)}
-              style={{
-                position: "absolute",
-                top: 10,
-                right: 10,
-                border: "none",
-                background: "transparent",
-                fontSize: 20,
-                cursor: "pointer",
-              }}
-            >
-              ×
-            </button>
+      {/* VICTORY */}
+{showVictory && (
+  <div className="victoryOverlay">
+    <div className="victoryPopup">
 
-            <h2>VICTORIA</h2>
-            <p>Has rellenado todo el tablero.</p>
+      <button
+        onClick={() => setShowVictory(false)}
+        className="victoryClose"
+      >
+        ×
+      </button>
 
-            <button
-              onClick={onBack}
-              style={{
-                marginTop: 20,
-                padding: "10px 16px",
-                borderRadius: 8,
-                border: "none",
-                cursor: "pointer",
-                background: "#ff2e63",
-                color: "white",
-              }}
-            >
-              Volver al menú
-            </button>
-          </div>
-        </div>
-      )}
+      <div className="victoryIcon">
+        ✨
+      </div>
+
+      <h2 className="victoryTitle">
+        ¡VICTORIA!
+      </h2>
+
+      <div className="victoryLine" />
+
+      <p className="victoryText">
+        Has completado el puzzle correctamente
+      </p>
+
+      <button
+        onClick={onBack}
+        className="victoryButton"
+      >
+        Volver al menú
+      </button>
+    </div>
+  </div>
+)}
     </PuzzleLayout>
   );
 }

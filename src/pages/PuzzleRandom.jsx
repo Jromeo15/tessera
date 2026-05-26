@@ -300,31 +300,36 @@ export default function PuzzleRandom({
         setPieces(generatePieces(piecesCount));
       }}
     >
-      {/* BOARD */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-end",
-          paddingBottom: 140,
-          height: "100%",
-        }}
-      >
-<Board key={resetKey}>
-  {pieces.map((p, index) => (
-    <Piece
-      key={p.id}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={(index % 4) * 30}
-      initialY={Math.floor(index / 4) * 120 - (0.5 * 120) / 2}
-      onDrop={checkVictory}
-    />
-  ))}
-</Board>
-      </div>
+{/* BOARD */}
+<div
+  style={{
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingBottom: 100,
+    width: "100%",
+  }}
+>
+  <Board key={resetKey}>
+    {pieces.map((p, index) => (
+      <Piece
+        key={p.id}
+        id={p.id}
+        color={p.color}
+        shape={p.shape}
+        initialX={
+          (index % 4) * 65 - 45 +
+          (index < pieces.length / 2 ? -8 : 8)
+        }
+        initialY={
+          Math.floor(index / 4) * 140 - 60
+        }
+        onDrop={checkVictory}
+      />
+    ))}
+  </Board>
+</div>
   
       {/* VICTORY */}
       {showVictory && (

@@ -544,3 +544,188 @@ code {
     border-radius: 12px;
   }
 }
+
+/* =========================
+   VICTORY POPUP
+========================= */
+
+.victoryOverlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.55);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+
+  backdrop-filter: blur(6px);
+}
+
+.victoryPopup {
+  position: relative;
+
+  width: 360px;
+  max-width: calc(100% - 40px);
+
+  padding: 36px 28px;
+
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.96),
+      rgba(255,255,255,0.9)
+    );
+
+  border: 1px solid rgba(255,255,255,0.65);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.35),
+    0 10px 25px rgba(255,46,99,0.15);
+
+  text-align: center;
+
+  animation: popupEnter 0.25s ease;
+}
+
+.victoryClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(0,0,0,0.06);
+
+  cursor: pointer;
+
+  font-size: 20px;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.victoryClose:hover {
+  transform: scale(1.08);
+
+  background: rgba(0,0,0,0.12);
+}
+
+.victoryIcon {
+  font-size: 54px;
+  margin-bottom: 10px;
+
+  filter: drop-shadow(
+    0 0 18px rgba(255,184,1,0.45)
+  );
+}
+
+.victoryTitle {
+  margin: 0;
+
+  font-size: 40px;
+  font-weight: 900;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  background: linear-gradient(
+    90deg,
+    #ff2e63,
+    #ff6a00,
+    #c084fc
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.victoryLine {
+  width: 140px;
+  height: 5px;
+
+  margin: 14px auto 22px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #ff2e63,
+    #ff6a00,
+    #c084fc
+  );
+
+  box-shadow:
+    0 0 18px rgba(255,46,99,0.35);
+}
+
+.victoryText {
+  margin: 0;
+
+  color: #475569;
+
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.victoryButton {
+  margin-top: 28px;
+
+  padding: 14px 22px;
+
+  border: none;
+  border-radius: 14px;
+
+  cursor: pointer;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #ff6a00,
+    #ff2e63
+  );
+
+  box-shadow:
+    0 10px 25px rgba(255,46,99,0.35);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.victoryButton:hover {
+  transform: translateY(-2px) scale(1.03);
+
+  box-shadow:
+    0 14px 35px rgba(255,46,99,0.45);
+}
+
+.victoryButton:active {
+  transform: scale(0.98);
+}
+
+@keyframes popupEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
