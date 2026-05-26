@@ -10,6 +10,8 @@ export default function PuzzleLayout({
   onBack,
   onReset,
   children,
+  showVictory = false,
+  onCloseVictory,
 }) {
   const [showHelp, setShowHelp] = useState(false);
 
@@ -133,6 +135,41 @@ export default function PuzzleLayout({
           </div>
         </div>
       )}
+      {/* MODAL VICTORIA */}
+{showVictory && (
+  <div className="victoryOverlay">
+    <div className="victoryPopup">
+
+      <button
+        onClick={onCloseVictory}
+        className="victoryClose"
+      >
+        ×
+      </button>
+
+      <div className="victoryIcon">
+        ✨
+      </div>
+
+      <h2 className="victoryTitle">
+        ¡VICTORIA!
+      </h2>
+
+      <div className="victoryLine" />
+
+      <p className="victoryText">
+        Has completado el puzzle correctamente
+      </p>
+
+      <button
+        onClick={onBack}
+        className="victoryButton"
+      >
+        Volver al menú
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 }

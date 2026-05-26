@@ -66,13 +66,16 @@ export default function App({ onBack }) {
 
   return (
     <PuzzleLayout
-      title="Puzzle 1"
-      onBack={onBack}
-      onReset={() => {
-        setShowVictory(false);
-        setResetKey((k) => k + 1);
-      }}
-    >
+  title="Puzzle 1"
+  onBack={onBack}
+  onReset={() => {
+    setShowVictory(false);
+    setResetKey((k) => k + 1);
+  }}
+
+  showVictory={showVictory}
+  onCloseVictory={() => setShowVictory(false)}
+>
       {/* BOARD */}
       <div
         style={{
@@ -105,42 +108,6 @@ export default function App({ onBack }) {
   ))}
 </Board>
       </div>
-
-      {/* VICTORY */}
-{showVictory && (
-  <div className="victoryOverlay">
-    <div className="victoryPopup">
-
-      <button
-        onClick={() => setShowVictory(false)}
-        className="victoryClose"
-      >
-        ×
-      </button>
-
-      <div className="victoryIcon">
-        ✨
-      </div>
-
-      <h2 className="victoryTitle">
-        ¡VICTORIA!
-      </h2>
-
-      <div className="victoryLine" />
-
-      <p className="victoryText">
-        Has completado el puzzle correctamente
-      </p>
-
-      <button
-        onClick={onBack}
-        className="victoryButton"
-      >
-        Volver al menú
-      </button>
-    </div>
-  </div>
-)}
     </PuzzleLayout>
   );
 }

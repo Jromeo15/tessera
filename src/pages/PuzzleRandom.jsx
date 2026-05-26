@@ -292,14 +292,16 @@ export default function PuzzleRandom({
 
   return (
     <PuzzleLayout
-      title="Aleatorio"
-      onBack={onBack}
-      onReset={() => {
-        setShowVictory(false);
-        setResetKey((k) => k + 1);
-        setPieces(generatePieces(piecesCount));
-      }}
-    >
+  title="Puzzle 1"
+  onBack={onBack}
+  onReset={() => {
+    setShowVictory(false);
+    setResetKey((k) => k + 1);
+  }}
+
+  showVictory={showVictory}
+  onCloseVictory={() => setShowVictory(false)}
+>
 {/* BOARD */}
 <div
   style={{
@@ -331,54 +333,6 @@ export default function PuzzleRandom({
   </Board>
 </div>
   
-      {/* VICTORY */}
-      {showVictory && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 999,
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              padding: 30,
-              borderRadius: 12,
-              minWidth: 300,
-              position: "relative",
-              textAlign: "center",
-              boxShadow: "0 0 20px rgba(0,0,0,0.3)",
-            }}
-          >
-            <button
-              onClick={() => setShowVictory(false)}
-              style={{
-                position: "absolute",
-                top: 10,
-                right: 10,
-                border: "none",
-                background: "transparent",
-                fontSize: 20,
-                cursor: "pointer",
-              }}
-            >
-              ×
-            </button>
-  
-            <h2>VICTORIA</h2>
-            <p>Has rellenado todo el tablero.</p>
-  
-            <button onClick={onBack}>
-              Volver
-            </button>
-          </div>
-        </div>
-      )}
     </PuzzleLayout>
   );
 }
