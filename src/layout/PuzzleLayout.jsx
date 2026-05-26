@@ -54,16 +54,16 @@ export default function PuzzleLayout({
         <div className="puzzleActions">
         <button
           onClick={onReset}
-          className="puzzleBtn puzzleBtnPrimary"
+          className="puzzleIconBtn puzzleIconBtn--reset"
         >
-          <RotateCcw size={18} />
+          <RotateCcw size={20} strokeWidth={2.5} />
         </button>
 
         <button
           onClick={onBack}
-          className="puzzleBtn"
+          className="puzzleIconBtn puzzleIconBtn--back"
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={20} strokeWidth={2.5} />
         </button>
       </div>
       </div>
