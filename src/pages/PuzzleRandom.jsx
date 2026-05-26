@@ -276,18 +276,19 @@ export default function PuzzleRandom({
           height: "100%",
         }}
       >
-        <Board key={resetKey}>
-          {pieces.map((p) => (
-            <Piece
-              key={p.id}
-              id={p.id}
-              color={p.color}
-              shape={p.shape}
-              shapeMode={p.shapeMode}
-              onDrop={checkVictory}
-            />
-          ))}
-        </Board>
+<Board key={resetKey}>
+  {pieces.map((p, index) => (
+    <Piece
+      key={p.id}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={(index % 4) * 30}
+      initialY={Math.floor(index / 4) * 120 - (0.5 * 120) / 2}
+      onDrop={checkVictory}
+    />
+  ))}
+</Board>
       </div>
   
       {/* VICTORY */}
