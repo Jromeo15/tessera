@@ -55,6 +55,8 @@ const rotateMatrix = (matrix) => {
 // hit test
 const getCellFromPoint = (x, y) => {
   const el = document.elementFromPoint(x, y);
+
+  console.log("hit test:", x, y, el);
   return el?.closest?.(".piece-cell") || null;
 };
 
