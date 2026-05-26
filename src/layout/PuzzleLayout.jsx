@@ -23,49 +23,39 @@ export default function PuzzleLayout({
     >
       {/* HEADER */}
       <div className="puzzleHeader">
-        {/* TÍTULO + AYUDA */}
-        <div className="puzzleTitleWrap">
-        <div className="puzzleTitleBlock">
-          <h1 className="puzzleTitle">{title}</h1>
-          <div className="puzzleTitleLine" />
-        </div>
+{/* TÍTULO */}
+<div className="puzzleTitleWrap">
+  <div className="puzzleTitleBlock">
+    <h1 className="puzzleTitle">{title}</h1>
+    <div className="puzzleTitleLine" />
+  </div>
+</div>
 
-          {/* BOTÓN AYUDA */}
-          <button
-  onClick={() => setShowHelp(true)}
-  style={{
-    width: 28,
-    height: 28,
-    borderRadius: "50%",
-    border: "None",
-    background: "rgba(255,255,255,0.9)",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 0,
-  }}
->
-  <HelpCircle size={30} color="#222" />
-</button>
-        </div>
+{/* BOTONES DERECHA */}
+<div className="puzzleActions">
 
-        {/* BOTONES DERECHA */}
-        <div className="puzzleActions">
-        <button
-          onClick={onReset}
-          className="puzzleIconBtn puzzleIconBtn--reset"
-        >
-          <RotateCcw size={20} strokeWidth={2.5} />
-        </button>
+  <button
+    onClick={() => setShowHelp(true)}
+    className="puzzleIconBtn puzzleIconBtn--help"
+  >
+    <HelpCircle size={20} strokeWidth={2.5} />
+  </button>
 
-        <button
-          onClick={onBack}
-          className="puzzleIconBtn puzzleIconBtn--back"
-        >
-          <ArrowLeft size={20} strokeWidth={2.5} />
-        </button>
-      </div>
+  <button
+    onClick={onReset}
+    className="puzzleIconBtn puzzleIconBtn--reset"
+  >
+    <RotateCcw size={20} strokeWidth={2.5} />
+  </button>
+
+  <button
+    onClick={onBack}
+    className="puzzleIconBtn puzzleIconBtn--back"
+  >
+    <ArrowLeft size={20} strokeWidth={2.5} />
+  </button>
+
+</div>
       </div>
 
       {/* CONTENIDO (CENTRADO EN PANTALLA) */}

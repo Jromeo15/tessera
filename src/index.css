@@ -428,8 +428,25 @@ code {
 }
 
 .puzzleIconBtn--help {
-  background: rgba(255,255,255,0.9);
-  color: #222;
+  background: linear-gradient(
+    135deg,
+    #ff7a18,
+    #ffb347
+  );
+
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.15);
+
+  box-shadow:
+    0 10px 24px rgba(255, 140, 0, 0.35),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.puzzleIconBtn--help:hover {
+  box-shadow:
+    0 14px 30px rgba(255, 140, 0, 0.5),
+    inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .puzzleIconBtn--reset {
@@ -512,7 +529,7 @@ code {
   }
 
   .puzzleTitleLine {
-    width: 90px;
+    width: 200px;
     margin-top: 6px;
   }
 
