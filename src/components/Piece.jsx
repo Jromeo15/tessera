@@ -3,12 +3,7 @@ import { CELL_SIZE } from "../constants";
 
 let activePieceId = null;
 
-let overlapTick = 0;
 
-export const bumpOverlapTick = () => {
-  overlapTick++;
-  window.dispatchEvent(new Event("overlap-change"));
-};
 
 const rotateTriangleType = (value) => {
   switch (value) {
@@ -75,17 +70,6 @@ export default function Piece({
     row: Math.round(initialY / CELL_SIZE),
   }));
 
-  useEffect(() => {
-    const handle = () => {
-      setIsOverlapping(checkOverlap());
-    };
-  
-    window.addEventListener("overlap-change", handle);
-  
-    return () => {
-      window.removeEventListener("overlap-change", handle);
-    };
-  }, []);
 
   const [rot, setRot] = useState(0);
   const [isOverlapping, setIsOverlapping] = useState(false);
@@ -176,8 +160,11 @@ export default function Piece({
         col: Math.round((clientX - offset.current.x) / CELL_SIZE),
         row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
+
+      requestAnimationFrame(() => {
+        setIsOverlapping(checkOverlap());
+      });
       
-      bumpOverlapTick();
     }
   };
 
@@ -212,7 +199,10 @@ export default function Piece({
 
     activePieceId = null;
 
-    bumpOverlapTick();
+    requestAnimationFrame(() => {
+      setIsOverlapping(checkOverlap());
+    });
+
 
     onDrop?.();
   };
@@ -329,14 +319,7 @@ export default function Piece({
       });
     };
   
-    window.addEventListener("overlap-change", update);
-  
-    // cálculo inicial (MUY IMPORTANTE para inicio + rotaciones)
     update();
-  
-    return () => {
-      window.removeEventListener("overlap-change", update);
-    };
   }, [gridPos, rot]);
 
   return (
