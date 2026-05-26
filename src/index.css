@@ -313,13 +313,14 @@ code {
 /* =========================
    PUZZLE LAYOUT
 ========================= */
-
 .puzzleHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 18px 26px;
+  gap: 18px;
+
+  padding: 16px 22px;
 
   background: rgba(255,255,255,0.08);
 
@@ -336,14 +337,18 @@ code {
 .puzzleTitleWrap {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
+
+  min-width: 0;
 }
 
 .puzzleTitle {
   margin: 0;
 
-  font-size: 34px;
+  font-size: clamp(28px, 5vw, 40px);
+
   font-weight: 900;
+
   letter-spacing: 2px;
 
   background: linear-gradient(
@@ -358,13 +363,17 @@ code {
 
   text-transform: uppercase;
 
-  line-height: 1;
+  line-height: 1.1;
+
+  white-space: nowrap;
 }
 
 .puzzleTitleLine {
   margin-top: 8px;
 
-  width: 120px;
+  width: 140px;
+  max-width: 100%;
+
   height: 4px;
 
   border-radius: 999px;
@@ -382,7 +391,60 @@ code {
 
 .puzzleActions {
   display: flex;
+  align-items: center;
   gap: 10px;
+
+  flex-shrink: 0;
+}
+
+.puzzleIconBtn {
+  width: 48px;
+  height: 48px;
+
+  border: none;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.22);
+}
+
+.puzzleIconBtn:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+.puzzleIconBtn:active {
+  transform: scale(0.96);
+}
+
+.puzzleIconBtn--help {
+  background: rgba(255,255,255,0.9);
+  color: #222;
+}
+
+.puzzleIconBtn--reset {
+  background: linear-gradient(
+    135deg,
+    #ff2e63,
+    #ff6a00
+  );
+
+  color: white;
+}
+
+.puzzleIconBtn--back {
+  background: rgba(40,40,40,0.95);
+  color: white;
 }
 
 .puzzleContent {
@@ -402,4 +464,37 @@ code {
       rgba(255,255,255,0.05),
       transparent 45%
     );
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .puzzleHeader {
+    padding: 14px 14px;
+    gap: 10px;
+  }
+
+  .puzzleTitleWrap {
+    gap: 10px;
+  }
+
+  .puzzleTitle {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .puzzleTitleLine {
+    width: 90px;
+    margin-top: 6px;
+  }
+
+  .puzzleActions {
+    gap: 8px;
+  }
+
+  .puzzleIconBtn {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+  }
 }

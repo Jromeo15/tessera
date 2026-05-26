@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { HelpCircle } from "lucide-react";
+import {
+  HelpCircle,
+  RotateCcw,
+  ArrowLeft
+} from "lucide-react";
 
 export default function PuzzleLayout({
   title,
@@ -21,7 +25,7 @@ export default function PuzzleLayout({
       <div className="puzzleHeader">
         {/* TÍTULO + AYUDA */}
         <div className="puzzleTitleWrap">
-        <div>
+        <div className="puzzleTitleBlock">
           <h1 className="puzzleTitle">{title}</h1>
           <div className="puzzleTitleLine" />
         </div>
@@ -48,34 +52,20 @@ export default function PuzzleLayout({
 
         {/* BOTONES DERECHA */}
         <div className="puzzleActions">
-          <button
-            onClick={onReset}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-              border: "none",
-              cursor: "pointer",
-              background: "#ff2e63",
-              color: "white",
-            }}
-          >
-            ↻ Reiniciar
-          </button>
+        <button
+          onClick={onReset}
+          className="puzzleBtn puzzleBtnPrimary"
+        >
+          <RotateCcw size={18} />
+        </button>
 
-          <button
-            onClick={onBack}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-              border: "none",
-              cursor: "pointer",
-              background: "#333",
-              color: "white",
-            }}
-          >
-            ← Volver
-          </button>
-        </div>
+        <button
+          onClick={onBack}
+          className="puzzleBtn"
+        >
+          <ArrowLeft size={18} />
+        </button>
+      </div>
       </div>
 
       {/* CONTENIDO (CENTRADO EN PANTALLA) */}
