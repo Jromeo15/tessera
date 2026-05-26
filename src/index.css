@@ -288,26 +288,44 @@ code {
   top: 14px;
   right: 14px;
 
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
 
-  border-radius: 12px;
   border: none;
-
-  background: rgba(255, 255, 255, 0.85);
-  cursor: pointer;
+  border-radius: 14px;
 
   display: grid;
   place-items: center;
 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  cursor: pointer;
 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(
+    135deg,
+    #ff2e63,
+    #ff4d6d
+  );
+
+  color: white;
+
+  box-shadow:
+    0 10px 24px rgba(255, 46, 99, 0.35),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .home__randomBtn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 14px 35px rgba(0,0,0,0.2);
+  transform: translateY(-2px) scale(1.04);
+
+  box-shadow:
+    0 14px 30px rgba(255, 46, 99, 0.5),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.home__randomBtn:active {
+  transform: scale(0.96);
 }
 
 /* =========================
