@@ -23,7 +23,7 @@ export default function App({ onBack }) {
     { id: 8, color: "#d3d3d3", shape: SHAPES[7] },
     { id: 9, color: "#d3d3d3", shape: SHAPES[8] },
     { id: 10, color: "#d3d3d3", shape: SHAPES[9] },
-    { id: 11, color: "green", shape: SHAPES[10] },
+    { id: 11, color: "blue", shape: SHAPES[10] },
   ]);
 
   const checkVictory = () => {
