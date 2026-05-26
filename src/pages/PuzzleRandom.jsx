@@ -115,6 +115,23 @@ const buildShape = (cells) => {
   return shape;
 };
 
+const rotateMatrix = (matrix) => {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  const rotated = Array.from({ length: cols }, () =>
+    Array(rows).fill(0)
+  );
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      rotated[c][rows - 1 - r] = matrix[r][c];
+    }
+  }
+
+  return rotated;
+};
+
 /**
  * 🔥 GENERADOR FINAL (SIN ISLAS + SUMA EXACTA 90)
  */
@@ -231,10 +248,19 @@ const generatePieces = (count) => {
       shape[r - minR][c - minC] = 1;
     });
 
+    let rotatedShape = shape;
+
+    // 0, 1, 2 o 3 rotaciones (0º, 90º, 180º, 270º)
+    const rotations = Math.floor(Math.random() * 4);
+    
+    for (let i = 0; i < rotations; i++) {
+      rotatedShape = rotateMatrix(rotatedShape);
+    }
+    
     return {
       id: p.id,
       color: p.color,
-      shape,
+      shape: rotatedShape,
       shapeMode: "square",
     };
   });
