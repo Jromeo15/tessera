@@ -18,17 +18,13 @@ export default function PuzzleLayout({
       }}
     >
       {/* HEADER */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "10px 20px",
-        }}
-      >
+      <div className="puzzleHeader">
         {/* TÍTULO + AYUDA */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <h1 style={{ margin: 0 }}>{title}</h1>
+        <div className="puzzleTitleWrap">
+        <div>
+          <h1 className="puzzleTitle">{title}</h1>
+          <div className="puzzleTitleLine" />
+        </div>
 
           {/* BOTÓN AYUDA */}
           <button
@@ -51,7 +47,7 @@ export default function PuzzleLayout({
         </div>
 
         {/* BOTONES DERECHA */}
-        <div style={{ display: "flex", gap: 10 }}>
+        <div className="puzzleActions">
           <button
             onClick={onReset}
             style={{
@@ -83,15 +79,7 @@ export default function PuzzleLayout({
       </div>
 
       {/* CONTENIDO (CENTRADO EN PANTALLA) */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
-      >
+      <div className="puzzleContent">
         {children}
       </div>
 

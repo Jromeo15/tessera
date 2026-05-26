@@ -309,3 +309,97 @@ code {
   transform: scale(1.05);
   box-shadow: 0 14px 35px rgba(0,0,0,0.2);
 }
+
+/* =========================
+   PUZZLE LAYOUT
+========================= */
+
+.puzzleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 26px;
+
+  background: rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.18);
+
+  z-index: 10;
+}
+
+.puzzleTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.puzzleTitle {
+  margin: 0;
+
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 2px;
+
+  background: linear-gradient(
+    90deg,
+    #ff2e63,
+    #ff6a00,
+    #c084fc
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-transform: uppercase;
+
+  line-height: 1;
+}
+
+.puzzleTitleLine {
+  margin-top: 8px;
+
+  width: 120px;
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #ff2e63,
+    #ff6a00,
+    #c084fc
+  );
+
+  box-shadow:
+    0 0 20px rgba(255, 46, 99, 0.4);
+}
+
+.puzzleActions {
+  display: flex;
+  gap: 10px;
+}
+
+.puzzleContent {
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(255,255,255,0.05),
+      transparent 45%
+    );
+}
