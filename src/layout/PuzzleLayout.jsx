@@ -143,6 +143,9 @@ export default function PuzzleLayout({
               <br />
               <br />
               Rellena todas las casillas del tablero con las piezas
+              <br />
+              <br />
+              Si la pieza está gris significa que está encima o debajo de otra pieza
             </p>
 
             <button

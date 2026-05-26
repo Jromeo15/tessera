@@ -3,6 +3,13 @@ import { CELL_SIZE } from "../constants";
 
 let activePieceId = null;
 
+let overlapTick = 0;
+
+export const bumpOverlapTick = () => {
+  overlapTick++;
+  window.dispatchEvent(new Event("overlap-change"));
+};
+
 const rotateTriangleType = (value) => {
   switch (value) {
     case 3:
@@ -66,7 +73,20 @@ export default function Piece({
     row: Math.round(initialY / CELL_SIZE),
   }));
 
+  useEffect(() => {
+    const handle = () => {
+      setIsOverlapping(checkOverlap());
+    };
+  
+    window.addEventListener("overlap-change", handle);
+  
+    return () => {
+      window.removeEventListener("overlap-change", handle);
+    };
+  }, []);
+
   const [rot, setRot] = useState(0);
+  const [isOverlapping, setIsOverlapping] = useState(false);
 
   const dragging = useRef(false);
   const moved = useRef(false);
@@ -83,6 +103,37 @@ export default function Piece({
 
     return s;
   }, [shape, rot]);
+
+  const checkOverlap = () => {
+    const pieces = document.querySelectorAll(".piece");
+    const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
+  
+    let overlap = false;
+  
+    myCells.forEach((cell) => {
+      const rect = cell.getBoundingClientRect();
+  
+      pieces.forEach((el) => {
+        if (el.classList.contains(`piece-${id}`)) return;
+  
+        const targetCells = el.querySelectorAll(".piece-cell");
+  
+        targetCells.forEach((t) => {
+          const r = t.getBoundingClientRect();
+  
+          const intersect =
+            !(rect.right <= r.left ||
+              rect.left >= r.right ||
+              rect.bottom <= r.top ||
+              rect.top >= r.bottom);
+  
+          if (intersect) overlap = true;
+        });
+      });
+    });
+  
+    return overlap;
+  };
 
   // -------------------------
   // DRAG START
@@ -112,15 +163,14 @@ export default function Piece({
 
     if (dx > 3 || dy > 3) {
       moved.current = true;
-
+    
       setGridPos({
-        col: Math.round(
-          (clientX - offset.current.x) / CELL_SIZE
-        ),
-        row: Math.round(
-          (clientY - offset.current.y) / CELL_SIZE
-        ),
+        col: Math.round((clientX - offset.current.x) / CELL_SIZE),
+        row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
+      
+      setIsOverlapping(checkOverlap());
+      bumpOverlapTick();
     }
   };
 
@@ -154,6 +204,9 @@ export default function Piece({
     });
 
     activePieceId = null;
+
+    bumpOverlapTick();
+
     onDrop?.();
   };
 
@@ -262,6 +315,10 @@ export default function Piece({
     };
   }, [gridPos, rot]);
 
+  useEffect(() => {
+    setIsOverlapping(checkOverlap());
+  }, [gridPos, rot]);
+
   return (
     <div
       className={`piece piece-${id}`}
@@ -272,19 +329,22 @@ export default function Piece({
         position: "absolute",
         left: gridPos.col * CELL_SIZE,
         top: gridPos.row * CELL_SIZE,
-
+  
         display: "grid",
-
+  
         gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
-
+  
         cursor: "grab",
         userSelect: "none",
         touchAction: "none",
-
+  
         zIndex: activePieceId === id ? 1000 : 1,
-
-        // 🔥 CLAVE
+  
         pointerEvents: "none",
+  
+        // 🔥 VISUAL OVERLAP
+        opacity: isOverlapping ? 0.6 : 1,
+        filter: isOverlapping ? "brightness(0.6)" : "none",
       }}
     >
     {rotatedShape.flat().map((cell, i) => {
