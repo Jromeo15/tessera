@@ -102,107 +102,125 @@ const buildShape = (cells) => {
  * 🔥 GENERADOR FINAL (SIN ISLAS + SUMA EXACTA 90)
  */
 const generatePieces = (count) => {
-  const visited = Array.from({ length: BOARD_ROWS }, () =>
-    Array(BOARD_COLS).fill(false)
+  const grid = Array.from(
+    { length: BOARD_ROWS },
+    () => Array(BOARD_COLS).fill(null)
   );
 
   const pieces = [];
 
-  const getRandomFreeCell = () => {
-    const free = [];
-    for (let r = 0; r < BOARD_ROWS; r++) {
-      for (let c = 0; c < BOARD_COLS; c++) {
-        if (!visited[r][c]) free.push([r, c]);
+  // -------------------------
+  // 1. crear semillas
+  // -------------------------
+  for (let i = 0; i < count; i++) {
+    while (true) {
+      const r = Math.floor(Math.random() * BOARD_ROWS);
+      const c = Math.floor(Math.random() * BOARD_COLS);
+
+      if (grid[r][c] === null) {
+        grid[r][c] = i;
+
+        pieces.push({
+          id: i + 1,
+          color: COLORS[i % COLORS.length],
+          cells: [[r, c]],
+        });
+
+        break;
       }
     }
-    return free.length
-      ? free[Math.floor(Math.random() * free.length)]
-      : null;
-  };
+  }
 
-  const getNeighbors = (r, c) => {
-    const dirs = [
-      [r - 1, c],
-      [r + 1, c],
-      [r, c - 1],
-      [r, c + 1],
-    ];
+  // -------------------------
+  // 2. expandir piezas
+  // -------------------------
+  let remaining =
+    BOARD_ROWS * BOARD_COLS - count;
 
-    return dirs.filter(
-      ([rr, cc]) =>
-        rr >= 0 &&
-        rr < BOARD_ROWS &&
-        cc >= 0 &&
-        cc < BOARD_COLS &&
-        !visited[rr][cc]
-    );
-  };
+  while (remaining > 0) {
+    const expandable = pieces.filter((p) => {
+      return p.cells.some(([r, c]) => {
+        return (
+          (r > 0 && grid[r - 1][c] === null) ||
+          (r < BOARD_ROWS - 1 &&
+            grid[r + 1][c] === null) ||
+          (c > 0 && grid[r][c - 1] === null) ||
+          (c < BOARD_COLS - 1 &&
+            grid[r][c + 1] === null)
+        );
+      });
+    });
 
-  const buildRegion = (startR, startC, maxSize) => {
-    const region = [[startR, startC]];
-    visited[startR][startC] = true;
+    if (!expandable.length) break;
 
-    while (region.length < maxSize) {
-      const candidates = [];
+    const piece =
+      expandable[
+        Math.floor(Math.random() * expandable.length)
+      ];
 
-      for (const [r, c] of region) {
-        candidates.push(...getNeighbors(r, c));
-      }
+    const frontier = [];
 
-      if (!candidates.length) break;
+    piece.cells.forEach(([r, c]) => {
+      const neighbors = [
+        [r - 1, c],
+        [r + 1, c],
+        [r, c - 1],
+        [r, c + 1],
+      ];
 
-      const [nr, nc] =
-        candidates[Math.floor(Math.random() * candidates.length)];
+      neighbors.forEach(([nr, nc]) => {
+        if (
+          nr >= 0 &&
+          nr < BOARD_ROWS &&
+          nc >= 0 &&
+          nc < BOARD_COLS &&
+          grid[nr][nc] === null
+        ) {
+          frontier.push([nr, nc]);
+        }
+      });
+    });
 
-      region.push([nr, nc]);
-      visited[nr][nc] = true;
-    }
+    if (!frontier.length) continue;
 
-    return region;
-  };
+    const [nr, nc] =
+      frontier[
+        Math.floor(Math.random() * frontier.length)
+      ];
 
-  const buildShape = (cells) => {
-    const minR = Math.min(...cells.map(([r]) => r));
-    const minC = Math.min(...cells.map(([, c]) => c));
-    const maxR = Math.max(...cells.map(([r]) => r));
-    const maxC = Math.max(...cells.map(([, c]) => c));
+    grid[nr][nc] = piece.id - 1;
+
+    piece.cells.push([nr, nc]);
+
+    remaining--;
+  }
+
+  // -------------------------
+  // 3. convertir a shapes
+  // -------------------------
+  return pieces.map((p) => {
+    const minR = Math.min(...p.cells.map(([r]) => r));
+    const minC = Math.min(...p.cells.map(([, c]) => c));
+
+    const maxR = Math.max(...p.cells.map(([r]) => r));
+    const maxC = Math.max(...p.cells.map(([, c]) => c));
 
     const shape = Array.from(
       { length: maxR - minR + 1 },
       () => Array(maxC - minC + 1).fill(0)
     );
 
-    cells.forEach(([r, c]) => {
+    p.cells.forEach(([r, c]) => {
       shape[r - minR][c - minC] = 1;
     });
 
-    return shape;
-  };
-
-  const TOTAL = BOARD_ROWS * BOARD_COLS;
-  const targetPerPiece = Math.floor(TOTAL / count);
-
-  for (let i = 0; i < count; i++) {
-    const start = getRandomFreeCell();
-    if (!start) break;
-
-    const isLast = i === count - 1;
-
-    const region = buildRegion(
-      start[0],
-      start[1],
-      isLast ? TOTAL : targetPerPiece
-    );
-
-    pieces.push({
-      id: i + 1,
-      color: COLORS[i % COLORS.length],
-      shape: buildShape(region),
+    return {
+      id: p.id,
+      color: p.color,
+      shape,
       shapeMode: "square",
-    });
-  }
-
-  return pieces;
+    };
+  });
 };
 
 export default function PuzzleRandom({
@@ -257,7 +275,7 @@ export default function PuzzleRandom({
 
   return (
     <PuzzleLayout
-      title="Puzzle Random"
+      title="Aleatorio"
       onBack={onBack}
       onReset={() => {
         setShowVictory(false);
