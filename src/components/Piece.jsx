@@ -169,7 +169,6 @@ export default function Piece({
         row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
       
-      setIsOverlapping(checkOverlap());
       bumpOverlapTick();
     }
   };
@@ -316,8 +315,18 @@ export default function Piece({
   }, [gridPos, rot]);
 
   useEffect(() => {
-    setIsOverlapping(checkOverlap());
-  }, [gridPos, rot]);
+    const handle = () => {
+      requestAnimationFrame(() => {
+        setIsOverlapping(checkOverlap());
+      });
+    };
+  
+    window.addEventListener("overlap-change", handle);
+  
+    return () => {
+      window.removeEventListener("overlap-change", handle);
+    };
+  }, []);
 
   return (
     <div
