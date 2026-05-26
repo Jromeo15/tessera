@@ -135,6 +135,12 @@ export default function Piece({
     return overlap;
   };
 
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsOverlapping(checkOverlap());
+    });
+  }, []);
+
   // -------------------------
   // DRAG START
   // -------------------------
@@ -157,17 +163,19 @@ export default function Piece({
 
   const moveDrag = (clientX, clientY) => {
     if (!dragging.current) return;
-  
+
     const dx = Math.abs(clientX - start.current.x);
     const dy = Math.abs(clientY - start.current.y);
-  
+
     if (dx > 3 || dy > 3) {
       moved.current = true;
-  
+    
       setGridPos({
         col: Math.round((clientX - offset.current.x) / CELL_SIZE),
         row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
+      
+      bumpOverlapTick();
     }
   };
 
@@ -202,6 +210,7 @@ export default function Piece({
 
     activePieceId = null;
 
+    bumpOverlapTick();
 
     onDrop?.();
   };
@@ -313,21 +322,18 @@ export default function Piece({
 
   useEffect(() => {
     const update = () => {
-      setIsOverlapping(checkOverlap());
+      requestAnimationFrame(() => {
+        setIsOverlapping(checkOverlap());
+      });
     };
   
-    const rafUpdate = () => {
-      requestAnimationFrame(update);
-    };
+    window.addEventListener("overlap-change", update);
   
-    // 🔥 inicial
-    rafUpdate();
-  
-    // 🔥 cuando cambia posición o rotación
-    rafUpdate();
+    // cálculo inicial (MUY IMPORTANTE para inicio + rotaciones)
+    update();
   
     return () => {
-      // nada que limpiar
+      window.removeEventListener("overlap-change", update);
     };
   }, [gridPos, rot]);
 
