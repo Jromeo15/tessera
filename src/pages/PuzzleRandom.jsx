@@ -8,7 +8,24 @@ const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
 const TOTAL_CELLS = BOARD_COLS * BOARD_ROWS;
 
-const COLORS = ["red", "blue", "green", "orange", "purple", "pink"];
+const COLORS = [
+  "#FF6B6B", // coral rojo
+  "#FFD93D", // amarillo vivo
+  "#6BCB77", // verde fresco
+  "#4D96FF", // azul brillante
+  "#9D4EDD", // violeta
+  "#FF8E3C", // naranja cálido
+  "#2EC4B6", // turquesa
+  "#845EC2", // púrpura profundo
+  "#00C9A7", // aqua
+  "#FF9671", // melocotón
+  "#00B8D9", // cyan
+  "#C34A36", // terracota
+  "#3EC1D3", // azul agua
+  "#F67280", // rosa coral
+  "#8BC34A", // lima suave
+  "#A66CFF", // lavanda intensa
+];
 
 /**
  * Pool de 90 celdas
