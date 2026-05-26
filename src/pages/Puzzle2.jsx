@@ -93,8 +93,15 @@ export default function App({ onBack }) {
       id={p.id}
       color={p.color}
       shape={p.shape}
-      initialX={(index % 4) * 30}
-      initialY={Math.floor(index / 4) * 120 - (0.5 * 120) / 2}
+      initialX={
+        (index % 4) * 65 - 45 +
+        (index < pieces.length / 2 ? -8 : 8)
+      }
+      initialY={
+        index < pieces.length / 2
+          ? Math.floor(index / 4) * 140 - 60
+          : Math.floor(index / 4) * 140 - 60
+      }
       onDrop={checkVictory}
     />
   ))}
