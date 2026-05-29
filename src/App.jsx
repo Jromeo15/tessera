@@ -3,9 +3,8 @@ import { useState } from "react";
 import Home from "./pages/Home";
 import Levels from "./pages/Levels";
 import CategoryLevels from "./pages/CategoryLevels";
-
-import Puzzle1 from "./pages/Puzzle1";
-import Puzzle2 from "./pages/Puzzle2";
+import Puzzle1 from "./pages/square/Puzzle1";
+import Puzzle2 from "./pages/triangle/Puzzle2";
 import PuzzleRandom from "./pages/PuzzleRandom";
 
 export default function App() {

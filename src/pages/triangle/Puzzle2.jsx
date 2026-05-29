@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Board from "../components/Board";
-import Piece from "../components/Piece";
-import { SHAPES } from "../shapes2";
-import { CELL_SIZE } from "../constants";
-import PuzzleLayout from "../layout/PuzzleLayout";
+import Board from "../../components/Board";
+import Piece from "../../components/Piece";
+import { SHAPES } from "../../shapes2";
+import { CELL_SIZE } from "../../constants";
+import PuzzleLayout from "../../layout/PuzzleLayout";
 
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;

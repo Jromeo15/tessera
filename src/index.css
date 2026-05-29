@@ -854,19 +854,19 @@ code {
 
 .categoryBtnTheme--square {
   background:
-      #3b82f6;
-  box-shadow:
-    0 14px 30px rgba(37,99,235,0.35);
-}
-
-.categoryBtnTheme--circle {
-  background:
       #14b8a6;
   box-shadow:
     0 14px 30px rgba(20,184,166,0.35);
 }
 
 .categoryBtnTheme--triangle {
+  background:
+      #3b82f6;
+  box-shadow:
+    0 14px 30px rgba(37,99,235,0.35);
+}
+
+.categoryBtnTheme--circle {
   background:
       #f59e0b;
   box-shadow:
@@ -889,7 +889,7 @@ code {
   font-weight: 900;
   text-transform: uppercase;
 
-  background: #3b82f6;
+  background: #14b8a6;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
@@ -910,7 +910,8 @@ code {
   font-weight: 900;
   text-transform: uppercase;
 
-  background:#f59e0b;
+  background: #3b82f6;
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
@@ -931,7 +932,7 @@ code {
   font-weight: 900;
   text-transform: uppercase;
 
-  background: #14b8a6;
+  background:#f59e0b;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
