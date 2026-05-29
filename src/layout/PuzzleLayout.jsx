@@ -82,9 +82,7 @@ export default function PuzzleLayout({
     <ArrowLeft size={20} strokeWidth={2.5} />
   </button>
 
-  <div className="puzzleTimer">
-  {formatTime(time)}
-</div>
+
 
 </div>
       </div>
@@ -93,6 +91,10 @@ export default function PuzzleLayout({
       <div className="puzzleContent">
         {children}
       </div>
+
+      <div className="puzzleTimerBottom">
+  {formatTime(time)}
+</div>
 
       {/* MODAL AYUDA */}
       {showHelp && (

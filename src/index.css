@@ -963,24 +963,51 @@ code {
   padding-bottom: 6px; /* evita clipping inferior */
 }
 
-.puzzleTimer {
-  position: relative;
+
+/* =========================
+   TIMER BOTTOM HUD
+========================= */
+
+.puzzleTimerBottom {
+  position: fixed;
+
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 10px 16px;
+
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+
+  color: white;
+
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+
+  z-index: 999;
+
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.puzzleTimer::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
+/* 🔥 efecto “respira tipo juego” */
+.puzzleTimerBottom {
+  animation: timerFloat 2.5s ease-in-out infinite;
+}
 
-  background: radial-gradient(
-    circle,
-    rgba(255,255,255,0.12),
-    transparent 70%
-  );
-
-  filter: blur(6px);
-
-  z-index: -1;
+@keyframes timerFloat {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-3px);
+  }
 }
 
 .victoryTime {
