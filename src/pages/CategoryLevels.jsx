@@ -1,3 +1,5 @@
+import { ArrowLeft } from "lucide-react";
+
 export default function CategoryLevels({
     category,
     puzzles,
@@ -47,11 +49,11 @@ export default function CategoryLevels({
           ))}
   
           <button
-            className="home__button"
-            onClick={onBack}
-          >
-            Volver
-          </button>
+          onClick={onBack}
+          className="puzzleIconBtn puzzleIconBtn--back categoryBackBtn"
+        >
+          <ArrowLeft size={20} strokeWidth={2.5} />
+        </button>
   
         </div>
       </div>
