@@ -3,12 +3,34 @@ export default function CategoryLevels({
     onBack,
     onSelectLevel,
   }) {
+    // CONFIG INTERNA DE CATEGORÍAS
+    const CATEGORIES = {
+      square: {
+        title: "Fácil",
+        className: "title--square",
+      },
+      triangle: {
+        title: "Medio",
+        className: "title--triangle",
+      },
+      circle: {
+        title: "Difícil",
+        className: "title--circle",
+      },
+      skull: {
+        title: "Chunguele",
+        className: "title--skull",
+      },
+    };
+  
+    const data = CATEGORIES[category];
+  
     return (
       <div className="home">
         <div className="home__card">
   
-          <h1 className="home__title">
-            {category}
+          <h1 className={`home__title ${data?.className}`}>
+            {data?.title}
           </h1>
   
           {/* CUADRADO */}
@@ -31,11 +53,12 @@ export default function CategoryLevels({
             </button>
           )}
   
-          {/* VACÍOS DE MOMENTO */}
+          {/* CÍRCULO */}
           {category === "circle" && (
             <p>Próximamente...</p>
           )}
   
+          {/* CALAVERA */}
           {category === "skull" && (
             <p>Próximamente...</p>
           )}

@@ -13,8 +13,8 @@ import {
       <div className="home">
         <div className="home__card">
   
-          <h1 className="home__title">
-            Categorías
+          <h1 className="niveles__title">
+            Niveles
           </h1>
   
           <div className="levelsGrid">
