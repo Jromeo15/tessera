@@ -5,10 +5,23 @@ let activePieceId = null;
 
 let overlapTick = 0;
 
+const areCompatibleTriangles = (a, b) => {
+  const pairA = Number(a);
+  const pairB = Number(b);
+
+  return (
+    (pairA === 4 && pairB === 5) ||
+    (pairA === 5 && pairB === 4) ||
+    (pairA === 6 && pairB === 3) ||
+    (pairA === 3 && pairB === 6)
+  );
+};
+
 export const bumpOverlapTick = () => {
   overlapTick++;
   window.dispatchEvent(new Event("overlap-change"));
 };
+
 
 const rotateTriangleType = (value) => {
   switch (value) {
@@ -75,18 +88,6 @@ export default function Piece({
     row: Math.round(initialY / CELL_SIZE),
   }));
 
-  useEffect(() => {
-    const handle = () => {
-      setIsOverlapping(checkOverlap());
-    };
-  
-    window.addEventListener("overlap-change", handle);
-  
-    return () => {
-      window.removeEventListener("overlap-change", handle);
-    };
-  }, []);
-
   const [rot, setRot] = useState(0);
   const [isOverlapping, setIsOverlapping] = useState(false);
 
@@ -109,6 +110,10 @@ export default function Piece({
   const checkOverlap = () => {
     const pieces = document.querySelectorAll(".piece");
     const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
+    const getType = (el) => {
+      const match = [...el.classList].find(c => c.startsWith("type-"));
+      return match ? match.replace("type-", "") : null;
+    };
   
     let overlap = false;
   
@@ -123,13 +128,23 @@ export default function Piece({
         targetCells.forEach((t) => {
           const r = t.getBoundingClientRect();
   
-          const intersect =
-            !(rect.right <= r.left ||
-              rect.left >= r.right ||
-              rect.bottom <= r.top ||
-              rect.top >= r.bottom);
-  
-          if (intersect) overlap = true;
+        const intersect =
+          !(rect.right <= r.left ||
+            rect.left >= r.right ||
+            rect.bottom <= r.top ||
+            rect.top >= r.bottom);
+        
+        if (intersect) {
+          const a = getType(cell);
+          const b = getType(t);
+        
+          // si son triángulos compatibles, NO es overlap
+          if (a && b && areCompatibleTriangles(a, b)) {
+            return;
+          }
+        
+          overlap = true;
+        }
         });
       });
     });
