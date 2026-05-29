@@ -19,7 +19,6 @@ import {
   
           <div className="levelsGrid">
   
-            {/* CUADRADO */}
             <button
               className="
                 categoryBtn
@@ -31,19 +30,17 @@ import {
               <Square size={52} strokeWidth={2.5} />
             </button>
   
-            {/* TRIÁNGULO */}
             <button
-                className="
+              className="
                 categoryBtn
                 categoryBtnTheme
                 categoryBtnTheme--triangle
-                "
-                onClick={() => onSelectCategory("triangle")}
+              "
+              onClick={() => onSelectCategory("triangle")}
             >
-                <Triangle size={52} strokeWidth={2.5} />
+              <Triangle size={52} strokeWidth={2.5} />
             </button>
   
-            {/* CÍRCULO */}
             <button
               className="
                 categoryBtn
@@ -54,8 +51,7 @@ import {
             >
               <Circle size={52} strokeWidth={2.5} />
             </button>
-
-            {/* CALAVERA */}
+  
             <button
               className="
                 categoryBtn

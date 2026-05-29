@@ -1,9 +1,9 @@
 export default function CategoryLevels({
     category,
+    puzzles,
     onBack,
-    onSelectLevel,
+    onSelectPuzzle,
   }) {
-    // CONFIG INTERNA DE CATEGORÍAS
     const CATEGORIES = {
       square: {
         title: "Fácil",
@@ -25,6 +25,8 @@ export default function CategoryLevels({
   
     const data = CATEGORIES[category];
   
+    const list = puzzles?.[category] || [];
+  
     return (
       <div className="home">
         <div className="home__card">
@@ -33,35 +35,16 @@ export default function CategoryLevels({
             {data?.title}
           </h1>
   
-          {/* CUADRADO */}
-          {category === "square" && (
+          {/* PUZZLES AUTOMÁTICOS */}
+          {list.map((puzzle) => (
             <button
+              key={puzzle.name}
               className="home__button"
-              onClick={() => onSelectLevel(1)}
+              onClick={() => onSelectPuzzle(puzzle.component)}
             >
-              Puzzle 1
+              {puzzle.name}
             </button>
-          )}
-  
-          {/* TRIÁNGULO */}
-          {category === "triangle" && (
-            <button
-              className="home__button"
-              onClick={() => onSelectLevel(2)}
-            >
-              Puzzle 2
-            </button>
-          )}
-  
-          {/* CÍRCULO */}
-          {category === "circle" && (
-            <p>Próximamente...</p>
-          )}
-  
-          {/* CALAVERA */}
-          {category === "skull" && (
-            <p>Próximamente...</p>
-          )}
+          ))}
   
           <button
             className="home__button"
