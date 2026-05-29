@@ -542,10 +542,53 @@ code {
 
   background:
     radial-gradient(
-      circle at top,
-      rgba(255,255,255,0.05),
+      circle at 20% 10%,
+      rgba(255, 122, 24, 0.10),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(59, 130, 246, 0.10),
       transparent 45%
+    ),
+    radial-gradient(
+      circle at 40% 90%,
+      rgba(245, 158, 11, 0.08),
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      #f8fafc,
+      #eef2ff
     );
+
+  animation: bgFloat 12s ease-in-out infinite;
+}
+
+@keyframes bgFloat {
+  0% {
+    background-position:
+      0% 0%,
+      0% 0%,
+      0% 0%,
+      0% 0%;
+  }
+
+  50% {
+    background-position:
+      10% 5%,
+      -5% 10%,
+      5% -5%,
+      0% 0%;
+  }
+
+  100% {
+    background-position:
+      0% 0%,
+      0% 0%,
+      0% 0%,
+      0% 0%;
+  }
 }
 
 /* MOBILE */
