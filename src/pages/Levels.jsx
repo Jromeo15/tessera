@@ -1,28 +1,73 @@
-export default function Levels({
+import {
+    Square,
+    Circle,
+    Triangle,
+    Skull,
+  } from "lucide-react";
+  
+  export default function Levels({
     onBack,
-    onSelectLevel,
+    onSelectCategory,
   }) {
     return (
       <div className="home">
         <div className="home__card">
   
           <h1 className="home__title">
-            Selección de niveles
+            Categorías
           </h1>
   
-          <button
-            className="home__button"
-            onClick={() => onSelectLevel(1)}
-          >
-            Puzzle 1
-          </button>
+          <div className="levelsGrid">
   
-          <button
-            className="home__button"
-            onClick={() => onSelectLevel(2)}
-          >
-            Puzzle 2
-          </button>
+            {/* CUADRADO */}
+            <button
+              className="
+                categoryBtn
+                categoryBtnTheme
+                categoryBtnTheme--square
+              "
+              onClick={() => onSelectCategory("square")}
+            >
+              <Square size={52} strokeWidth={2.5} />
+            </button>
+  
+            {/* TRIÁNGULO */}
+            <button
+                className="
+                categoryBtn
+                categoryBtnTheme
+                categoryBtnTheme--triangle
+                "
+                onClick={() => onSelectCategory("triangle")}
+            >
+                <Triangle size={52} strokeWidth={2.5} />
+            </button>
+  
+            {/* CÍRCULO */}
+            <button
+              className="
+                categoryBtn
+                categoryBtnTheme
+                categoryBtnTheme--circle
+              "
+              onClick={() => onSelectCategory("circle")}
+            >
+              <Circle size={52} strokeWidth={2.5} />
+            </button>
+
+            {/* CALAVERA */}
+            <button
+              className="
+                categoryBtn
+                categoryBtnTheme
+                categoryBtnTheme--skull
+              "
+              onClick={() => onSelectCategory("skull")}
+            >
+              <Skull size={52} strokeWidth={2.5} />
+            </button>
+  
+          </div>
   
           <button
             className="home__button"
