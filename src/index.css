@@ -451,8 +451,6 @@ code {
     box-shadow 0.18s ease,
     background 0.18s ease;
 
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.22);
 }
 
 .puzzleIconBtn:hover {
@@ -474,9 +472,6 @@ code {
 
   border: 1px solid rgba(255,255,255,0.15);
 
-  box-shadow:
-    0 10px 24px rgba(255, 140, 0, 0.35),
-    inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .puzzleIconBtn--help:hover {
@@ -496,9 +491,6 @@ code {
 
   border: 1px solid rgba(255,255,255,0.15);
 
-  box-shadow:
-    0 10px 24px rgba(255, 46, 99, 0.35),
-    inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .puzzleIconBtn--reset:hover {
@@ -518,9 +510,6 @@ code {
 
   border: 1px solid rgba(255,255,255,0.15);
 
-  box-shadow:
-    0 10px 24px rgba(255, 46, 99, 0.28),
-    inset 0 1px 0 rgba(255,255,255,0.12);
 }
 
 .puzzleIconBtn--back:hover {
