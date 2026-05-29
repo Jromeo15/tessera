@@ -964,13 +964,23 @@ code {
 }
 
 .puzzleTimer {
+  position: relative;
+}
+
+.puzzleTimer::before {
+  content: "";
   position: absolute;
-  right: 0;
-  top: 48px;
-  font-size: 14px;
-  font-weight: 600;
-  color: white;
-  opacity: 0.9;
+  inset: -6px;
+
+  background: radial-gradient(
+    circle,
+    rgba(255,255,255,0.12),
+    transparent 70%
+  );
+
+  filter: blur(6px);
+
+  z-index: -1;
 }
 
 .victoryTime {
