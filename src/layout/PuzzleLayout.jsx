@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   HelpCircle,
   RotateCcw,
@@ -14,6 +14,31 @@ export default function PuzzleLayout({
   onCloseVictory,
 }) {
   const [showHelp, setShowHelp] = useState(false);
+  const [time, setTime] = useState(0);
+  const [running, setRunning] = useState(true);
+
+  useEffect(() => {
+    if (!running) return;
+  
+    const interval = setInterval(() => {
+      setTime((t) => t + 1);
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, [running]);
+
+  useEffect(() => {
+    if (showVictory) {
+      setRunning(false);
+    }
+  }, [showVictory]);
+
+  const formatTime = (t) => {
+    const min = Math.floor(t / 60);
+    const sec = t % 60;
+  
+    return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+  };
 
   return (
     <div
@@ -56,6 +81,10 @@ export default function PuzzleLayout({
   >
     <ArrowLeft size={20} strokeWidth={2.5} />
   </button>
+
+  <div className="puzzleTimer">
+  {formatTime(time)}
+</div>
 
 </div>
       </div>
@@ -160,6 +189,9 @@ export default function PuzzleLayout({
       <p className="victoryText">
         Has completado el puzzle correctamente
       </p>
+      <p className="victoryTime">
+  Tiempo: {formatTime(time)}
+</p>
 
       <button
         onClick={onBack}

@@ -246,11 +246,8 @@ code {
 
 .piece-cell {
   background: var(--accent);
-
   border: 1.5px solid rgba(0,0,0,0.75);
-
   border-radius: 4px;
-
   box-sizing: border-box;
 }
 
@@ -964,4 +961,19 @@ code {
   line-height: 1.1; /* CLAVE para evitar cortes */
   padding-top: 6px;  /* evita clipping superior */
   padding-bottom: 6px; /* evita clipping inferior */
+}
+
+.puzzleTimer {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  opacity: 0.9;
+}
+
+.victoryTime {
+  margin-top: 10px;
+  font-weight: 600;
 }
