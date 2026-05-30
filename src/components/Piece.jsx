@@ -23,7 +23,7 @@ export const bumpOverlapTick = () => {
 };
 
 
-const rotateTriangleType = (value) => {
+const rotateCellType  = (value) => {
   switch (value) {
     case 3:
       return 5;
@@ -36,6 +36,16 @@ const rotateTriangleType = (value) => {
 
     case 4:
       return 3;
+
+    case "a": return "b";
+    case "b": return "c";
+    case "c": return "d";
+    case "d": return "a";
+    
+    case "e": return "f";
+    case "f": return "g";
+    case "g": return "h";
+    case "h": return "e";
 
     default:
       return value;
@@ -55,7 +65,7 @@ const rotateMatrix = (matrix) => {
     for (let c = 0; c < cols; c++) {
 
       const rotatedValue =
-        rotateTriangleType(matrix[r][c]);
+      rotateCellType(matrix[r][c]);
 
       rotated[c][rows - 1 - r] =
         rotatedValue;

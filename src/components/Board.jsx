@@ -14,7 +14,7 @@ export default function Board({ children }) {
 
         margin: "0 auto",
 
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "var(--board-bg)",
 
         border: "2px solid black",
 

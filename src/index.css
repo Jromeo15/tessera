@@ -73,6 +73,10 @@ html, body {
   }
 }
 
+:root {
+  --board-bg: #f2f2f2;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -279,6 +283,132 @@ code {
 
 .piece-cell.type-6 {
   clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+/* =========================
+   CURVAS INTERIORES
+   a b c d
+========================= */
+
+.piece-cell.type-a,
+.piece-cell.type-b,
+.piece-cell.type-c,
+.piece-cell.type-d {
+  position: relative;
+  overflow: hidden;
+}
+
+/* círculo interior */
+
+.piece-cell.type-a {
+  border-top-left-radius: 100%;
+}
+
+.piece-cell.type-b {
+  border-top-right-radius: 100%;
+}
+
+.piece-cell.type-d {
+  border-bottom-left-radius: 100%;
+}
+
+.piece-cell.type-c {
+  border-bottom-right-radius: 100%;
+}
+
+
+/* =========================
+   CURVAS EXTERIORES (HUECOS REALES)
+   e f g h
+========================= */
+
+.piece-cell.type-e,
+.piece-cell.type-f,
+.piece-cell.type-g,
+.piece-cell.type-h {
+  position: relative;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* -------------------------
+   e → hueco arriba izquierda
+-------------------------- */
+.piece-cell.type-e {
+  border-top: none;
+  border-left: none;
+
+  -webkit-mask-image: radial-gradient(
+    circle at top left,
+    transparent 0 50%,
+    black 51%
+  );
+  mask-image: radial-gradient(
+    circle at top left,
+    transparent 0 67%,
+    black 51%
+  );
+}
+
+/* -------------------------
+   f → hueco arriba derecha
+-------------------------- */
+.piece-cell.type-f {
+  border-top: none;
+  border-right: none;
+
+  -webkit-mask-image: radial-gradient(
+    circle at top right,
+    transparent 0 50%,
+    black 51%
+  );
+  mask-image: radial-gradient(
+    circle at top right,
+    transparent 0 67%,
+    black 51%
+  );
+}
+
+/* -------------------------
+   g → hueco abajo derecha
+-------------------------- */
+.piece-cell.type-g {
+  border-bottom: none;
+  border-right: none;
+
+  -webkit-mask-image: radial-gradient(
+    circle at bottom right,
+    transparent 0 50%,
+    black 51%
+  );
+  mask-image: radial-gradient(
+    circle at bottom right,
+    transparent 0 67%,
+    black 51%
+  );
+}
+
+/* -------------------------
+   h → hueco abajo izquierda
+-------------------------- */
+.piece-cell.type-h {
+  border-bottom: none;
+  border-left: none;
+
+  -webkit-mask-image: radial-gradient(
+    circle at bottom left,
+    transparent 0 50%,
+    black 51%
+  );
+  mask-image: radial-gradient(
+    circle at bottom left,
+    transparent 0 67%,
+    black 51%
+  );
 }
 
 .popupOverlay {
