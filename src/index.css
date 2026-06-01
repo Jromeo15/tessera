@@ -711,7 +711,7 @@ code {
     140% 140%,
     100% 100%;
 
-  animation: bgFlow 12s ease-in-out infinite;
+  animation: none;
 }
 @keyframes bgFlow {
   0% {
