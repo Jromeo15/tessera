@@ -3,6 +3,7 @@ import Board from "../components/Board";
 import Piece from "../components/Piece";
 import { CELL_SIZE } from "../constants";
 import PuzzleLayout from "../layout/PuzzleLayout";
+import { TimerOff } from "lucide-react";
 
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
@@ -10,7 +11,7 @@ const TOTAL_CELLS = BOARD_COLS * BOARD_ROWS;
 
 const MAX_PIECES = 45;
 const START_PIECES = 3;
-const TIME_LIMIT = 300;
+const TIME_LIMIT = 10;
 
 const COLORS = [
   "#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF",
@@ -230,13 +231,32 @@ export default function PuzzleTimeAttack({ onBack }) {
   if (gameOver) {
     return (
       <PuzzleLayout title="Contrarreloj" onBack={onBack} onReset={reset} hideInternalTimer={true}>
-        <div style={{ textAlign: "center" }}>
-          <h2>Tiempo terminado</h2>
-          <p>Puzzles: {score}</p>
-
-          <button onClick={onBack} className="home__button">
-            Volver
-          </button>
+        <div className="defeatOverlay">
+          <div className="defeatPopup">
+  
+          <div className="defeatIcon">
+            <TimerOff size={34} strokeWidth={2.2} />
+          </div>
+  
+            <h2 className="defeatTitle">
+              TIEMPO AGOTADO
+            </h2>
+  
+            <div className="defeatLine" />
+  
+            <p className="defeatText">
+              Has completado <b>{score}</b> puzzles
+            </p>
+  
+            <p className="defeatSubtext">
+              Inténtalo de nuevo y supera tu marca
+            </p>
+  
+            <button onClick={onBack} className="defeatButton">
+              Volver al menú
+            </button>
+  
+          </div>
         </div>
       </PuzzleLayout>
     );
