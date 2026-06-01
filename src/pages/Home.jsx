@@ -1,12 +1,16 @@
 import { useState } from "react";
 import logo from "../../images/logo.png";
 import { Shuffle } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function Home({
   onLevels,
   onTimeAttack,
   onRandom,
 }) {
+  const { user } = useAuth();
+
+  console.log("Usuario:", user);
   const [showPopup, setShowPopup] = useState(false);
   const [value, setValue] = useState(2);
 

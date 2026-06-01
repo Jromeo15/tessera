@@ -5,7 +5,7 @@ import Levels from "./pages/Levels";
 import CategoryLevels from "./pages/CategoryLevels";
 import PuzzleRandom from "./pages/PuzzleRandom";
 import PuzzleTimeAttack from "./pages/PuzzleTimeAttack";
-import TimeAttack from "./pages/TimeAttack"; // 👈 IMPORTANTE (setup)
+import TimeAttack from "./pages/TimeAttack";
 
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
