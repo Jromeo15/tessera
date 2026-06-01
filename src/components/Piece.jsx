@@ -5,17 +5,30 @@ let activePieceId = null;
 
 let overlapTick = 0;
 
-const areCompatibleTriangles = (a, b) => {
-  const pairA = Number(a);
-  const pairB = Number(b);
+const compatiblePairs = {
+  "3": "6",
+  "6": "3",
 
-  return (
-    (pairA === 4 && pairB === 5) ||
-    (pairA === 5 && pairB === 4) ||
-    (pairA === 6 && pairB === 3) ||
-    (pairA === 3 && pairB === 6)
-  );
+  "4": "5",
+  "5": "4",
+
+  "a": "g",
+  "g": "a",
+
+  "b": "h",
+  "h": "b",
+
+  "c": "e",
+  "e": "c",
+
+  "d": "f",
+  "f": "d",
 };
+
+const areCompatible = (a, b) => {
+  return compatiblePairs[a] === b;
+};
+
 
 export const bumpOverlapTick = () => {
   overlapTick++;
@@ -149,7 +162,8 @@ export default function Piece({
           const b = getType(t);
         
           // si son triángulos compatibles, NO es overlap
-          if (a && b && areCompatibleTriangles(a, b)) {
+          console.log("compatibilidad", a, b);
+          if (a && b && areCompatible(a, b)) {
             return;
           }
         

@@ -12,6 +12,8 @@ export default function PuzzleLayout({
   children,
   showVictory = false,
   onCloseVictory,
+  externalTimer = null,
+  hideInternalTimer = false,
 }) {
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
@@ -92,9 +94,11 @@ export default function PuzzleLayout({
         {children}
       </div>
 
-      <div className="puzzleTimerBottom">
-  {formatTime(time)}
-</div>
+      {!hideInternalTimer && (
+        <div className="puzzleTimerBottom">
+          {externalTimer ?? formatTime(time)}
+        </div>
+      )}
 
       {/* MODAL AYUDA */}
       {showHelp && (

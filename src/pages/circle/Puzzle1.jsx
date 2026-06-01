@@ -15,6 +15,13 @@ export default function App({ onBack }) {
   const [pieces] = useState([
     { id: 1, color: "#4D96FF", shape: SHAPES[0] },
     { id: 2, color: "#4D96FF", shape: SHAPES[1] },
+    { id: 3, color: "#F7B801", shape: SHAPES[2] },
+    { id: 4, color: "#6BCB77", shape: SHAPES[3] },
+    { id: 5, color: "#9D4EDD", shape: SHAPES[4] },
+    { id: 6, color: "#00C9A7", shape: SHAPES[5] },
+    { id: 7, color: "#00C9A7", shape: SHAPES[6] },
+    { id: 8, color: "#4D96FF", shape: SHAPES[7] },
+    { id: 9, color: "#F7B801", shape: SHAPES[8] },
   ]);
 
   const checkVictory = () => {

@@ -4,18 +4,17 @@ import Home from "./pages/Home";
 import Levels from "./pages/Levels";
 import CategoryLevels from "./pages/CategoryLevels";
 import PuzzleRandom from "./pages/PuzzleRandom";
+import PuzzleTimeAttack from "./pages/PuzzleTimeAttack";
+import TimeAttack from "./pages/TimeAttack"; // 👈 IMPORTANTE (setup)
 
-// AUTO IMPORT DE PUZZLES
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
 });
 
-// AGRUPAR POR CATEGORÍA
 const groupedPuzzles = {};
 
 Object.entries(puzzles).forEach(([path, module]) => {
   const match = path.match(/pages\/(\w+)\/(Puzzle\d+)\.jsx/);
-
   if (!match) return;
 
   const [, category, puzzleName] = match;
@@ -35,14 +34,17 @@ export default function App() {
 
   const [category, setCategory] = useState(null);
   const [selectedPuzzle, setSelectedPuzzle] = useState(null);
+
   const [randomCount, setRandomCount] = useState(2);
 
-  // HOME
+  const [timeAttackConfig, setTimeAttackConfig] = useState(null);
+
+  // ---------------- HOME ----------------
   if (screen === "home") {
     return (
       <Home
         onLevels={() => setScreen("levels")}
-        onTimeAttack={() => {}}
+        onTimeAttack={() => setScreen("timeattack")}
         onRandom={(count) => {
           setRandomCount(count);
           setScreen("random");
@@ -51,7 +53,30 @@ export default function App() {
     );
   }
 
-  // CATEGORÍAS
+  // ---------------- TIME ATTACK SETUP ----------------
+  if (screen === "timeattack") {
+    return (
+      <TimeAttack
+        onBack={() => setScreen("home")}
+        onStart={(config) => {
+          setTimeAttackConfig(config);
+          setScreen("timeattack-game");
+        }}
+      />
+    );
+  }
+
+  // ---------------- TIME ATTACK GAME ----------------
+  if (screen === "timeattack-game") {
+    return (
+      <PuzzleTimeAttack
+        config={timeAttackConfig}
+        onBack={() => setScreen("home")}
+      />
+    );
+  }
+
+  // ---------------- LEVELS ----------------
   if (screen === "levels") {
     return (
       <Levels
@@ -64,7 +89,7 @@ export default function App() {
     );
   }
 
-  // LISTA DE PUZZLES POR CATEGORÍA
+  // ---------------- CATEGORY ----------------
   if (screen === "category") {
     return (
       <CategoryLevels
@@ -79,13 +104,13 @@ export default function App() {
     );
   }
 
-  // PUZZLE DINÁMICO
+  // ---------------- PUZZLE NORMAL ----------------
   if (screen === "puzzle") {
     const Puzzle = selectedPuzzle;
     return <Puzzle onBack={() => setScreen("category")} />;
   }
 
-  // RANDOM
+  // ---------------- RANDOM ----------------
   if (screen === "random") {
     return (
       <PuzzleRandom

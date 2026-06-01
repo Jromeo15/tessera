@@ -206,6 +206,28 @@ code {
   padding-top: 6px;  /* evita clipping superior */
   padding-bottom: 6px; /* evita clipping inferior */
 }
+
+.niveles__title_timeattack {
+  font-size: 35px;
+  letter-spacing: 6px;
+  margin: 20px 0 16px; /* más aire vertical */
+
+  font-weight: 900;
+  text-transform: uppercase;
+
+  background: #c084fc;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 40px rgba(255, 46, 99, 0.25);
+
+  transform: skew(-3deg);
+
+  line-height: 1.1; /* CLAVE para evitar cortes */
+  padding-top: 6px;  /* evita clipping superior */
+  padding-bottom: 6px; /* evita clipping inferior */
+}
+
 /* Subtítulo */
 .home__subtitle {
   font-size: 14px;
@@ -1194,4 +1216,27 @@ code {
   height: 52px;
 
   border-radius: 16px;
+}
+
+.timeattackSelect {
+  width: 100%;
+  max-width: 220px;
+
+  padding: 14px;
+
+  border-radius: 14px;
+  border: 1px solid #d4d4d4;
+
+  font-size: 16px;
+  text-align: center;
+
+  margin-bottom: 8px;
+}
+
+.home__button--secondary {
+  background: linear-gradient(
+    135deg,
+    #64748b,
+    #475569
+  );
 }
