@@ -1409,3 +1409,8 @@ code {
   box-shadow:
     0 14px 35px rgba(255,46,99,0.35);
 }
+
+.puzzleTitle--small {
+  font-size: clamp(22px, 4vw, 30px);
+  letter-spacing: 1px;
+}

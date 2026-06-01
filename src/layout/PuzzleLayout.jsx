@@ -55,7 +55,9 @@ export default function PuzzleLayout({
 {/* TÍTULO */}
 <div className="puzzleTitleWrap">
   <div className="puzzleTitleBlock">
-    <h1 className="puzzleTitle">{title}</h1>
+  <h1 className={`puzzleTitle ${title === "Contrarreloj" ? "puzzleTitle--small" : ""}`}>
+    {title}
+  </h1>
     <div className="puzzleTitleLine" />
   </div>
 </div>
