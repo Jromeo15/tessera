@@ -6,7 +6,7 @@ import PuzzleLayout from "../layout/PuzzleLayout";
 import { TimerOff } from "lucide-react";
 
 const BOARD_COLS = 9;
-const BOARD_ROWS = 10;
+const BOARD_ROWS = 300;
 const TOTAL_CELLS = BOARD_COLS * BOARD_ROWS;
 
 const MAX_PIECES = 45;
