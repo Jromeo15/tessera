@@ -229,7 +229,7 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   if (gameOver) {
     return (
-      <PuzzleLayout title="Contrarreloj" onBack={onBack} onReset={reset}>
+      <PuzzleLayout title="Contrarreloj" onBack={onBack} onReset={reset} hideInternalTimer={true}>
         <div style={{ textAlign: "center" }}>
           <h2>Tiempo terminado</h2>
           <p>Puzzles: {score}</p>
@@ -244,13 +244,11 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   return (
     <PuzzleLayout
-      title={`Contrarreloj · ${piecesCount} piezas`}
+      title={`Contrarreloj`}
       onBack={onBack}
       onReset={reset}
+      hideInternalTimer={true}   
     >
-      <div style={{ textAlign: "center", marginBottom: 10 }}>
-        ⏱ {formatTime(timeLeft)} · ⭐ {score}
-      </div>
 
       <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
         <Board key={resetKey}>
@@ -267,6 +265,9 @@ export default function PuzzleTimeAttack({ onBack }) {
           ))}
         </Board>
       </div>
+      <div className="timeAttackHud">
+  ⏱ {formatTime(timeLeft)} · ⭐ {score}
+        </div>
     </PuzzleLayout>
   );
 }

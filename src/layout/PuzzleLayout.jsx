@@ -93,10 +93,10 @@ export default function PuzzleLayout({
       </div>
 
       {!hideInternalTimer && (
-        <div className="puzzleTimerBottom">
-          {externalTimer ?? formatTime(time)}
-        </div>
-      )}
+  <div className="puzzleTimerBottom">
+    {externalTimer ?? formatTime(time)}
+  </div>
+)}
 
       {/* MODAL AYUDA */}
       {showHelp && (
