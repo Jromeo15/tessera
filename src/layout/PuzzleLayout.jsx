@@ -84,8 +84,6 @@ export default function PuzzleLayout({
     <ArrowLeft size={20} strokeWidth={2.5} />
   </button>
 
-
-
 </div>
       </div>
 
