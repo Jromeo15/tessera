@@ -6,12 +6,12 @@ import PuzzleLayout from "../layout/PuzzleLayout";
 import { TimerOff } from "lucide-react";
 
 const BOARD_COLS = 9;
-const BOARD_ROWS = 300;
+const BOARD_ROWS = 10;
 const TOTAL_CELLS = BOARD_COLS * BOARD_ROWS;
 
 const MAX_PIECES = 45;
 const START_PIECES = 3;
-const TIME_LIMIT = 10;
+const TIME_LIMIT = 300;
 
 const COLORS = [
   "#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF",
