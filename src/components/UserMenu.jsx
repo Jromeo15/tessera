@@ -6,8 +6,9 @@ import { supabase } from "../lib/supabaseClient";
 export default function UserMenu() {
   const { user } = useAuth();
 
-  const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState("login"); // login | register
+  const [openAuth, setOpenAuth] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [mode, setMode] = useState("login");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +28,7 @@ export default function UserMenu() {
         return;
       }
     } else {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
       });
@@ -37,37 +38,41 @@ export default function UserMenu() {
         console.log(error);
         return;
       }
-
-      alert("Cuenta creada. Revisa tu email si hay confirmación activada.");
-      console.log(data);
     }
 
-    setOpen(false);
+    setOpenAuth(false);
     setEmail("");
     setPassword("");
   }
 
-  async function handleAuth() {
+  async function handleLogout() {
+    await logout();
+    setOpenMenu(false);
+  }
+
+  function handleClick() {
     if (user) {
-      await logout();
+      setOpenMenu(true);
     } else {
-      setOpen(true);
+      setOpenAuth(true);
     }
   }
 
   return (
     <>
-      <div className="userMenu" onClick={handleAuth}>
+      {/* BOTÓN USUARIO */}
+      <div className="userMenu" onClick={handleClick}>
         {user ? formatUser(user.email) : "Iniciar sesión"}
       </div>
 
-      {open && (
-        <div className="loginOverlay" onClick={() => setOpen(false)}>
-          <div className="loginModal" onClick={(e) => e.stopPropagation()}>
-
-            <h3>
-              {mode === "login" ? "Login" : "Crear cuenta"}
-            </h3>
+      {/* ================= LOGIN / REGISTER MODAL ================= */}
+      {openAuth && (
+        <div className="loginOverlay" onClick={() => setOpenAuth(false)}>
+          <div
+            className="loginModal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>{mode === "login" ? "Login" : "Crear cuenta"}</h3>
 
             <input
               placeholder="Email"
@@ -90,25 +95,46 @@ export default function UserMenu() {
               onClick={() =>
                 setMode(mode === "login" ? "register" : "login")
               }
-              style={{
-                marginTop: 10,
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                color: "#666",
-              }}
             >
               {mode === "login"
-                ? "¿No tienes cuenta? Regístrate"
-                : "¿Ya tienes cuenta? Login"}
+                ? "Crear cuenta"
+                : "Ya tengo cuenta"}
             </button>
 
-            <button onClick={() => setOpen(false)}>
+            <button onClick={() => setOpenAuth(false)}>
               Cancelar
             </button>
-
           </div>
         </div>
+      )}
+
+      {/* ================= SIDEBAR USUARIO ================= */}
+      {openMenu && (
+        <>
+          <div
+            className="sidebarOverlay"
+            onClick={() => setOpenMenu(false)}
+          />
+
+          <div className="userSidebar">
+            <div className="userSidebarHeader">
+              <div className="userSidebarEmail">
+                {formatUser(user.email)}
+              </div>
+            </div>
+
+            <button className="sidebarBtn">
+              Mis niveles
+            </button>
+
+            <button
+              className="sidebarBtn sidebarBtn--danger"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        </>
       )}
     </>
   );
