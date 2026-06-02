@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Board from "../components/Board";
 import Piece from "../components/Piece";
 import { CELL_SIZE } from "../constants";
 import PuzzleLayout from "../layout/PuzzleLayout";
 import { TimerOff } from "lucide-react";
 
+import { useAuth } from "../context/AuthContext";
+import { saveTimeAttackScore } from "../lib/timeAttackScores";
+
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
-const TOTAL_CELLS = BOARD_COLS * BOARD_ROWS;
 
 const MAX_PIECES = 45;
 const START_PIECES = 3;
@@ -20,12 +22,7 @@ const COLORS = [
   "#3EC1D3", "#F67280", "#8BC34A", "#A66CFF",
 ];
 
-// -------------------- GENERADOR (COPIA DE RANDOM) --------------------
-
-const toGrid = (index) => ({
-  row: Math.floor(index / BOARD_COLS),
-  col: index % BOARD_COLS,
-});
+// -------------------- GENERADOR --------------------
 
 const rotateMatrix = (matrix) => {
   const rows = matrix.length;
@@ -149,6 +146,8 @@ const generatePieces = (count) => {
 // -------------------- GAME --------------------
 
 export default function PuzzleTimeAttack({ onBack }) {
+  const { user } = useAuth();
+
   const [piecesCount, setPiecesCount] = useState(START_PIECES);
   const [pieces, setPieces] = useState(() =>
     generatePieces(START_PIECES)
@@ -159,6 +158,9 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [gameOver, setGameOver] = useState(false);
+
+  // 🔥 evita doble guardado
+  const savedRef = useRef(false);
 
   useEffect(() => {
     if (gameOver) return;
@@ -174,6 +176,24 @@ export default function PuzzleTimeAttack({ onBack }) {
 
     return () => clearInterval(interval);
   }, [timeLeft, gameOver]);
+
+  // 🔥 GUARDAR EN SUPABASE SOLO UNA VEZ
+  useEffect(() => {
+    async function save() {
+      if (!gameOver) return;
+      if (!user) return;
+      if (savedRef.current) return;
+
+      savedRef.current = true;
+
+      await saveTimeAttackScore({
+        userId: user.id,
+        score,
+      });
+    }
+
+    save();
+  }, [gameOver, user, score]);
 
   const formatTime = (t) => {
     const m = Math.floor(t / 60);
@@ -230,32 +250,37 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   if (gameOver) {
     return (
-      <PuzzleLayout title="Contrarreloj" onBack={onBack} onReset={reset} hideInternalTimer={true}>
+      <PuzzleLayout
+        title="Contrarreloj"
+        onBack={onBack}
+        onReset={reset}
+        hideInternalTimer={true}
+      >
         <div className="defeatOverlay">
           <div className="defeatPopup">
-  
-          <div className="defeatIcon">
-            <TimerOff size={34} strokeWidth={2.2} />
-          </div>
-  
+
+            <div className="defeatIcon">
+              <TimerOff size={34} strokeWidth={2.2} />
+            </div>
+
             <h2 className="defeatTitle">
               TIEMPO AGOTADO
             </h2>
-  
+
             <div className="defeatLine" />
-  
+
             <p className="defeatText">
               Has completado <b>{score}</b> puzzles
             </p>
-  
+
             <p className="defeatSubtext">
               Inténtalo de nuevo y supera tu marca
             </p>
-  
+
             <button onClick={onBack} className="defeatButton">
               Volver al menú
             </button>
-  
+
           </div>
         </div>
       </PuzzleLayout>
@@ -264,10 +289,10 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   return (
     <PuzzleLayout
-      title={`Contrarreloj`}
+      title="Contrarreloj"
       onBack={onBack}
       onReset={reset}
-      hideInternalTimer={true}   
+      hideInternalTimer={true}
     >
 
       <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
@@ -285,9 +310,11 @@ export default function PuzzleTimeAttack({ onBack }) {
           ))}
         </Board>
       </div>
+
       <div className="timeAttackHud">
-  ⏱ {formatTime(timeLeft)} · ⭐ {score}
-        </div>
+        ⏱ {formatTime(timeLeft)} · ⭐ {score}
+      </div>
+
     </PuzzleLayout>
   );
 }
