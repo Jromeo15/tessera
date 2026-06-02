@@ -16,6 +16,15 @@ import {
           <h1 className="niveles__title">
             Niveles
           </h1>
+          <p
+          style={{
+            textAlign: "center",
+            lineHeight: 1.6,
+            marginBottom: 20,
+          }}
+        >
+          Elige una dificultad.
+        </p>
   
           <div className="levelsGrid">
   
