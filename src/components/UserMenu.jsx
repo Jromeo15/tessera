@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { login, logout } from "../lib/auth";
+import { supabase } from "../lib/supabaseClient";
 
 export default function UserMenu() {
   const { user } = useAuth();
 
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState("login"); // login | register
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,12 +18,28 @@ export default function UserMenu() {
   }
 
   async function handleSubmit() {
-    const { error } = await login(email, password);
+    if (mode === "login") {
+      const { error } = await login(email, password);
 
-    if (error) {
-      alert("Error login");
-      console.log(error);
-      return;
+      if (error) {
+        alert("Error login");
+        console.log(error);
+        return;
+      }
+    } else {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        alert("Error registro");
+        console.log(error);
+        return;
+      }
+
+      alert("Cuenta creada. Revisa tu email si hay confirmación activada.");
+      console.log(data);
     }
 
     setOpen(false);
@@ -45,7 +64,10 @@ export default function UserMenu() {
       {open && (
         <div className="loginOverlay" onClick={() => setOpen(false)}>
           <div className="loginModal" onClick={(e) => e.stopPropagation()}>
-            <h3>Login</h3>
+
+            <h3>
+              {mode === "login" ? "Login" : "Crear cuenta"}
+            </h3>
 
             <input
               placeholder="Email"
@@ -60,15 +82,31 @@ export default function UserMenu() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-              <button onClick={() => setOpen(false)}>
-                Cancelar
-              </button>
+            <button onClick={handleSubmit}>
+              {mode === "login" ? "Entrar" : "Registrarse"}
+            </button>
 
-              <button onClick={handleSubmit}>
-                Entrar
-              </button>
-            </div>
+            <button
+              onClick={() =>
+                setMode(mode === "login" ? "register" : "login")
+              }
+              style={{
+                marginTop: 10,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: "#666",
+              }}
+            >
+              {mode === "login"
+                ? "¿No tienes cuenta? Regístrate"
+                : "¿Ya tienes cuenta? Login"}
+            </button>
+
+            <button onClick={() => setOpen(false)}>
+              Cancelar
+            </button>
+
           </div>
         </div>
       )}
