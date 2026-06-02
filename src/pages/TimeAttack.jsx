@@ -1,4 +1,4 @@
-import { Timer, ArrowLeft } from "lucide-react";
+import { Timer, ArrowLeft, Play} from "lucide-react";
 import { useState } from "react";
 
 export default function TimeAttack({ onBack, onStart }) {
@@ -58,6 +58,7 @@ export default function TimeAttack({ onBack, onStart }) {
             })
         }
         >
+        <Play size={18} style={{ marginRight: 8 }} />
         Jugar
         </button>
       </div>

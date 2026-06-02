@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../../images/logo.png";
-import { Shuffle } from "lucide-react";
+import { Grid, Trophy, Play, Shuffle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home({
@@ -43,6 +43,7 @@ export default function Home({
           className="home__button"
           onClick={onLevels}
         >
+          <Grid size={18} style={{ marginRight: 8 }} />
           Niveles
         </button>
 
@@ -50,6 +51,7 @@ export default function Home({
           className="home__button"
           onClick={onTimeAttack}
         >
+          <Trophy size={18} style={{ marginRight: 8 }} />
           Contrarreloj
         </button>
 
