@@ -1465,22 +1465,118 @@ code {
 }
 
 .loginModal {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  width: 260px;
+  width: 320px;
+
+  padding: 28px;
+
+  border-radius: 24px;
+
+  background: rgba(255,255,255,0.95);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.35),
+    0 10px 25px rgba(255,46,99,0.12);
 
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+}
 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+.loginModal h3 {
+  margin: 0 0 10px;
+
+  text-align: center;
+
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  background: linear-gradient(
+    90deg,
+    #ff2e63,
+    #ff6a00,
+    #c084fc
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .loginModal input {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  padding: 12px 14px;
+
+  border-radius: 12px;
+
+  border: 1px solid #d8d8d8;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: border 0.15s ease;
+}
+
+.loginModal input:focus {
+  border-color: #c084fc;
+}
+
+.loginModal button {
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  cursor: pointer;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.loginModal button:first-of-type {
+  background: linear-gradient(
+    135deg,
+    #ff6a00,
+    #ff2e63
+  );
+
+  color: white;
+
+  box-shadow:
+    0 10px 25px rgba(255,46,99,0.25);
+}
+
+.loginModal button:first-of-type:hover {
+  transform: translateY(-2px);
+}
+
+.loginModal button:nth-of-type(2) {
+  background: rgba(192,132,252,0.15);
+
+  color: #7c3aed;
+}
+
+.loginModal button:last-of-type {
+  background: #e5e7eb;
+
+  color: #475569;
+}
+
+.loginHint {
+  margin: -2px 0 4px;
+
+  font-size: 12px;
+
+  color: #64748b;
+
+  text-align: center;
 }
 
 .sidebarOverlay {

@@ -28,10 +28,15 @@ export default function UserMenu() {
         return;
       }
     } else {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+        if (password.length < 6) {
+          alert("La contraseña debe tener al menos 6 caracteres");
+          return;
+        }
+      
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
 
       if (error) {
         alert("Error registro");
@@ -81,11 +86,17 @@ export default function UserMenu() {
             />
 
             <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             />
+
+            {mode === "register" && (
+            <p className="loginHint">
+                La contraseña debe tener al menos 6 caracteres.
+            </p>
+            )}
 
             <button onClick={handleSubmit}>
               {mode === "login" ? "Entrar" : "Registrarse"}
