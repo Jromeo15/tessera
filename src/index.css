@@ -1450,3 +1450,32 @@ code {
 .userMenu:active {
   transform: scale(0.97);
 }
+
+.loginOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.loginModal {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 260px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.loginModal input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}

@@ -42,6 +42,12 @@ export default function App() {
 
   let content = null;
 
+  // 🔥 NUEVO: screens donde NO queremos usuario
+  const isPuzzleScreen =
+    screen === "puzzle" ||
+    screen === "random" ||
+    screen === "timeattack-game";
+
   // ---------------- HOME ----------------
   if (screen === "home") {
     content = (
@@ -112,9 +118,7 @@ export default function App() {
     const Puzzle = selectedPuzzle;
 
     content = (
-      <Puzzle
-        onBack={() => setScreen("category")}
-      />
+      <Puzzle onBack={() => setScreen("category")} />
     );
   }
 
@@ -130,7 +134,7 @@ export default function App() {
 
   return (
     <>
-      <UserMenu />
+      {!isPuzzleScreen && <UserMenu />}
       {content}
     </>
   );
