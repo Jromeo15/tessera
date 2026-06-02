@@ -6,6 +6,7 @@ import CategoryLevels from "./pages/CategoryLevels";
 import PuzzleRandom from "./pages/PuzzleRandom";
 import PuzzleTimeAttack from "./pages/PuzzleTimeAttack";
 import TimeAttack from "./pages/TimeAttack";
+import UserMenu from "./components/UserMenu";
 
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
@@ -39,9 +40,11 @@ export default function App() {
 
   const [timeAttackConfig, setTimeAttackConfig] = useState(null);
 
+  let content = null;
+
   // ---------------- HOME ----------------
   if (screen === "home") {
-    return (
+    content = (
       <Home
         onLevels={() => setScreen("levels")}
         onTimeAttack={() => setScreen("timeattack")}
@@ -54,8 +57,8 @@ export default function App() {
   }
 
   // ---------------- TIME ATTACK SETUP ----------------
-  if (screen === "timeattack") {
-    return (
+  else if (screen === "timeattack") {
+    content = (
       <TimeAttack
         onBack={() => setScreen("home")}
         onStart={(config) => {
@@ -67,8 +70,8 @@ export default function App() {
   }
 
   // ---------------- TIME ATTACK GAME ----------------
-  if (screen === "timeattack-game") {
-    return (
+  else if (screen === "timeattack-game") {
+    content = (
       <PuzzleTimeAttack
         config={timeAttackConfig}
         onBack={() => setScreen("home")}
@@ -77,8 +80,8 @@ export default function App() {
   }
 
   // ---------------- LEVELS ----------------
-  if (screen === "levels") {
-    return (
+  else if (screen === "levels") {
+    content = (
       <Levels
         onBack={() => setScreen("home")}
         onSelectCategory={(cat) => {
@@ -90,8 +93,8 @@ export default function App() {
   }
 
   // ---------------- CATEGORY ----------------
-  if (screen === "category") {
-    return (
+  else if (screen === "category") {
+    content = (
       <CategoryLevels
         category={category}
         puzzles={groupedPuzzles}
@@ -105,14 +108,19 @@ export default function App() {
   }
 
   // ---------------- PUZZLE NORMAL ----------------
-  if (screen === "puzzle") {
+  else if (screen === "puzzle") {
     const Puzzle = selectedPuzzle;
-    return <Puzzle onBack={() => setScreen("category")} />;
+
+    content = (
+      <Puzzle
+        onBack={() => setScreen("category")}
+      />
+    );
   }
 
   // ---------------- RANDOM ----------------
-  if (screen === "random") {
-    return (
+  else if (screen === "random") {
+    content = (
       <PuzzleRandom
         piecesCount={randomCount}
         onBack={() => setScreen("home")}
@@ -120,5 +128,10 @@ export default function App() {
     );
   }
 
-  return null;
+  return (
+    <>
+      <UserMenu />
+      {content}
+    </>
+  );
 }
