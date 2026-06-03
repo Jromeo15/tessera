@@ -1,12 +1,13 @@
 import { useState } from "react";
 import logo from "../../images/logo.png";
-import { Grid, Trophy, Play, Shuffle } from "lucide-react";
+import { Grid, Trophy, Play, Shuffle, Medal } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home({
   onLevels,
   onTimeAttack,
   onRandom,
+  onLeaderboard,
 }) {
   const { user } = useAuth();
 
@@ -53,6 +54,14 @@ export default function Home({
         >
           <Trophy size={18} style={{ marginRight: 8 }} />
           Contrarreloj
+        </button>
+
+        <button
+          className="home__button"
+          onClick={onLeaderboard}
+        >
+          <Medal size={18} style={{ marginRight: 8 }} />
+          Clasificación
         </button>
 
       </div>

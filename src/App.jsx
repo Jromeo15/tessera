@@ -7,6 +7,7 @@ import PuzzleRandom from "./pages/PuzzleRandom";
 import PuzzleTimeAttack from "./pages/PuzzleTimeAttack";
 import TimeAttack from "./pages/TimeAttack";
 import UserMenu from "./components/UserMenu";
+import Leaderboard from "./pages/Leaderboard";
 
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
@@ -58,6 +59,7 @@ export default function App() {
           setRandomCount(count);
           setScreen("random");
         }}
+        onLeaderboard={() => setScreen("leaderboard")}
       />
     );
   }
@@ -129,6 +131,12 @@ export default function App() {
         piecesCount={randomCount}
         onBack={() => setScreen("home")}
       />
+    );
+  }
+
+  else if (screen === "leaderboard") {
+    content = (
+      <Leaderboard onBack={() => setScreen("home")} />
     );
   }
 
