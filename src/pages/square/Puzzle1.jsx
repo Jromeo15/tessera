@@ -8,15 +8,32 @@ import PuzzleLayout from "../../layout/PuzzleLayout";
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
 
+const BOARD_PIXEL_WIDTH = BOARD_COLS * CELL_SIZE;
+const BOARD_PIXEL_HEIGHT = BOARD_ROWS * CELL_SIZE;
+
+const SAFE_MARGIN = 20;
+
 export default function App({ onBack }) {
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
 
+  const getPieceWidth = (shape) => {
+    let maxX = 0;
+
+    shape.forEach((row) => {
+      row.forEach((cell, x) => {
+        if (cell) maxX = Math.max(maxX, x);
+      });
+    });
+
+    return maxX + 1;
+  };
+
   const [pieces] = useState([
-    { id: 1, color: "#4D96FF", shape: SHAPES[0] }, // coral rojo
-    { id: 2, color: "#9D4EDD", shape: SHAPES[1] }, // amarillo
-    { id: 3, color: "#FF6B6B", shape: SHAPES[2] }, // verde
-    { id: 4, color: "#2EC4B6", shape: SHAPES[3] }, // azul
+    { id: 1, color: "#4D96FF", shape: SHAPES[0] },
+    { id: 2, color: "#9D4EDD", shape: SHAPES[1] },
+    { id: 3, color: "#FF6B6B", shape: SHAPES[2] },
+    { id: 4, color: "#2EC4B6", shape: SHAPES[3] },
   ]);
 
   const checkVictory = () => {
@@ -57,19 +74,19 @@ export default function App({ onBack }) {
     setShowVictory(win);
   };
 
+  const topCount = Math.ceil(pieces.length / 2);
+
   return (
     <PuzzleLayout
-  title="Puzzle 1"
-  onBack={onBack}
-  onReset={() => {
-    setShowVictory(false);
-    setResetKey((k) => k + 1);
-  }}
-
-  showVictory={showVictory}
-  onCloseVictory={() => setShowVictory(false)}
->
-      {/* BOARD */}
+      title="Puzzle 1"
+      onBack={onBack}
+      onReset={() => {
+        setShowVictory(false);
+        setResetKey((k) => k + 1);
+      }}
+      showVictory={showVictory}
+      onCloseVictory={() => setShowVictory(false)}
+    >
       <div
         style={{
           flex: 1,
@@ -80,26 +97,54 @@ export default function App({ onBack }) {
           width: "100%",
         }}
       >
-<Board key={resetKey}>
-  {pieces.map((p, index) => (
-    <Piece
-      key={p.id}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={
-        (index % 4) * 65 - 45 +
-        (index < pieces.length / 2 ? -8 : 8)
-      }
-      initialY={
-        index < pieces.length / 2
-          ? Math.floor(index / 4) * 140 - 60
-          : Math.floor(index / 4) * 140 - 60
-      }
-      onDrop={checkVictory}
-    />
-  ))}
-</Board>
+      <Board key={resetKey}>
+        {pieces.map((p, index) => {
+          const isTopRow = index < topCount;
+          const rowIndex = isTopRow ? index : index - topCount;
+
+          const pieceWidth = getPieceWidth(p.shape) * CELL_SIZE;
+
+          const availableWidth = BOARD_PIXEL_WIDTH - SAFE_MARGIN * 2;
+
+          const slotWidth =
+            topCount > 1 ? availableWidth / (topCount - 1) : 0;
+
+          // 🎯 centro ideal equiespaciado
+          let centerX =
+            topCount > 1
+              ? SAFE_MARGIN + slotWidth * rowIndex
+              : BOARD_PIXEL_WIDTH / 2;
+
+          // 🎯 límites reales según tamaño pieza
+          const minCenter = SAFE_MARGIN + pieceWidth / 2;
+          const maxCenter = BOARD_PIXEL_WIDTH - SAFE_MARGIN - pieceWidth / 2;
+
+          // 🔥 soft correction (NO hard clamp)
+          if (centerX < minCenter) {
+            centerX += (minCenter - centerX) * 0.6;
+          } else if (centerX > maxCenter) {
+            centerX -= (centerX - maxCenter) * 0.6;
+          }
+
+          const x = centerX - pieceWidth / 2;
+
+          const y = isTopRow
+            ? -80
+            : window.innerHeight * 0.15;
+
+          return (
+            <Piece
+              key={p.id}
+              id={p.id}
+              color={p.color}
+              shape={p.shape}
+              initialX={x}
+              initialY={y}
+              onDrop={checkVictory}
+            />
+          );
+        })}
+      </Board>
       </div>
     </PuzzleLayout>
   );
