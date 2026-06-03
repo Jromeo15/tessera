@@ -201,6 +201,30 @@ export default function PuzzleTimeAttack({ onBack }) {
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
 
+  const getPieceBounds = (shape) => {
+    let minX = Infinity;
+    let maxX = -Infinity;
+  
+    let minY = Infinity;
+    let maxY = -Infinity;
+  
+    shape.forEach((row, y) => {
+      row.forEach((cell, x) => {
+        if (cell) {
+          minX = Math.min(minX, x);
+          maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y);
+          maxY = Math.max(maxY, y);
+        }
+      });
+    });
+  
+    return {
+      width: (maxX - minX + 1) * CELL_SIZE,
+      height: (maxY - minY + 1) * CELL_SIZE,
+    };
+  };
+
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;
@@ -296,19 +320,47 @@ export default function PuzzleTimeAttack({ onBack }) {
     >
 
       <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
-        <Board key={resetKey}>
-          {pieces.map((p, i) => (
-            <Piece
-              key={p.id}
-              id={p.id}
-              color={p.color}
-              shape={p.shape}
-              initialX={(i % 4) * 65}
-              initialY={Math.floor(i / 4) * 140}
-              onDrop={checkVictory}
-            />
-          ))}
-        </Board>
+      <Board key={resetKey}>
+  {pieces.map((p, i) => {
+    const cols = Math.min(4, pieces.length);
+    const rows = Math.ceil(pieces.length / 4);
+
+    const { width: pieceWidth } = getPieceBounds(p.shape);
+
+    const pieceHeight = p.shape.length * CELL_SIZE;
+
+    const boardWidth = BOARD_COLS * CELL_SIZE;
+
+    const totalRowWidth = cols * 65;
+    
+    const LEFT_SHIFT = 20;
+    
+    const baseLeft =
+      boardWidth / 2 -
+      totalRowWidth / 2 -
+      LEFT_SHIFT;
+    
+    const x =
+      baseLeft +
+      (i % 4) * 65 +
+      (i < pieces.length / 2 ? -10 : 10) -
+      pieceWidth / 2;
+
+      const y = -100 + Math.random() * 250;
+
+    return (
+      <Piece
+        key={p.id}
+        id={p.id}
+        color={p.color}
+        shape={p.shape}
+        initialX={x}
+        initialY={y}
+        onDrop={checkVictory}
+      />
+    );
+  })}
+</Board>
       </div>
 
       <div className="timeAttackHud">
