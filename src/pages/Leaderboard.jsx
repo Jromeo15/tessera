@@ -37,6 +37,16 @@ export default function Leaderboard({ onBack }) {
           CLASIFICACIÓN
         </h1>
 
+        <p
+          style={{
+            textAlign: "center",
+            lineHeight: 1.6,
+            marginBottom: 20,
+          }}
+        >
+          Mejores puntuaciones de CONTRARRELOJ.
+        </p>
+
         {loading ? (
           <p>Cargando...</p>
         ) : (
