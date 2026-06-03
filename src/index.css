@@ -1807,6 +1807,15 @@ code {
   }
 
   .leaderboardCard {
-    padding: 20px;
+    position: relative;
+    padding-top: 20px;
+  }
+  
+  .leaderboardCard h1 {
+    font-size: 32px;
+    margin-top: 70px;   /* separación clara del botón */
+    margin-bottom: 24px;
+    text-align: center;
   }
 }
+
