@@ -109,17 +109,17 @@ export default function App({ onBack }) {
           const slotWidth =
             topCount > 1 ? availableWidth / (topCount - 1) : 0;
 
-          // 🎯 centro ideal equiespaciado
           let centerX =
             topCount > 1
               ? SAFE_MARGIN + slotWidth * rowIndex
               : BOARD_PIXEL_WIDTH / 2;
+          
+          const globalBias = -40; // prueba entre -8 y -20 si quieres más efecto
+          centerX += globalBias;
 
-          // 🎯 límites reales según tamaño pieza
           const minCenter = SAFE_MARGIN + pieceWidth / 2;
           const maxCenter = BOARD_PIXEL_WIDTH - SAFE_MARGIN - pieceWidth / 2;
 
-          // 🔥 soft correction (NO hard clamp)
           if (centerX < minCenter) {
             centerX += (minCenter - centerX) * 0.6;
           } else if (centerX > maxCenter) {
