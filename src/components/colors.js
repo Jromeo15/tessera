@@ -1,0 +1,58 @@
+export const COLORS = [
+    // 🔴 RED / ENERGY
+    "#FF3B3B", "#FF0054", "#FF2E63",
+  
+    // 🟠 ORANGE NEON
+    "#FF6B00", "#FF7A00", "#FF9E00",
+  
+    // 🟡 ELECTRIC YELLOW
+    "#FFE600", "#FFD000", "#F9FF00",
+  
+    // 🟢 ACID / FUTURE GREEN
+    "#39FF14", "#00FF85", "#00E676",
+  
+    // 🟦 CYBER BLUE
+    "#00B8FF", "#1E90FF", "#4D96FF",
+  
+    // 🟣 NEON PURPLE
+    "#B026FF", "#9D4EDD", "#7B2CBF",
+  
+    // 💗 HOT PINK / MAGENTA
+    "#FF2D95", "#FF00C8", "#FF4FD8",
+  
+    // 🟦 CYAN / ELECTRIC AQUA
+    "#00F5FF", "#00E5FF", "#00C2FF",
+  
+    // 🧊 ICE BLUE / FUTURE LIGHT
+    "#A0E9FF", "#7DF9FF", "#B3FFF6",
+  
+    // 🟫 DARK CONTRAST (for variety but still futuristic)
+    "#2B2D42", "#1F1F3A", "#3A0CA3",
+  
+    // ⚡ SPECIAL NEON ACCENTS
+    "#FF3864", "#2DE2E6", "#F72585", "#7209B7"
+  ];
+
+export const shuffleArray = (array) => {
+const arr = [...array];
+
+for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+}
+
+return arr;
+};
+
+export const getUniqueColors = (count) => {
+    const shuffled = shuffleArray(COLORS);
+  
+    // si pides más colores que los disponibles
+    if (count > shuffled.length) {
+      throw new Error(
+        `No hay suficientes colores únicos (${shuffled.length}) para ${count} piezas`
+      );
+    }
+  
+    return shuffled.slice(0, count);
+  };

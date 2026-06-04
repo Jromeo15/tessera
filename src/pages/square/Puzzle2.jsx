@@ -1,10 +1,9 @@
 import { useState } from "react";
 import Board from "../../components/Board";
 import Piece from "../../components/Piece";
-import { SHAPES } from "./shapes/shapes1";
+import { SHAPES } from "./shapes/shapes2";
 import { CELL_SIZE } from "../../constants";
 import PuzzleLayout from "../../layout/PuzzleLayout";
-import { getUniqueColors } from "../../components/colors";
 
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
@@ -30,15 +29,12 @@ export default function App({ onBack }) {
     return maxX + 1;
   };
 
-  const [pieces] = useState(() => {
-    const colors = getUniqueColors(SHAPES.length);
-  
-    return SHAPES.map((shape, i) => ({
-      id: i + 1,
-      color: colors[i],
-      shape,
-    }));
-  });
+  const [pieces] = useState([
+    { id: 1, color: "#4D96FF", shape: SHAPES[0] },
+    { id: 2, color: "#9D4EDD", shape: SHAPES[1] },
+    { id: 3, color: "#FF6B6B", shape: SHAPES[2] },
+    { id: 4, color: "#2EC4B6", shape: SHAPES[3] },
+  ]);
 
   const checkVictory = () => {
     const board = document.querySelector(".board");
