@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Board from "../../components/Board";
 import Piece from "../../components/Piece";
-import { SHAPES } from "../../shapes-logo";
+import { SHAPES } from "./shapes/shapes-logo";
 import { CELL_SIZE } from "../../constants";
 import PuzzleLayout from "../../layout/PuzzleLayout";
 
@@ -66,7 +66,7 @@ export default function App({ onBack }) {
 
   return (
     <PuzzleLayout
-  title="Puzzle 1"
+  title="Puzzle 7"
   onBack={onBack}
   onReset={() => {
     setShowVictory(false);

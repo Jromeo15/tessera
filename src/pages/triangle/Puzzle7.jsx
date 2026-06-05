@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Board from "../../components/Board";
 import Piece from "../../components/Piece";
-import { SHAPES } from "../../shapes2";
+import { SHAPES } from "./shapes/shapes7";
 import { CELL_SIZE } from "../../constants";
 import PuzzleLayout from "../../layout/PuzzleLayout";
+import { getUniqueColors } from "../../components/colors";
 
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
@@ -12,18 +13,15 @@ export default function App({ onBack }) {
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
 
-  const [pieces] = useState([
-    { id: 1, color: "#FF6B6B", shape: SHAPES[0].shape, shapeMode: SHAPES[0].mode }, // coral rojo
-    { id: 2, color: "#F7B801", shape: SHAPES[1].shape, shapeMode: SHAPES[1].mode }, // amarillo
-    { id: 3, color: "#6BCB77", shape: SHAPES[2].shape, shapeMode: SHAPES[2].mode }, // verde
-    { id: 4, color: "#4D96FF", shape: SHAPES[3].shape, shapeMode: SHAPES[3].mode }, // azul
-    { id: 5, color: "#9D4EDD", shape: SHAPES[4].shape, shapeMode: SHAPES[4].mode }, // violeta
-    { id: 6, color: "#FF7F50", shape: SHAPES[5].shape, shapeMode: SHAPES[5].mode }, // naranja
-    { id: 7, color: "#2EC4B6", shape: SHAPES[6].shape, shapeMode: SHAPES[6].mode }, // turquesa
-    { id: 8, color: "#845EC2", shape: SHAPES[7].shape, shapeMode: SHAPES[7].mode }, // morado profundo
-    { id: 9, color: "#00C9A7", shape: SHAPES[8].shape, shapeMode: SHAPES[8].mode }, // verde aqua
-    { id: 10, color: "#FF9671", shape: SHAPES[1].shape, shapeMode: SHAPES[1].mode }, // melocotón
-  ]);
+  const [pieces] = useState(() => {
+    const colors = getUniqueColors(SHAPES.length);
+  
+    return SHAPES.map((shape, i) => ({
+      id: i + 1,
+      color: colors[i],
+      shape,
+    }));
+  });
 
   const checkVictory = () => {
     const board = document.querySelector(".board");
@@ -67,7 +65,7 @@ export default function App({ onBack }) {
 
   return (
     <PuzzleLayout
-  title="Puzzle 1"
+  title="Puzzle 7"
   onBack={onBack}
   onReset={() => {
     setShowVictory(false);

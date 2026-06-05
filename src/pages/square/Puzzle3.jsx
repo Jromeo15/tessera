@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Board from "../../components/Board";
 import Piece from "../../components/Piece";
-import { SHAPES } from "./shapes/shapes2";
+import { SHAPES } from "./shapes/shapes3";
 import { CELL_SIZE } from "../../constants";
 import PuzzleLayout from "../../layout/PuzzleLayout";
 import { getUniqueColors } from "../../components/colors";
