@@ -173,26 +173,22 @@ code {
   font-weight: 900;
   text-transform: uppercase;
 
-  background: linear-gradient(
-    90deg,
-    #67e8f9,
-    #00e5ff,
-    #0077ff,
-    #4f46e5
-  );
-  
-  text-shadow: 0 0 50px rgba(0, 229, 255, 0.45);
-
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow: 0 0 40px rgba(0, 184, 255, 0.35);
-
   transform: skew(-3deg);
 
   line-height: 1.1;
   padding-top: 6px;
   padding-bottom: 6px;
+
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.5);
+}
+
+.home__title span {
+  display: inline-block;
+
+  filter:
+    drop-shadow(0 0 4px rgba(0, 229, 255, 0.35))
+    drop-shadow(0 0 6px rgba(79, 70, 229, 0.25));
 }
 
 .niveles__title {
@@ -246,33 +242,97 @@ code {
 }
 
 .home__button {
-  padding: 14px 28px;
-  font-size: 18px;
+  padding: 16px 36px;
+  font-size: 16px;
   width: 100%;
-  max-width: 220px;
+  max-width: 280px;
 
-  border: none;
-  border-radius: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+
   cursor: pointer;
 
-  background: linear-gradient(135deg, #00c6ff, #2563eb);
-  color: white;
+  background: #3aafe0;
+  color: #ffffff;
 
-  box-shadow: 0 10px 25px rgba(0, 198, 255, 0.35);
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
 
-  font-weight: 800;
-  font-style: italic;
+  position: relative;
+  overflow: hidden;
 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.25),
+    0 6px 14px rgba(0, 120, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .home__button:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 14px 35px rgba(0, 198, 255, 0.5);
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.30),
+    0 10px 20px rgba(0, 140, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+  filter: brightness(1.05);
+}
+
+.home__button:active {
+  transform: translateY(0px) scale(0.98);
+  filter: brightness(0.95);
+
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.25),
+    inset 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* brillo interno profesional (muy sutil, no neón agresivo) */
+.home__button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.18),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* borde superior tipo UI limpia */
+.home__button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+}
+
+.home__button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+
+  box-shadow:
+    0 14px 28px rgba(0, 140, 255, 0.35),
+    0 3px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .home__button:active {
   transform: scale(0.98);
+  filter: brightness(0.98);
 }
 
 .piece-cell.type-0 {
@@ -484,7 +544,7 @@ code {
 
   cursor: pointer;
 
-  background: linear-gradient(135deg, #00c6ff, #2563eb);
+  background: #3aafe0;
 
   color: white;
 
@@ -663,7 +723,7 @@ code {
 }
 
 .puzzleIconBtn--back {
-  background: linear-gradient(135deg, #00c6ff, #2563eb);
+  background: #3aafe0;
 
   color: white;
 

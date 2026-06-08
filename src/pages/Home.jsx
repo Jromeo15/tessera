@@ -11,9 +11,22 @@ export default function Home({
 }) {
   const { user } = useAuth();
 
-  console.log("Usuario:", user);
   const [showPopup, setShowPopup] = useState(false);
   const [value, setValue] = useState(2);
+
+  const title = "TESSERA";
+
+  const titleColors = [
+    "#00F5FF", // cyan tech (base futurista)
+    "#00B8FF", // azul eléctrico
+    "#4D7CFF", // azul profundo limpio
+  
+    "#FFB000", // amarillo energético (alerta / reward)
+    "#FF7A18", // naranja sci-fi (calor / acción)
+  
+    "#FF3DCE", // magenta HUD (UI futurista)
+    "#A855F7", // violeta sci-fi
+  ];
 
   return (
     <div className="home">
@@ -34,7 +47,18 @@ export default function Home({
           className="home__logo"
         />
 
-        <h1 className="home__title">TESSERA</h1>
+<h1 className="home__title">
+  {title.split("").map((char, i) => (
+    <span
+      key={i}
+      style={{
+        color: titleColors[i % titleColors.length],
+      }}
+    >
+      {char}
+    </span>
+  ))}
+</h1>
 
         <p className="home__subtitle">
           Encaja las piezas. Completa el tablero.

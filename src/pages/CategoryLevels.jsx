@@ -41,7 +41,7 @@ export default function CategoryLevels({
           {list.map((puzzle) => (
             <button
               key={puzzle.name}
-              className="home__button"
+              className={`home__button categoryBtnTheme--${category}`}
               onClick={() => onSelectPuzzle(puzzle.component)}
             >
               {puzzle.name}
