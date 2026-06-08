@@ -307,7 +307,7 @@ export default function PuzzleLayout({
       </button>
 
       <div className="victoryIcon">
-        ✨
+        {/* ✨ */}
       </div>
 
       <h2 className="victoryTitle">
