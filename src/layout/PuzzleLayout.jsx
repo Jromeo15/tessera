@@ -165,8 +165,7 @@ export default function PuzzleLayout({
     height: 42,
     borderRadius: 12,
     border: "1px solid rgba(255,255,255,0.15)",
-    background:
-      "linear-gradient(135deg, #009dff, #3b82f6)",
+    background: "#3aafe0",
     backdropFilter: "blur(12px)",
     boxShadow:
       "0 8px 20px rgba(0,157,255,0.45), inset 0 1px 0 rgba(255,255,255,0.2)",
@@ -188,8 +187,7 @@ export default function PuzzleLayout({
     height: 42,
     borderRadius: 12,
     border: "1px solid rgba(255,255,255,0.15)",
-    background:
-      "linear-gradient(135deg, #009dff, #3b82f6)",
+    background: "#3aafe0",
     backdropFilter: "blur(12px)",
     boxShadow:
       "0 8px 20px rgba(0,157,255,0.45), inset 0 1px 0 rgba(255,255,255,0.2)",
