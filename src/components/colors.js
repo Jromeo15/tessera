@@ -1,12 +1,12 @@
 export const COLORS = [
-    // 🔴 RED / ENERGY
-    "#FF3B3B", "#FF0054", "#FF2E63",
+    // 🔴 RED / ENERGY (más diferenciados)
+    "#FF4D4D", "#D90429", "#FF7A7A",
   
-    // 🟠 ORANGE NEON
-    "#FF6B00", "#FF7A00", "#FF9E00",
+    // 🟠 ORANGE NEON (más separación real)
+    "#FF6B00", "#FB8500", "#FFB703",
   
     // 🟡 ELECTRIC YELLOW
-    "#FFE600", "#FFD000", "#F9FF00",
+    "#FFE600", "#FFD000", "#FFC300",
   
     // 🟢 ACID / FUTURE GREEN
     "#39FF14", "#00FF85", "#00E676",
@@ -17,17 +17,17 @@ export const COLORS = [
     // 🟣 NEON PURPLE
     "#B026FF", "#9D4EDD", "#7B2CBF",
   
-    // 💗 HOT PINK / MAGENTA
-    "#FF2D95", "#FF00C8", "#FF4FD8",
+    // 💗 HOT PINK / MAGENTA (más variedad real)
+    "#FF4DA6", "#D946EF", "#FF6EC7",
   
     // 🟦 CYAN / ELECTRIC AQUA
     "#00F5FF", "#00E5FF", "#00C2FF",
   
-    // 🧊 ICE BLUE / FUTURE LIGHT
-    "#A0E9FF", "#7DF9FF", "#B3FFF6",
+    // 🧊 ICE BLUE / FUTURE LIGHT (sin tonos oscuros)
+    "#E0F7FF", "#B3FFF6", "#A0E9FF",
   
-    // 🟫 DARK CONTRAST (for variety but still futuristic)
-    "#2B2D42", "#1F1F3A", "#3A0CA3",
+    // ⚪ LIGHT FUTURISTIC NEUTRALS (sustituyen los oscuros)
+    "#E2E8F0", "#CBD5E1", "#94A3B8",
   
     // ⚡ SPECIAL NEON ACCENTS
     "#FF3864", "#2DE2E6", "#F72585", "#7209B7"
