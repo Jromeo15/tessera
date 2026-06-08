@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import {
   HelpCircle,
   RotateCcw,
-  ArrowLeft
+  ArrowLeft,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 
 export default function PuzzleLayout({
@@ -19,6 +21,15 @@ export default function PuzzleLayout({
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(true);
+  const [zoom, setZoom] = useState(1);
+
+  const zoomOut = () => {
+    setZoom((z) => Math.max(0.8, z - 0.2));
+  };
+  
+  const zoomIn = () => {
+    setZoom((z) => Math.min(1.2, z + 0.2));
+  };
 
   const compatiblePairs = {
     "3": "6",
@@ -129,11 +140,75 @@ export default function PuzzleLayout({
       </div>
 
       {/* CONTENIDO (CENTRADO EN PANTALLA) */}
-      <div className="puzzleContent">
-      {typeof children === "function"
-  ? children({ isFilled: checkCellFilled })
-  : children}
-      </div>
+{/* CONTENIDO (CENTRADO EN PANTALLA) */}
+<div className="puzzleContent" style={{ position: "relative" }}>
+  
+  {/* ZOOM BAR (FLOAT TOP-LEFT) */}
+  <div
+    style={{
+      position: "absolute",
+      top: 10,
+      left: 10,
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      zIndex: 10,
+      padding: "6px 8px",
+      borderRadius: 8,
+      background: "rgba(255,255,255,0.7)",
+      backdropFilter: "blur(6px)",
+      border: "1px solid rgba(0,0,0,0.1)",
+    }}
+  >
+  <button
+    onClick={zoomOut}
+    style={{
+      width: 32,
+      height: 32,
+      borderRadius: 8,
+      border: "1px solid #ccc",
+      background: "white",
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    <ZoomOut size={18} />
+  </button>
+
+  <button
+    onClick={zoomIn}
+    style={{
+      width: 32,
+      height: 32,
+      borderRadius: 8,
+      border: "1px solid #ccc",
+      background: "white",
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    <ZoomIn size={18} />
+  </button>
+  </div>
+
+  {/* CONTENIDO REAL */}
+  <div
+    style={{
+      transform: `scale(${zoom})`,
+      transformOrigin: "center center",
+      transition: "transform 0.2s ease",
+    }}
+  >
+    {typeof children === "function"
+      ? children({ isFilled: checkCellFilled })
+      : children}
+  </div>
+
+</div>
 
       {!hideInternalTimer && (
   <div className="puzzleTimerBottom">
