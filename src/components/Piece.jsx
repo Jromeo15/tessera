@@ -436,6 +436,7 @@ export default function Piece({
       return (
         <div
           key={i}
+          data-cell-type={cell}
           className={`piece-cell type-${cell}`}
           style={{
             width: CELL_SIZE,

@@ -14,10 +14,49 @@ export default function PuzzleLayout({
   onCloseVictory,
   externalTimer = null,
   hideInternalTimer = false,
+  isFilled,
 }) {
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(true);
+
+  const compatiblePairs = {
+    "3": "6",
+    "6": "3",
+  
+    "4": "5",
+    "5": "4",
+  
+    "a": "g",
+    "g": "a",
+  
+    "b": "h",
+    "h": "b",
+  
+    "c": "e",
+    "e": "c",
+  
+    "d": "f",
+    "f": "d",
+  };
+  
+  const defaultIsFilled = (parts) => {
+    if (parts.length === 0) {
+      return false;
+    }
+  
+    if (parts.includes("1")) {
+      return true;
+    }
+  
+    if (parts.length !== 2) {
+      return false;
+    }
+  
+    return compatiblePairs[parts[0]] === parts[1];
+  };
+  
+  const checkCellFilled = isFilled || defaultIsFilled;
 
   useEffect(() => {
     if (!running) return;
@@ -91,7 +130,9 @@ export default function PuzzleLayout({
 
       {/* CONTENIDO (CENTRADO EN PANTALLA) */}
       <div className="puzzleContent">
-        {children}
+      {typeof children === "function"
+  ? children({ isFilled: checkCellFilled })
+  : children}
       </div>
 
       {!hideInternalTimer && (

@@ -24,13 +24,13 @@ export default function App({ onBack }) {
     { id: 9, color: "#F7B801", shape: SHAPES[8] },
   ]);
 
-  const checkVictory = () => {
+  const checkVictory = (isFilled) => {
     const board = document.querySelector(".board");
     if (!board) return;
 
     const grid = Array.from({ length: BOARD_ROWS }, () =>
-      Array(BOARD_COLS).fill(false)
-    );
+    Array.from({ length: BOARD_COLS }, () => [])
+  );
 
     const piecesDom = document.querySelectorAll(".piece");
 
@@ -53,59 +53,62 @@ export default function App({ onBack }) {
           col >= 0 &&
           col < BOARD_COLS
         ) {
-          grid[row][col] = true;
+          const type = cell.dataset.cellType;
+          grid[row][col].push(type);
         }
       });
     });
 
-    const win = grid.every((row) => row.every(Boolean));
+    const win = grid.every((row) =>
+      row.every((cell) => isFilled(cell))
+    );
     setShowVictory(win);
   };
 
   return (
     <PuzzleLayout
-  title="Puzzle 1"
-  onBack={onBack}
-  onReset={() => {
-    setShowVictory(false);
-    setResetKey((k) => k + 1);
-  }}
-
-  showVictory={showVictory}
-  onCloseVictory={() => setShowVictory(false)}
->
-      {/* BOARD */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-end",
-          paddingBottom: 100,
-          width: "100%",
-        }}
-      >
-<Board key={resetKey}>
-  {pieces.map((p, index) => (
-    <Piece
-      key={p.id}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={
-        (index % 4) * 65 - 45 +
-        (index < pieces.length / 2 ? -8 : 8)
-      }
-      initialY={
-        index < pieces.length / 2
-          ? Math.floor(index / 4) * 140 - 60
-          : Math.floor(index / 4) * 140 - 60
-      }
-      onDrop={checkVictory}
-    />
-  ))}
-</Board>
-      </div>
+      title="Puzzle 1"
+      onBack={onBack}
+      onReset={() => {
+        setShowVictory(false);
+        setResetKey((k) => k + 1);
+      }}
+      showVictory={showVictory}
+      onCloseVictory={() => setShowVictory(false)}
+    >
+      {({ isFilled }) => (
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-end",
+            paddingBottom: 100,
+            width: "100%",
+          }}
+        >
+          <Board key={resetKey}>
+            {pieces.map((p, index) => (
+              <Piece
+                key={p.id}
+                id={p.id}
+                color={p.color}
+                shape={p.shape}
+                initialX={
+                  (index % 4) * 65 - 45 +
+                  (index < pieces.length / 2 ? -8 : 8)
+                }
+                initialY={
+                  index < pieces.length / 2
+                    ? Math.floor(index / 4) * 140 - 60
+                    : Math.floor(index / 4) * 140 - 60
+                }
+                onDrop={() => checkVictory(isFilled)}
+              />
+            ))}
+          </Board>
+        </div>
+      )}
     </PuzzleLayout>
   );
 }
