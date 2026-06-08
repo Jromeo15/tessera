@@ -14,7 +14,6 @@ export default function Board({ children }) {
 
         margin: "0 auto",
 
-        // 🌌 fondo futurista
         background: `
           radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), transparent 40%),
           radial-gradient(circle at 80% 90%, rgba(0,200,255,0.08), transparent 50%),
@@ -23,7 +22,6 @@ export default function Board({ children }) {
 
         border: "1px solid rgba(0,0,0,0.12)",
 
-        // ✨ profundidad + glow suave
         boxShadow: `
           0 12px 35px rgba(0,0,0,0.18),
           inset 0 1px 0 rgba(255,255,255,0.9),
@@ -35,7 +33,7 @@ export default function Board({ children }) {
         boxSizing: "content-box",
       }}
     >
-      {/* ✨ GRID VISUAL */}
+      {/*GRID VISUAL */}
       <div
         style={{
           position: "absolute",

@@ -177,7 +177,6 @@ export default function PuzzleTimeAttack({ onBack }) {
     return () => clearInterval(interval);
   }, [timeLeft, gameOver]);
 
-  // 🔥 GUARDAR EN SUPABASE SOLO UNA VEZ
   useEffect(() => {
     async function save() {
       if (!gameOver) return;
@@ -234,6 +233,7 @@ export default function PuzzleTimeAttack({ onBack }) {
     );
 
     const rect = board.getBoundingClientRect();
+    const zoom = parseFloat(getComputedStyle(document.body).getPropertyValue("--zoom")) || 1;
     const piecesDom = document.querySelectorAll(".piece");
 
     piecesDom.forEach((piece) => {
@@ -242,11 +242,11 @@ export default function PuzzleTimeAttack({ onBack }) {
       cells.forEach((cell) => {
         const r = cell.getBoundingClientRect();
 
-        const x = r.left + r.width / 2 - rect.left;
-        const y = r.top + r.height / 2 - rect.top;
+        const x = (r.left + r.width / 2 - rect.left) / zoom;
+        const y = (r.top + r.height / 2 - rect.top) / zoom;
 
-        const col = Math.floor(x / CELL_SIZE);
-        const row = Math.floor(y / CELL_SIZE);
+        const col = Math.round(x / CELL_SIZE);
+        const row = Math.round(y / CELL_SIZE);
 
         if (
           row >= 0 &&

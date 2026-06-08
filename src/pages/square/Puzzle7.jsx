@@ -43,8 +43,10 @@ export default function App({ onBack }) {
         const rect = cell.getBoundingClientRect();
         const boardRect = board.getBoundingClientRect();
 
-        const x = rect.left - boardRect.left;
-        const y = rect.top - boardRect.top;
+        const zoom = parseFloat(getComputedStyle(document.body).getPropertyValue("--zoom")) || 1;
+
+        const x = (rect.left - boardRect.left) / zoom;
+        const y = (rect.top - boardRect.top) / zoom;
 
         const col = Math.round(x / CELL_SIZE);
         const row = Math.round(y / CELL_SIZE);

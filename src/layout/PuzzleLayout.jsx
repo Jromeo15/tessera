@@ -85,6 +85,10 @@ export default function PuzzleLayout({
     }
   }, [showVictory]);
 
+  useEffect(() => {
+    document.body.style.setProperty("--zoom", zoom);
+  }, [zoom]);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
