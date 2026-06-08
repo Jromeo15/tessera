@@ -90,9 +90,22 @@ const rotateMatrix = (matrix) => {
 
 // hit test
 const getCellFromPoint = (x, y) => {
-  const el = document.elementFromPoint(x, y);
+  let el = document.elementFromPoint(x, y);
 
-  console.log("hit test:", x, y, el);
+  while (
+    el &&
+    (
+      el.classList?.contains("type-e") ||
+      el.classList?.contains("type-f") ||
+      el.classList?.contains("type-g") ||
+      el.classList?.contains("type-h")
+    )
+  ) {
+    el.style.pointerEvents = "none";
+    el = document.elementFromPoint(x, y);
+    el?.style?.removeProperty("pointer-events");
+  }
+
   return el?.closest?.(".piece-cell") || null;
 };
 
