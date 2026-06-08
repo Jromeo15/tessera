@@ -374,10 +374,12 @@ export default function PuzzleTimeAttack({ onBack }) {
   })}
 </Board>
       </div>
-
-      <div className="timeAttackHud">
-        ⏱ {formatTime(timeLeft)} · ⭐ {score}
-      </div>
+      {createPortal(
+        <div className="timeAttackHud">
+          ⏱ {formatTime(timeLeft)} · ⭐ {score}
+        </div>,
+        document.body
+      )}
 
     </PuzzleLayout>
   );

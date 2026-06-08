@@ -149,55 +149,61 @@ export default function PuzzleLayout({
   
   {/* ZOOM BAR (FLOAT TOP-LEFT) */}
   <div
-    style={{
-      position: "absolute",
-      top: 10,
-      left: 10,
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      zIndex: 10,
-      padding: "6px 8px",
-      borderRadius: 8,
-      background: "rgba(255,255,255,0.7)",
-      backdropFilter: "blur(6px)",
-      border: "1px solid rgba(0,0,0,0.1)",
-    }}
-  >
-  <button
-    onClick={zoomOut}
-    style={{
-      width: 32,
-      height: 32,
-      borderRadius: 8,
-      border: "1px solid #ccc",
-      background: "white",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    <ZoomOut size={18} />
-  </button>
+  style={{
+    position: "absolute",
+    top: 12,
+    left: 12,
+    display: "flex",
+    gap: 10,
+    zIndex: 50,
+  }}
+>
+<button
+  onClick={zoomOut}
+  style={{
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    border: "1px solid rgba(255,255,255,0.15)",
+    background:
+      "linear-gradient(135deg, #009dff, #3b82f6)",
+    backdropFilter: "blur(12px)",
+    boxShadow:
+      "0 8px 20px rgba(0,157,255,0.45), inset 0 1px 0 rgba(255,255,255,0.2)",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#ffffff",
+    transition: "all 0.2s ease",
+  }}
+>
+  <ZoomOut size={18} strokeWidth={2.5} />
+</button>
 
-  <button
-    onClick={zoomIn}
-    style={{
-      width: 32,
-      height: 32,
-      borderRadius: 8,
-      border: "1px solid #ccc",
-      background: "white",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    <ZoomIn size={18} />
-  </button>
-  </div>
+<button
+  onClick={zoomIn}
+  style={{
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    border: "1px solid rgba(255,255,255,0.15)",
+    background:
+      "linear-gradient(135deg, #009dff, #3b82f6)",
+    backdropFilter: "blur(12px)",
+    boxShadow:
+      "0 8px 20px rgba(0,157,255,0.45), inset 0 1px 0 rgba(255,255,255,0.2)",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#ffffff",
+    transition: "all 0.2s ease",
+  }}
+>
+  <ZoomIn size={18} strokeWidth={2.5} />
+</button>
+</div>
 
   {/* CONTENIDO REAL */}
   <div
