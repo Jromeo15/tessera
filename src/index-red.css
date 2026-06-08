@@ -168,31 +168,22 @@ code {
 .home__title {
   font-size: 58px;
   letter-spacing: 6px;
-  margin: 20px 0 16px;
+  margin: 20px 0 16px; /* más aire vertical */
 
   font-weight: 900;
   text-transform: uppercase;
 
-  background: linear-gradient(
-    90deg,
-    #67e8f9,
-    #00e5ff,
-    #0077ff,
-    #4f46e5
-  );
-  
-  text-shadow: 0 0 50px rgba(0, 229, 255, 0.45);
-
+  background: linear-gradient(90deg, #ff2e63, #ff6a00, #c084fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  text-shadow: 0 0 40px rgba(0, 184, 255, 0.35);
+  text-shadow: 0 0 40px rgba(255, 46, 99, 0.25);
 
   transform: skew(-3deg);
 
-  line-height: 1.1;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  line-height: 1.1; /* CLAVE para evitar cortes */
+  padding-top: 6px;  /* evita clipping superior */
+  padding-bottom: 6px; /* evita clipping inferior */
 }
 
 .niveles__title {
@@ -245,6 +236,7 @@ code {
   opacity: 1;
 }
 
+/* BOTÓN (lo dejamos como te gustó, pero más pulido) */
 .home__button {
   padding: 14px 28px;
   font-size: 18px;
@@ -255,10 +247,10 @@ code {
   border-radius: 14px;
   cursor: pointer;
 
-  background: linear-gradient(135deg, #00c6ff, #2563eb);
+  background: linear-gradient(135deg, #ff6a00, #ff2e63);
   color: white;
 
-  box-shadow: 0 10px 25px rgba(0, 198, 255, 0.35);
+  box-shadow: 0 10px 25px rgba(255, 46, 99, 0.35);
 
   font-weight: 800;
   font-style: italic;
@@ -268,13 +260,12 @@ code {
 
 .home__button:hover {
   transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 14px 35px rgba(0, 198, 255, 0.5);
+  box-shadow: 0 14px 35px rgba(255, 46, 99, 0.45);
 }
 
 .home__button:active {
   transform: scale(0.98);
 }
-
 .piece-cell.type-0 {
   background: transparent;
   pointer-events: none;
@@ -484,7 +475,11 @@ code {
 
   cursor: pointer;
 
-  background: linear-gradient(135deg, #00c6ff, #2563eb);
+  background: linear-gradient(
+    135deg,
+    #ff2e63,
+    #ff4d6d
+  );
 
   color: white;
 
@@ -663,7 +658,11 @@ code {
 }
 
 .puzzleIconBtn--back {
-  background: linear-gradient(135deg, #00c6ff, #2563eb);
+  background: linear-gradient(
+    135deg,
+    #ff5a7a,
+    #ff2e63
+  );
 
   color: white;
 
@@ -673,7 +672,7 @@ code {
 
 .puzzleIconBtn--back:hover {
   box-shadow:
-    0 14px 30px rgba(46, 192, 255, 0.42),
+    0 14px 30px rgba(255, 46, 99, 0.42),
     inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
