@@ -7,6 +7,7 @@ import { TimerOff } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 import { saveTimeAttackScore } from "../lib/timeAttackScores";
+import { createPortal } from "react-dom";
 
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
@@ -227,27 +228,30 @@ export default function PuzzleTimeAttack({ onBack }) {
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;
-
+  
     const grid = Array.from({ length: BOARD_ROWS }, () =>
       Array(BOARD_COLS).fill(false)
     );
-
+  
     const rect = board.getBoundingClientRect();
-    const zoom = parseFloat(getComputedStyle(document.body).getPropertyValue("--zoom")) || 1;
+  
+    const zoom =
+      parseFloat(getComputedStyle(document.body).getPropertyValue("--zoom")) || 1;
+  
     const piecesDom = document.querySelectorAll(".piece");
-
+  
     piecesDom.forEach((piece) => {
       const cells = piece.querySelectorAll(".piece-cell");
-
+  
       cells.forEach((cell) => {
         const r = cell.getBoundingClientRect();
-
-        const x = (r.left + r.width / 2 - rect.left) / zoom;
-        const y = (r.top + r.height / 2 - rect.top) / zoom;
-
-        const col = Math.round(x / CELL_SIZE);
-        const row = Math.round(y / CELL_SIZE);
-
+  
+        const x = (r.left - rect.left) / zoom;
+        const y = (r.top - rect.top) / zoom;
+  
+        const col = Math.floor(x / CELL_SIZE);
+        const row = Math.floor(y / CELL_SIZE);
+  
         if (
           row >= 0 &&
           row < BOARD_ROWS &&
@@ -258,12 +262,12 @@ export default function PuzzleTimeAttack({ onBack }) {
         }
       });
     });
-
+  
     const win = grid.every((r) => r.every(Boolean));
     if (!win) return;
-
+  
     const next = Math.min(piecesCount + 1, MAX_PIECES);
-
+  
     setScore((s) => s + 1);
     setPiecesCount(next);
     setPieces(generatePieces(next));
@@ -274,40 +278,47 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   if (gameOver) {
     return (
-      <PuzzleLayout
-        title="Contrarreloj"
-        onBack={onBack}
-        onReset={reset}
-        hideInternalTimer={true}
-      >
-        <div className="defeatOverlay">
-          <div className="defeatPopup">
-
-            <div className="defeatIcon">
-              <TimerOff size={34} strokeWidth={2.2} />
-            </div>
-
-            <h2 className="defeatTitle">
-              TIEMPO AGOTADO
-            </h2>
-
-            <div className="defeatLine" />
-
-            <p className="defeatText">
-              Has completado <b>{score}</b> puzzles
-            </p>
-
-            <p className="defeatSubtext">
-              Inténtalo de nuevo y supera tu marca
-            </p>
-
-            <button onClick={onBack} className="defeatButton">
-              Volver al menú
-            </button>
-
+      <>
+        <PuzzleLayout
+          title="Contrarreloj"
+          onBack={onBack}
+          onReset={reset}
+          hideInternalTimer={true}
+        >
+          <div style={{ visibility: "hidden" }}>
+            {/* mantiene layout vivo pero no muestra nada */}
           </div>
-        </div>
-      </PuzzleLayout>
+        </PuzzleLayout>
+  
+        {createPortal(
+          <div className="defeatOverlay">
+            <div className="defeatPopup">
+  
+              <div className="defeatIcon">
+                <TimerOff size={34} strokeWidth={2.2} />
+              </div>
+  
+              <h2 className="defeatTitle">TIEMPO AGOTADO</h2>
+  
+              <div className="defeatLine" />
+  
+              <p className="defeatText">
+                Has completado <b>{score}</b> puzzles
+              </p>
+  
+              <p className="defeatSubtext">
+                Inténtalo de nuevo y supera tu marca
+              </p>
+  
+              <button onClick={onBack} className="defeatButton">
+                Volver al menú
+              </button>
+  
+            </div>
+          </div>,
+          document.body
+        )}
+      </>
     );
   }
 
@@ -357,6 +368,7 @@ export default function PuzzleTimeAttack({ onBack }) {
         initialX={x}
         initialY={y}
         onDrop={checkVictory}
+        onRotate={checkVictory}
       />
     );
   })}
