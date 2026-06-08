@@ -117,6 +117,7 @@ export default function Piece({
   initialX = 0,
   initialY = 0,
   onDrop,
+  onRotate,
 }) {
   const isTriangle = shapeMode === "triangle";
   const [gridPos, setGridPos] = useState(() => ({
@@ -299,16 +300,21 @@ export default function Piece({
 
   const onClick = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
-
+  
     if (!cell) return;
-
     if (!cell.closest(`.piece-${id}`)) return;
-
     if (moved.current) return;
-
-
-    setRot((r) => (r + 1) % 4);
-
+  
+    setRot((r) => {
+      const newRot = (r + 1) % 4;
+  
+      // 🔥 ESTO ES LO IMPORTANTE
+      requestAnimationFrame(() => {
+        onRotate?.();
+      });
+  
+      return newRot;
+    });
   };
 
   // -------------------------

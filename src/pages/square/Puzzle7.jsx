@@ -104,6 +104,7 @@ export default function App({ onBack }) {
           : Math.floor(index / 4) * 140 - 60
       }
       onDrop={checkVictory}
+      onRotate={checkVictory}
     />
   ))}
 </Board>

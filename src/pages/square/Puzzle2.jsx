@@ -145,6 +145,7 @@ export default function App({ onBack }) {
               initialX={x}
               initialY={y}
               onDrop={checkVictory}
+              onRotate={checkVictory}
             />
           );
         })}
