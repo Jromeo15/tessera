@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Play } from "lucide-react";
 
 export default function CategoryLevels({
     category,
@@ -44,7 +44,10 @@ export default function CategoryLevels({
               className={`home__button categoryBtnTheme--${category}`}
               onClick={() => onSelectPuzzle(puzzle.component)}
             >
-              {puzzle.name}
+              <span className="puzzleBtnContent">
+                <Play size={16} strokeWidth={2.5} />
+                {puzzle.name.replace(/([a-zA-Z])(\d+)$/, "$1 $2")}
+              </span>
             </button>
           ))}
   

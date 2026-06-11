@@ -222,6 +222,12 @@ code {
   opacity: 1;
 }
 
+.puzzleBtnContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .home__button {
   padding: 16px 36px;
   font-size: 16px;
