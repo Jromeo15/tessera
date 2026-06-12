@@ -1498,7 +1498,7 @@ code {
 
 .userMenu {
   position: fixed;
-  top: 16px;
+  top: 8px;
   right: 16px;
   z-index: 1000;
 
