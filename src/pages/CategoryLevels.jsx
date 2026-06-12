@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, Play, Lock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { supabase } from "../lib/supabaseClient";
 import { FREE_LEVELS } from "../constants";
 
 export default function CategoryLevels({
@@ -11,7 +12,8 @@ export default function CategoryLevels({
 }) {
   const { user } = useAuth();
 
-  const [showLockedPopup, setShowLockedPopup] = useState(false);
+  const [popupType, setPopupType] = useState(null);
+  const [progress, setProgress] = useState([]);
 
   const CATEGORIES = {
     square: {
@@ -35,6 +37,33 @@ export default function CategoryLevels({
   const data = CATEGORIES[category];
   const list = puzzles?.[category] || [];
 
+  // ----------------------------
+  // CARGAR PROGRESO SUPABASE
+  // ----------------------------
+  useEffect(() => {
+    async function loadProgress() {
+      if (!user) {
+        setProgress([]);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("user_progress")
+        .select("*")
+        .eq("user_id", user.id);
+
+      if (error) {
+        console.error("Error loading progress:", error);
+        setProgress([]);
+        return;
+      }
+
+      setProgress(data || []);
+    }
+
+    loadProgress();
+  }, [user]);
+
   return (
     <div className="home">
       <div className="home__card">
@@ -44,7 +73,14 @@ export default function CategoryLevels({
         </h1>
 
         {list.map((puzzle, index) => {
-          const isLocked = !user && index >= FREE_LEVELS;
+          const userCategory = progress.find(
+            (p) => p.category === category
+          );
+
+          const unlockedLevel =
+            userCategory?.unlocked_level ?? FREE_LEVELS;
+
+          const isLocked = index >= unlockedLevel;
 
           return (
             <button
@@ -53,8 +89,13 @@ export default function CategoryLevels({
                 isLocked ? "lockedLevel" : ""
               }`}
               onClick={() => {
+                if (!user) {
+                  setPopupType("login");
+                  return;
+                }
+
                 if (isLocked) {
-                  setShowLockedPopup(true);
+                  setPopupType("progress");
                   return;
                 }
 
@@ -74,7 +115,8 @@ export default function CategoryLevels({
           );
         })}
 
-        {showLockedPopup && (
+        {/* POPUP */}
+        {popupType && (
           <div
             style={{
               position: "fixed",
@@ -97,7 +139,7 @@ export default function CategoryLevels({
               }}
             >
               <button
-                onClick={() => setShowLockedPopup(false)}
+                onClick={() => setPopupType(null)}
                 style={{
                   position: "absolute",
                   top: 10,
@@ -113,29 +155,28 @@ export default function CategoryLevels({
                 ×
               </button>
 
-              <Lock
-                size={40}
-                style={{
-                  marginBottom: 10,
-                  color: "#666",
-                }}
-              />
+              {popupType === "login" && (
+                <>
+                  <Lock size={40} style={{ marginBottom: 10, color: "#666" }} />
+                  <h3>Acceso limitado</h3>
+                  <p style={{ marginTop: 20, lineHeight: 1.5 }}>
+                    Necesitas iniciar sesión para acceder a estos niveles.
+                  </p>
+                </>
+              )}
 
-              <h3>Nivel bloqueado</h3>
-
-              <p
-                style={{
-                  marginTop: 20,
-                  lineHeight: 1.5,
-                }}
-              >
-                Necesitas iniciar sesión para acceder a estos niveles.
-                <br />
-                <br />
-              </p>
+              {popupType === "progress" && (
+                <>
+                  <Lock size={40} style={{ marginBottom: 10, color: "#666" }} />
+                  <h3>Nivel bloqueado</h3>
+                  <p style={{ marginTop: 20, lineHeight: 1.5 }}>
+                    Completa los niveles anteriores para desbloquear este contenido.
+                  </p>
+                </>
+              )}
 
               <button
-                onClick={() => setShowLockedPopup(false)}
+                onClick={() => setPopupType(null)}
                 style={{
                   marginTop: 20,
                   padding: "8px 14px",

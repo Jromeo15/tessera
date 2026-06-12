@@ -7,8 +7,13 @@ import {
   ZoomOut,
 } from "lucide-react";
 
+import { supabase } from "../lib/supabaseClient";
+import { useAuth } from "../context/AuthContext";
+
 export default function PuzzleLayout({
-  title,
+  title,  
+  category,
+  puzzleIndex, 
   onBack,
   onReset,
   children,
@@ -18,10 +23,20 @@ export default function PuzzleLayout({
   hideInternalTimer = false,
   isFilled,
 }) {
+  const { user } = useAuth();
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(true);
   const [zoom, setZoom] = useState(1);
+  const [hasRegistered, setHasRegistered] = useState(false);
+  useEffect(() => {
+    console.log("[PuzzleLayout MOUNT]", {
+      title,
+      category,
+      puzzleIndex,
+      user: user?.id,
+    });
+  }, []);
 
   const zoomOut = () => {
     setZoom((z) => Math.max(0.8, z - 0.2));
@@ -69,6 +84,73 @@ export default function PuzzleLayout({
   
   const checkCellFilled = isFilled || defaultIsFilled;
 
+  const registerProgress = async () => {
+    console.log("[registerProgress] INICIO", {
+      user: user?.id,
+      category,
+      puzzleIndex,
+    });
+  
+    if (!user) {
+      console.log("[registerProgress] abortado: no user");
+      return;
+    }
+  
+    if (puzzleIndex <= 1) {
+      console.log("[registerProgress] abortado: puzzle 1 no cuenta");
+      return;
+    }
+
+    console.log("[registerProgress] HACIENDO SELECT en Supabase...");
+  
+    const { data, error } = await supabase
+      .from("user_progress")
+      .select("unlocked_level")
+      .eq("user_id", user.id)
+      .eq("category", category)
+      .single();
+
+    console.log("[registerProgress] SELECT resultado:", { data, error });
+  
+    if (error) {
+      console.log("[registerProgress] error en SELECT", error);
+      return;
+    }
+  
+    const current = data?.unlocked_level ?? 1;
+
+    console.log("[registerProgress] estado niveles", {
+      current,
+      puzzleIndex,
+    });
+  
+    // ❌ evitar doble conteo  
+    if (puzzleIndex + 1 <= current) {
+      console.log("[registerProgress] abortado: no mejora progreso", {
+        puzzleIndex,
+        current,
+      });
+      return;
+    }
+
+    console.log("[registerProgress] ACTUALIZANDO progreso...");
+  
+    await supabase
+      .from("user_progress")
+      .update({
+        unlocked_level: puzzleIndex + 1,
+      })
+      .eq("user_id", user.id)
+      .eq("category", category);
+
+      console.log("[registerProgress] UPDATE enviado", {
+        user: user.id,
+        category,
+        newLevel: puzzleIndex,
+      });
+      
+  };
+
   useEffect(() => {
     if (!running) return;
   
@@ -80,14 +162,49 @@ export default function PuzzleLayout({
   }, [running]);
 
   useEffect(() => {
-    if (showVictory) {
-      setRunning(false);
+    console.log("[PuzzleLayout] showVictory cambió:", {
+      showVictory,
+      hasRegistered,
+    });
+  
+    if (!showVictory) return;
+
+    if (hasRegistered) {
+      console.log("[PuzzleLayout] abortado: ya registrado");
+      return;
     }
+
+    console.log("[PuzzleLayout] Victory detectada", {
+      puzzleIndex,
+      category,
+      user: user?.id,
+    });
+  
+    setRunning(false);
+    setHasRegistered(true);
+
+    console.log("[PuzzleLayout] bloqueando registro y timer", {
+      hasRegistered: true,
+      running: false,
+    });
+  
+    registerProgress();
   }, [showVictory]);
 
   useEffect(() => {
     document.body.style.setProperty("--zoom", zoom);
   }, [zoom]);
+
+  useEffect(() => {
+    console.log("[PuzzleLayout RESET STATE]", {
+      puzzleIndex,
+      category,
+    });
+  
+    setHasRegistered(false);
+    setRunning(true);
+    setTime(0);
+  }, [puzzleIndex, category]);
 
   const formatTime = (t) => {
     const min = Math.floor(t / 60);

@@ -85,6 +85,8 @@ export default function App({ onBack }) {
   return (
     <PuzzleLayout
       title="Puzzle 6"
+      category="square"
+      puzzleIndex={6}
       onBack={onBack}
       onReset={() => {
         setShowVictory(false);
