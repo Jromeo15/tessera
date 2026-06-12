@@ -183,41 +183,44 @@ code {
   0% {
     transform: translateY(0px);
     filter:
-      drop-shadow(0 0 2px rgba(0, 229, 255, 0.25))
-      drop-shadow(0 0 5px rgba(79, 70, 229, 0.18));
-    opacity: 0.92;
+      drop-shadow(0 0 2px rgba(0, 229, 255, 0.35))
+      drop-shadow(0 0 6px rgba(79, 70, 229, 0.25));
+    opacity: 0.9;
   }
 
   25% {
-    transform: translateY(-0.5px);
+    transform: translateY(-1px);
     filter:
-      drop-shadow(0 0 5px rgba(0, 229, 255, 0.45))
-      drop-shadow(0 0 9px rgba(79, 70, 229, 0.3));
-    opacity: 0.98;
+      drop-shadow(0 0 8px rgba(0, 229, 255, 0.8))
+      drop-shadow(0 0 14px rgba(79, 70, 229, 0.6))
+      drop-shadow(0 0 20px rgba(255, 0, 200, 0.25));
+    opacity: 1;
   }
 
   50% {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     filter:
-      drop-shadow(0 0 8px rgba(0, 229, 255, 0.6))
-      drop-shadow(0 0 12px rgba(79, 70, 229, 0.45));
+      drop-shadow(0 0 14px rgba(0, 229, 255, 1))
+      drop-shadow(0 0 22px rgba(79, 70, 229, 0.85))
+      drop-shadow(0 0 28px rgba(0, 255, 200, 0.35));
     opacity: 1;
   }
 
   75% {
-    transform: translateY(-0.5px);
+    transform: translateY(-1px);
     filter:
-      drop-shadow(0 0 5px rgba(0, 229, 255, 0.4))
-      drop-shadow(0 0 9px rgba(79, 70, 229, 0.28));
-    opacity: 0.97;
+      drop-shadow(0 0 10px rgba(0, 229, 255, 0.7))
+      drop-shadow(0 0 16px rgba(79, 70, 229, 0.55))
+      drop-shadow(0 0 22px rgba(255, 0, 200, 0.2));
+    opacity: 0.95;
   }
 
   100% {
     transform: translateY(0px);
     filter:
-      drop-shadow(0 0 2px rgba(0, 229, 255, 0.25))
-      drop-shadow(0 0 5px rgba(79, 70, 229, 0.18));
-    opacity: 0.92;
+      drop-shadow(0 0 3px rgba(0, 229, 255, 0.4))
+      drop-shadow(0 0 8px rgba(79, 70, 229, 0.3));
+    opacity: 0.9;
   }
 }
 
