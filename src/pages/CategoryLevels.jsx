@@ -9,6 +9,7 @@ export default function CategoryLevels({
   puzzles,
   onBack,
   onSelectPuzzle,
+  progress: externalProgress, // 👈 NUEVO (opcional)
 }) {
   const { user } = useAuth();
 
@@ -38,10 +39,17 @@ export default function CategoryLevels({
   const list = puzzles?.[category] || [];
 
   // ----------------------------
-  // CARGAR PROGRESO SUPABASE
+  // PROGRESO FINAL (LOCAL O EXTERNO)
+  // ----------------------------
+  const finalProgress = externalProgress ?? progress;
+
+  // ----------------------------
+  // CARGAR PROGRESO SOLO SI NO VIENE DE ARRIBA
   // ----------------------------
   useEffect(() => {
     async function loadProgress() {
+      if (externalProgress) return; // 👈 clave: si ya viene cargado, no fetch
+
       if (!user) {
         setProgress([]);
         return;
@@ -62,7 +70,7 @@ export default function CategoryLevels({
     }
 
     loadProgress();
-  }, [user]);
+  }, [user, externalProgress]);
 
   return (
     <div className="home">
@@ -73,7 +81,7 @@ export default function CategoryLevels({
         </h1>
 
         {list.map((puzzle, index) => {
-          const userCategory = progress.find(
+          const userCategory = finalProgress.find(
             (p) => p.category === category
           );
 
