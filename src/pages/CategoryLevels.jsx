@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, Play, Lock } from "lucide-react";
+import { ArrowLeft, Play, Lock, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabaseClient";
 import { FREE_LEVELS } from "../constants";
@@ -88,6 +88,8 @@ export default function CategoryLevels({
           const unlockedLevel =
             userCategory?.unlocked_level ?? FREE_LEVELS;
 
+          const isCompleted = index + 1 < unlockedLevel;
+
           const isLocked = index >= unlockedLevel;
 
           return (
@@ -116,8 +118,11 @@ export default function CategoryLevels({
                 ) : (
                   <Play size={16} strokeWidth={2.5} />
                 )}
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  {puzzle.name.replace(/([a-zA-Z])(\d+)$/, "$1 $2")}
 
-                {puzzle.name.replace(/([a-zA-Z])(\d+)$/, "$1 $2")}
+                  {isCompleted && <span className="completedDot" />}
+                </span>
               </span>
             </button>
           );
