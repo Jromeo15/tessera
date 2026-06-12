@@ -1897,3 +1897,8 @@ code {
   }
 }
 
+.lockedLevel {
+  opacity: 0.45;
+  filter: grayscale(1);
+  cursor: not-allowed;
+}

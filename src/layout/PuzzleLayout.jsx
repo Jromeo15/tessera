@@ -255,8 +255,10 @@ export default function PuzzleLayout({
                 right: 10,
                 border: "none",
                 background: "transparent",
-                fontSize: 18,
+                fontSize: 22,
+                fontWeight: "bold",
                 cursor: "pointer",
+                color: "#000",
               }}
             >
               ×
@@ -275,6 +277,9 @@ export default function PuzzleLayout({
               <br />
               <br />
               Si la pieza está gris significa que está encima o debajo de otra pieza
+              <br />
+              <br />
+              Pulsa sobre el zoom en la esquina superior izquirda de la pantalla para acercar o alejar las piezas.
             </p>
 
             <button
