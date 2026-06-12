@@ -155,21 +155,51 @@ code {
   text-transform: uppercase;
 
   transform: skew(-3deg);
-
   line-height: 1.1;
+
   padding-top: 6px;
   padding-bottom: 6px;
 
   text-shadow:
     0 2px 4px rgba(0,0,0,0.5);
+
+  /* NUEVO */
+  position: relative;
 }
 
+/* glow base más suave */
 .home__title span {
   display: inline-block;
 
   filter:
-    drop-shadow(0 0 4px rgba(0, 229, 255, 0.35))
-    drop-shadow(0 0 6px rgba(79, 70, 229, 0.25));
+    drop-shadow(0 0 3px rgba(0, 229, 255, 0.25))
+    drop-shadow(0 0 6px rgba(79, 70, 229, 0.18));
+
+  animation: titleGlow 2.8s ease-in-out infinite;
+}
+
+/* animación global del glow */
+@keyframes titleGlow {
+  0% {
+    transform: translateY(0px);
+    filter:
+      drop-shadow(0 0 2px rgba(0, 229, 255, 0.2))
+      drop-shadow(0 0 4px rgba(79, 70, 229, 0.15));
+  }
+
+  50% {
+    transform: translateY(-1px);
+    filter:
+      drop-shadow(0 0 6px rgba(0, 229, 255, 0.45))
+      drop-shadow(0 0 10px rgba(79, 70, 229, 0.35));
+  }
+
+  100% {
+    transform: translateY(0px);
+    filter:
+      drop-shadow(0 0 2px rgba(0, 229, 255, 0.2))
+      drop-shadow(0 0 4px rgba(79, 70, 229, 0.15));
+  }
 }
 
 .niveles__title {
