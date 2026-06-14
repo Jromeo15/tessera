@@ -86,32 +86,42 @@ export default function CategoryLevels({
           );
 
           const unlockedLevel =
-            userCategory?.unlocked_level ?? FREE_LEVELS;
-
-          const isCompleted = index + 1 < unlockedLevel;
-
-          const isLocked = index >= unlockedLevel;
-
-          return (
-            <button
-              key={puzzle.name}
-              className={`home__button categoryBtnTheme--${category} ${
-                isLocked ? "lockedLevel" : ""
-              }`}
-              onClick={() => {
-                if (!user) {
-                  setPopupType("login");
-                  return;
-                }
-
-                if (isLocked) {
-                  setPopupType("progress");
-                  return;
-                }
-
+          userCategory?.unlocked_level ?? FREE_LEVELS;
+        
+        const isFreeLevel = index < FREE_LEVELS;
+        
+        const isCompleted = user && index + 1 < unlockedLevel;
+        
+        const isLocked = !isFreeLevel && index >= unlockedLevel;
+        
+        return (
+          <button
+            key={puzzle.name}
+            className={`home__button categoryBtnTheme--${category} ${
+              isLocked ? "lockedLevel" : ""
+            }`}
+            onClick={() => {
+              // Los niveles gratuitos siempre están disponibles
+              if (isFreeLevel) {
                 onSelectPuzzle(puzzle.component);
-              }}
-            >
+                return;
+              }
+        
+              // A partir de aquí es necesario iniciar sesión
+              if (!user) {
+                setPopupType("login");
+                return;
+              }
+        
+              // Usuario logueado pero nivel aún bloqueado
+              if (isLocked) {
+                setPopupType("progress");
+                return;
+              }
+        
+              onSelectPuzzle(puzzle.component);
+            }}
+          >
               <span className="puzzleBtnContent">
                 {isLocked ? (
                   <Lock size={16} strokeWidth={2.5} />
