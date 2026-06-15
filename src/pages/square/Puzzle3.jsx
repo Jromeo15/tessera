@@ -6,7 +6,7 @@ export default function App({ onBack }) {
     <PuzzleLayout
       title="Puzzle 3"
       category="square"
-      puzzleIndex={1}
+      puzzleIndex={3}
       shapes={SHAPES}
       onBack={onBack}
     />
