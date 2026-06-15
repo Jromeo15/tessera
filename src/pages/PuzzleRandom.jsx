@@ -317,48 +317,16 @@ export default function PuzzleRandom({
   };
 
   return (
-    <PuzzleLayout
+<PuzzleLayout
   title="Puzzle 1"
   onBack={onBack}
   onReset={() => {
     setShowVictory(false);
     setResetKey((k) => k + 1);
   }}
-
   showVictory={showVictory}
   onCloseVictory={() => setShowVictory(false)}
->
-{/* BOARD */}
-<div
-  style={{
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    paddingBottom: 100,
-    width: "100%",
-  }}
->
-  <Board key={resetKey}>
-    {pieces.map((p, index) => (
-      <Piece
-        key={p.id}
-        id={p.id}
-        color={p.color}
-        shape={p.shape}
-        initialX={
-          (index % 4) * 65 - 45 +
-          (index < pieces.length / 2 ? -8 : 8)
-        }
-        initialY={
-          Math.floor(index / 4) * 140 - 60
-        }
-        onDrop={checkVictory}
-      />
-    ))}
-  </Board>
-</div>
-  
-    </PuzzleLayout>
+  shapes={pieces.map(p => p.shape)}
+/>
   );
 }
