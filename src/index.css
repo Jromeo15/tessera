@@ -1980,3 +1980,77 @@ code {
   overflow-x: auto;
   white-space: nowrap;
 }
+
+.rotateButton {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(255,255,255,0.15);
+
+  background: #3aafe0;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.25),
+    0 8px 18px rgba(0,157,255,0.40),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+
+  transition:
+    transform .15s ease,
+    filter .2s ease,
+    box-shadow .2s ease;
+}
+
+.rotateButton:hover {
+  transform: translateY(-2px) scale(1.06);
+
+  filter: brightness(1.08);
+
+  box-shadow:
+    0 16px 34px rgba(0,0,0,.30),
+    0 12px 24px rgba(0,157,255,.45);
+}
+
+.rotateButton:active {
+  transform: scale(.95);
+}
+
+.rotateButton::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(255,255,255,.20),
+      transparent 60%
+    );
+
+  pointer-events: none;
+}
+
+.rotateButtonIcon {
+  width: 28px;
+  height: 28px;
+
+  stroke-width: 3;
+
+  color: white !important;
+  stroke: white !important;
+
+  filter:
+    drop-shadow(0 2px 2px rgba(0,0,0,.35));
+
+  pointer-events: none;
+}

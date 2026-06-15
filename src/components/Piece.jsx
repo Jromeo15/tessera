@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { CELL_SIZE } from "../constants";
+import { RotateCcw, RotateCw } from "lucide-react";
+import { Undo, Redo } from "lucide-react";
 
 let activePieceId = null;
 
@@ -126,6 +128,7 @@ export default function Piece({
   }));
 
   const [rot, setRot] = useState(0);
+  const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
 
   const dragging = useRef(false);
@@ -305,16 +308,31 @@ export default function Piece({
     if (!cell.closest(`.piece-${id}`)) return;
     if (moved.current) return;
   
-    setRot((r) => {
-      const newRot = (r + 1) % 4;
+    setShowRotateButtons((v) => !v);
+  };
+
+  const rotateLeft = (e) => {
+    e.stopPropagation();
   
-      // 🔥 ESTO ES LO IMPORTANTE
-      requestAnimationFrame(() => {
-        onRotate?.();
-      });
+    setRot((r) => (r + 3) % 4);
   
-      return newRot;
+    requestAnimationFrame(() => {
+      onRotate?.();
     });
+  
+    setShowRotateButtons(false);
+  };
+  
+  const rotateRight = (e) => {
+    e.stopPropagation();
+  
+    setRot((r) => (r + 1) % 4);
+  
+    requestAnimationFrame(() => {
+      onRotate?.();
+    });
+  
+    setShowRotateButtons(false);
   };
 
   // -------------------------
@@ -397,6 +415,24 @@ export default function Piece({
     };
   }, [gridPos, rot]);
 
+  useEffect(() => {
+    if (!showRotateButtons) return;
+  
+    const closeButtons = (e) => {
+      if (!e.target.closest(`.piece-${id}`)) {
+        setShowRotateButtons(false);
+      }
+    };
+  
+    window.addEventListener("mousedown", closeButtons);
+    window.addEventListener("touchstart", closeButtons);
+  
+    return () => {
+      window.removeEventListener("mousedown", closeButtons);
+      window.removeEventListener("touchstart", closeButtons);
+    };
+  }, [showRotateButtons, id]);
+
   return (
     <div
       className={`piece piece-${id}`}
@@ -419,12 +455,38 @@ export default function Piece({
         zIndex: activePieceId === id ? 1000 : 1,
   
         pointerEvents: "none",
-  
-        // 🔥 VISUAL OVERLAP
-        opacity: isOverlapping ? 0.6 : 1,
-        filter: isOverlapping ? "brightness(0.6)" : "none",
       }}
     >
+
+{showRotateButtons && (
+  <div
+  style={{
+    position: "absolute",
+    top: -55,
+    left: "50%",
+    transform: "translateX(-50%)",
+    display: "flex",
+    gap: 28,
+    zIndex: 2000,
+    pointerEvents: "auto",
+  }}
+  >
+<button
+  onClick={rotateLeft}
+  className="rotateButton"
+>
+  <Undo className="rotateButtonIcon" />
+</button>
+
+<button
+  onClick={rotateRight}
+  className="rotateButton"
+>
+  <Redo className="rotateButtonIcon" />
+</button>
+  </div>
+)}
+
     {rotatedShape.flat().map((cell, i) => {
       if (!cell) {
         return (
@@ -449,6 +511,8 @@ export default function Piece({
             height: CELL_SIZE,
 
             background: color,
+            opacity: isOverlapping ? 0.6 : 1,
+            filter: isOverlapping ? "brightness(0.6)" : "none",
 
             boxSizing: "border-box",
             pointerEvents: "auto",
