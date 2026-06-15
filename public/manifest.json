@@ -1,18 +1,19 @@
 {
     "name": "Tessera",
     "short_name": "Tessera",
-    "start_url": "/",
+    "start_url": "/tessera/",
+    "scope": "/tessera/",
     "display": "standalone",
     "background_color": "#0f172a",
     "theme_color": "#3aafe0",
     "icons": [
       {
-        "src": "/logo.png",
+        "src": "/tessera/logo.png",
         "sizes": "192x192",
         "type": "image/png"
       },
       {
-        "src": "/logo.png",
+        "src": "/tessera/logo.png",
         "sizes": "512x512",
         "type": "image/png"
       }
