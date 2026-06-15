@@ -23,7 +23,7 @@ const COLORS = [
   "#3EC1D3", "#F67280", "#8BC34A", "#A66CFF",
 ];
 
-// -------------------- GENERADOR --------------------
+// -------------------- GENERADOR ORIGINAL (NO TOCADO) --------------------
 
 const rotateMatrix = (matrix) => {
   const rows = matrix.length;
@@ -160,9 +160,9 @@ export default function PuzzleTimeAttack({ onBack }) {
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT);
   const [gameOver, setGameOver] = useState(false);
 
-  // 🔥 evita doble guardado
   const savedRef = useRef(false);
 
+  // TIMER
   useEffect(() => {
     if (gameOver) return;
 
@@ -178,11 +178,10 @@ export default function PuzzleTimeAttack({ onBack }) {
     return () => clearInterval(interval);
   }, [timeLeft, gameOver]);
 
+  // SAVE SCORE
   useEffect(() => {
     async function save() {
-      if (!gameOver) return;
-      if (!user) return;
-      if (savedRef.current) return;
+      if (!gameOver || !user || savedRef.current) return;
 
       savedRef.current = true;
 
@@ -201,57 +200,28 @@ export default function PuzzleTimeAttack({ onBack }) {
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
 
-  const getPieceBounds = (shape) => {
-    let minX = Infinity;
-    let maxX = -Infinity;
-  
-    let minY = Infinity;
-    let maxY = -Infinity;
-  
-    shape.forEach((row, y) => {
-      row.forEach((cell, x) => {
-        if (cell) {
-          minX = Math.min(minX, x);
-          maxX = Math.max(maxX, x);
-          minY = Math.min(minY, y);
-          maxY = Math.max(maxY, y);
-        }
-      });
-    });
-  
-    return {
-      width: (maxX - minX + 1) * CELL_SIZE,
-      height: (maxY - minY + 1) * CELL_SIZE,
-    };
-  };
-
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;
-  
+
     const grid = Array.from({ length: BOARD_ROWS }, () =>
       Array(BOARD_COLS).fill(false)
     );
-  
+
     const rect = board.getBoundingClientRect();
-  
     const zoom =
       parseFloat(getComputedStyle(document.body).getPropertyValue("--zoom")) || 1;
-  
-    const piecesDom = document.querySelectorAll(".piece");
-  
-    piecesDom.forEach((piece) => {
-      const cells = piece.querySelectorAll(".piece-cell");
-  
-      cells.forEach((cell) => {
+
+    document.querySelectorAll(".piece").forEach((piece) => {
+      piece.querySelectorAll(".piece-cell").forEach((cell) => {
         const r = cell.getBoundingClientRect();
-  
+
         const x = (r.left - rect.left) / zoom;
         const y = (r.top - rect.top) / zoom;
-  
+
         const col = Math.floor(x / CELL_SIZE);
         const row = Math.floor(y / CELL_SIZE);
-  
+
         if (
           row >= 0 &&
           row < BOARD_ROWS &&
@@ -262,12 +232,12 @@ export default function PuzzleTimeAttack({ onBack }) {
         }
       });
     });
-  
+
     const win = grid.every((r) => r.every(Boolean));
     if (!win) return;
-  
+
     const next = Math.min(piecesCount + 1, MAX_PIECES);
-  
+
     setScore((s) => s + 1);
     setPiecesCount(next);
     setPieces(generatePieces(next));
@@ -276,44 +246,43 @@ export default function PuzzleTimeAttack({ onBack }) {
 
   const reset = () => setResetKey((k) => k + 1);
 
+  // GAME OVER
   if (gameOver) {
     return (
       <>
         <PuzzleLayout
           title="Contrarreloj"
           onBack={onBack}
-          onReset={reset}
           hideInternalTimer={true}
+          shapes={pieces}
         >
-          <div style={{ visibility: "hidden" }}>
-            {/* mantiene layout vivo pero no muestra nada */}
-          </div>
+          <div style={{ visibility: "hidden" }} />
         </PuzzleLayout>
-  
+
         {createPortal(
           <div className="defeatOverlay">
             <div className="defeatPopup">
-  
+
               <div className="defeatIcon">
                 <TimerOff size={34} strokeWidth={2.2} />
               </div>
-  
+
               <h2 className="defeatTitle">TIEMPO AGOTADO</h2>
-  
+
               <div className="defeatLine" />
-  
+
               <p className="defeatText">
                 Has completado <b>{score}</b> puzzles
               </p>
-  
+
               <p className="defeatSubtext">
                 Inténtalo de nuevo y supera tu marca
               </p>
-  
+
               <button onClick={onBack} className="defeatButton">
                 Volver al menú
               </button>
-  
+
             </div>
           </div>,
           document.body
@@ -326,61 +295,55 @@ export default function PuzzleTimeAttack({ onBack }) {
     <PuzzleLayout
       title="Contrarreloj"
       onBack={onBack}
-      onReset={reset}
       hideInternalTimer={true}
+      shapes={pieces}
     >
+      {() => (
+        <>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-end",
+            }}
+          >
+            <Board key={resetKey}>
+              {pieces.map((p, i) => {
+                const cols = Math.min(4, pieces.length);
+                const boardWidth = BOARD_COLS * CELL_SIZE;
 
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
-      <Board key={resetKey}>
-  {pieces.map((p, i) => {
-    const cols = Math.min(4, pieces.length);
-    const rows = Math.ceil(pieces.length / 4);
+                const x =
+                  (i % 4) * 65 +
+                  boardWidth / 2 -
+                  (cols * 65) / 2;
 
-    const { width: pieceWidth } = getPieceBounds(p.shape);
+                const y = -100 + Math.random() * 250;
 
-    const pieceHeight = p.shape.length * CELL_SIZE;
+                return (
+                  <Piece
+                    key={p.id}
+                    id={p.id}
+                    color={p.color}
+                    shape={p.shape}
+                    initialX={x}
+                    initialY={y}
+                    onDrop={checkVictory}
+                    onRotate={checkVictory}
+                  />
+                );
+              })}
+            </Board>
+          </div>
 
-    const boardWidth = BOARD_COLS * CELL_SIZE;
-
-    const totalRowWidth = cols * 65;
-    
-    const LEFT_SHIFT = 20;
-    
-    const baseLeft =
-      boardWidth / 2 -
-      totalRowWidth / 2 -
-      LEFT_SHIFT;
-    
-    const x =
-      baseLeft +
-      (i % 4) * 65 +
-      (i < pieces.length / 2 ? -10 : 10) -
-      pieceWidth / 2;
-
-      const y = -100 + Math.random() * 250;
-
-    return (
-      <Piece
-        key={p.id}
-        id={p.id}
-        color={p.color}
-        shape={p.shape}
-        initialX={x}
-        initialY={y}
-        onDrop={checkVictory}
-        onRotate={checkVictory}
-      />
-    );
-  })}
-</Board>
-      </div>
-      {createPortal(
-        <div className="timeAttackHud">
-          ⏱ {formatTime(timeLeft)} · ⭐ {score}
-        </div>,
-        document.body
+          {createPortal(
+            <div className="timeAttackHud">
+              ⏱ {formatTime(timeLeft)} · ⭐ {score}
+            </div>,
+            document.body
+          )}
+        </>
       )}
-
     </PuzzleLayout>
   );
 }
