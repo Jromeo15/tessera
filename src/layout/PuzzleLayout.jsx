@@ -163,71 +163,48 @@ export default function PuzzleLayout({
   const checkCellFilled = isFilled || defaultIsFilled;
 
   const registerProgress = async () => {
-    console.log("[registerProgress] INICIO", {
-      user: user?.id,
-      category,
-      puzzleIndex,
-    });
+    if (!user) return;
+    if (puzzleIndex <= 1) return;
   
-    if (!user) {
-      console.log("[registerProgress] abortado: no user");
-      return;
-    }
-  
-    if (puzzleIndex <= 1) {
-      console.log("[registerProgress] abortado: puzzle 1 no cuenta");
-      return;
-    }
-
-    console.log("[registerProgress] HACIENDO SELECT en Supabase...");
+    const nextLevel = puzzleIndex + 1;
   
     const { data, error } = await supabase
       .from("user_progress")
       .select("unlocked_level")
       .eq("user_id", user.id)
       .eq("category", category)
-      .single();
-
-    console.log("[registerProgress] SELECT resultado:", { data, error });
+      .maybeSingle();
   
     if (error) {
-      console.log("[registerProgress] error en SELECT", error);
+      console.log("[registerProgress] SELECT error", error);
       return;
     }
   
-    const current = data?.unlocked_level ?? 1;
-
-    console.log("[registerProgress] estado niveles", {
-      current,
-      puzzleIndex,
-    });
-  
-    if (puzzleIndex + 1 <= current) {
-      console.log("[registerProgress] abortado: no mejora progreso", {
-        puzzleIndex,
-        current,
+    // si no existe fila → crearla y salir
+    if (!data) {
+      await supabase.from("user_progress").insert({
+        user_id: user.id,
+        category,
+        unlocked_level: nextLevel,
       });
       return;
     }
-
-    console.log("[registerProgress] ACTUALIZANDO progreso...");
+  
+    const current = data.unlocked_level ?? 1;
+  
+    // 🔥 NUNCA bajar progreso, solo subirlo
+    const newLevel = Math.max(current, nextLevel);
+  
+    if (newLevel === current) return;
   
     await supabase
       .from("user_progress")
       .update({
-        unlocked_level: puzzleIndex + 1,
+        unlocked_level: newLevel,
       })
       .eq("user_id", user.id)
       .eq("category", category);
-
-      console.log("[registerProgress] UPDATE enviado", {
-        user: user.id,
-        category,
-        newLevel: puzzleIndex,
-      });
-      
   };
-
   useEffect(() => {
     if (!running) return;
   
@@ -239,31 +216,11 @@ export default function PuzzleLayout({
   }, [running]);
 
   useEffect(() => {
-    console.log("[PuzzleLayout] showVictory cambió:", {
-      showVictory,
-      hasRegistered,
-    });
-  
     if (!showVictory) return;
-
-    if (hasRegistered) {
-      console.log("[PuzzleLayout] abortado: ya registrado");
-      return;
-    }
-
-    console.log("[PuzzleLayout] Victory detectada", {
-      puzzleIndex,
-      category,
-      user: user?.id,
-    });
+    if (hasRegistered) return;
   
     setRunning(false);
     setHasRegistered(true);
-
-    console.log("[PuzzleLayout] bloqueando registro y timer", {
-      hasRegistered: true,
-      running: false,
-    });
   
     registerProgress();
   }, [showVictory]);
