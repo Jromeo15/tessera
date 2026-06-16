@@ -130,8 +130,28 @@ export default function Piece({
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
-
-  const [touchingPanel, setTouchingPanel] = useState(false);
+  const isTouchingPanel = useMemo(() => {
+    const panel = document.querySelector(".puzzleBottomPanel");
+    if (!panel) return false;
+  
+    const panelRect = panel.getBoundingClientRect();
+  
+    const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
+  
+    for (const cell of myCells) {
+      const rect = cell.getBoundingClientRect();
+  
+      const intersect =
+        !(rect.right <= panelRect.left ||
+          rect.left >= panelRect.right ||
+          rect.bottom <= panelRect.top ||
+          rect.top >= panelRect.bottom);
+  
+      if (intersect) return true;
+    }
+  
+    return false;
+  }, [gridPos, rot]);
 
   const dragging = useRef(false);
   const moved = useRef(false);
@@ -229,6 +249,7 @@ export default function Piece({
     dragging.current = true;
     moved.current = false;
 
+
     activePieceId = id;
     topPieceId = id;
 
@@ -263,11 +284,9 @@ export default function Piece({
     }
   };
   const endDrag = () => {
-    console.log("[PIECE] endDrag", id);
   
     dragging.current = false;
   
-    // 🔥 FIX CLAVE: NO dependas de activePieceId
     const board = document.querySelector(".board");
     if (!board) return;
   
@@ -298,21 +317,15 @@ export default function Piece({
   
     activePieceId = null;
   
-    // 🔥 SIEMPRE dispara onDrop
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setTimeout(() => {
-          console.log("[PIECE] calling onDrop", id);
-  
-          onDrop?.({
-            col: finalCol,
-            row: finalRow,
-          });
-  
+          onDrop?.({ col: finalCol, row: finalRow });
           forceGlobalOverlapRecalc();
         }, 0);
       });
     });
+
   };
 
   // -------------------------
@@ -511,13 +524,9 @@ export default function Piece({
     const update = () => {
       cancelAnimationFrame(raf);
   
-      raf = requestAnimationFrame(() => {
-        setTouchingPanel(checkPanelTouch());
-      });
     };
   
     update();
-  
     window.addEventListener("global-overlap", update);
   
     return () => {
@@ -554,7 +563,7 @@ export default function Piece({
               : 1,
       
       
-        transform: touchingPanel ? "scale(0.2)" : "scale(1)",
+              transform: isTouchingPanel ? "scale(0.2)" : "scale(1)",
         transformOrigin: "center center",
         transition: "transform 0.15s ease",
       }}
