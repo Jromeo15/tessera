@@ -496,7 +496,7 @@ export default function PuzzleLayout({
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const x = accX;
-      accX +=  200;
+      accX +=  10;
 
       const y = panelTop - pieceHeight / 2 + 500;
 

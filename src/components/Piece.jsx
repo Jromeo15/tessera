@@ -555,9 +555,10 @@ export default function Piece({
       
         pointerEvents: "none",
       
+        willChange: "transform",
         transform: touchingPanel ? "scale(0.2)" : "scale(1)",
-        transformOrigin: "center center",
-        transition: "transform 0.15s ease",
+  transformOrigin: "center center",
+  transition: "transform 0.15s ease",
       }}
     >
 
@@ -615,9 +616,8 @@ export default function Piece({
             height: CELL_SIZE,
 
             background: color,
-            opacity: isOverlapping ? 0.6 : 1,
-            filter: isOverlapping ? "brightness(0.6)" : "none",
-
+            opacity: touchingPanel ? 0.3 : isOverlapping ? 0.6 : 1,
+filter: isOverlapping ? "brightness(0.6)" : "none",
             boxSizing: "border-box",
             pointerEvents: "auto",
           }}
