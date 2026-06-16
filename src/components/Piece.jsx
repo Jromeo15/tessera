@@ -531,7 +531,7 @@ export default function Piece({
               transform:
               dragging.current || !isTouchingPanel
                 ? "scale(1)"
-                : "scale(0.2)",
+                : "scale(0.4)",
         transition: "transform 0.15s ease",
       }}
     >

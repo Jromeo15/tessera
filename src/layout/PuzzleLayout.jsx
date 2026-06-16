@@ -446,16 +446,19 @@ export default function PuzzleLayout({
       paddingBottom: panelTop ? Math.max(10, 10) : 10,
     }}
   >
-    {pieces.map((p) => {
+    {pieces.map((p, index) => {
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const y = panelTop - pieceHeight / 2 + 500;
+
+      const initialX = (index - (pieces.length - 1) / 2) * (CELL_SIZE * 1.4);
 
       const delayedCheck = () => {
         requestAnimationFrame(() => {
           checkVictory(checkCellFilled);
         });
       };
+      
 
       return (
         <Piece
@@ -463,7 +466,7 @@ export default function PuzzleLayout({
           id={p.id}
           color={p.color}
           shape={p.shape}
-          initialX={0}   // ya no se usa para layout horizontal
+          initialX={initialX}   // ya no se usa para layout horizontal
           initialY={y}
           onDrop={delayedCheck}
           onRotate={delayedCheck}
