@@ -483,7 +483,9 @@ export default function PuzzleLayout({
     const spacing = 1;
 
     // calcular ancho total del conjunto de piezas
-    const totalWidth = 50;
+    const totalWidth = pieces.reduce((sum, p, i) => {
+      return sum + getPieceWidth(p.shape) * CELL_SIZE;
+    }, 0) + spacing * (pieces.length - 1);
 
     const startX = (BOARD_PIXEL_WIDTH - totalWidth) / 2;
 
@@ -494,9 +496,9 @@ export default function PuzzleLayout({
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const x = accX;
-      accX += pieceWidth + spacing;
+      accX +=  200;
 
-      const y = panelTop - pieceHeight / 2 + 400;
+      const y = panelTop - pieceHeight / 2 + 500;
 
       const delayedCheck = () => {
         requestAnimationFrame(() => {
