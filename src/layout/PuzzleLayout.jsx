@@ -334,6 +334,9 @@ export default function PuzzleLayout({
       {/* CONTENIDO (CENTRADO EN PANTALLA) */}
 {/* CONTENIDO (CENTRADO EN PANTALLA) */}
 <div className="puzzleContent" style={{ position: "relative" }}>
+
+  {/* PANEL INFERIOR */}
+<div className="puzzleBottomPanel" />
   
   {/* ZOOM BAR (FLOAT TOP-LEFT) */}
   <div
