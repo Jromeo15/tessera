@@ -495,7 +495,10 @@ export default function PuzzleLayout({
       return sum + getPieceWidth(p.shape) * CELL_SIZE;
     }, 0) + spacing * (pieces.length - 1);
 
-    const startX = (BOARD_PIXEL_WIDTH - totalWidth) / 2;
+    const boardEl = document.querySelector(".board");
+const boardWidth = boardEl?.getBoundingClientRect().width || 0;
+
+const startX = (boardWidth - totalWidth) / 2;
 
     let accX = startX;
 
@@ -504,7 +507,7 @@ export default function PuzzleLayout({
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const x = accX;
-      accX += (pieceWidth + 10) * 0.2;
+      accX += pieceWidth + 10;
 
       const y = panelTop - pieceHeight / 2 + 500;
 
