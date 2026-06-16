@@ -389,7 +389,14 @@ export default function PuzzleLayout({
 >
   <ZoomIn size={18} strokeWidth={2.5} />
 </button>
+
 </div>
+
+{!hideInternalTimer && (
+  <div className="puzzleTimerBottom">
+    {externalTimer ?? formatTime(time)}
+  </div>
+)}
 
   {/* CONTENIDO REAL */}
   <div
@@ -466,11 +473,7 @@ export default function PuzzleLayout({
 
 </div>
 
-      {!hideInternalTimer && (
-  <div className="puzzleTimerBottom">
-    {externalTimer ?? formatTime(time)}
-  </div>
-)}
+
 
       {/* MODAL AYUDA */}
       {showHelp && (
