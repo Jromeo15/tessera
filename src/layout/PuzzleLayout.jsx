@@ -256,6 +256,24 @@ export default function PuzzleLayout({
     setTime(0);
   }, [puzzleIndex, category]);
 
+  useEffect(() => {
+    // bloquear scroll en móvil
+    const preventScroll = (e) => {
+      e.preventDefault();
+    };
+  
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+  
+    document.addEventListener("touchmove", preventScroll, { passive: false });
+  
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.removeEventListener("touchmove", preventScroll);
+    };
+  }, []);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
