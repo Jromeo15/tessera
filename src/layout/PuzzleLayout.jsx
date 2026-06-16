@@ -46,6 +46,9 @@ export default function PuzzleLayout({
   const [panelTop, setPanelTop] = useState(0);
   const [touchingPanel, setTouchingPanel] = useState({});
 
+  const [boardWidth, setBoardWidth] = useState(0);
+  const boardRef = useRef(null);
+
   const getPieceWidth = (shape) => {
     let maxX = 0;
 
@@ -332,6 +335,20 @@ export default function PuzzleLayout({
     return () => cancelAnimationFrame(raf);
   }, []);
 
+  useEffect(() => {
+    const el = document.querySelector(".board");
+    if (!el) return;
+  
+    const update = () => {
+      setBoardWidth(el.getBoundingClientRect().width);
+    };
+  
+    update();
+    window.addEventListener("resize", update);
+  
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -488,26 +505,29 @@ export default function PuzzleLayout({
     <div style={{ position: "relative", zIndex: 50 }}>
 <Board key={resetKey}>
   {(() => {
-    const spacing = 1;
+    const spacing = 10;
 
-    // calcular ancho total del conjunto de piezas
-    const totalWidth = pieces.reduce((sum, p, i) => {
-      return sum + getPieceWidth(p.shape) * CELL_SIZE;
-    }, 0) + spacing * (pieces.length - 1);
+    const pieceWidths = pieces.map(
+      (p) => getPieceWidth(p.shape) * CELL_SIZE
+    );
 
-    const boardEl = document.querySelector(".board");
-const boardWidth = boardEl?.getBoundingClientRect().width || 0;
+    const totalWidth =
+      pieceWidths.reduce((a, b) => a + b, 0) +
+      spacing * (pieces.length - 1);
 
-const startX = (boardWidth - totalWidth) / 2;
+    // fallback seguro si aún no hay medida del board
+    const safeBoardWidth = boardWidth || window.innerWidth;
+
+    const startX = Math.max(0, (safeBoardWidth - totalWidth) / 2);
 
     let accX = startX;
 
-    return pieces.map((p) => {
-      const pieceWidth = getPieceWidth(p.shape) * CELL_SIZE;
+    return pieces.map((p, i) => {
+      const pieceWidth = pieceWidths[i];
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const x = accX;
-      accX += pieceWidth + 10;
+      accX += pieceWidth + spacing;
 
       const y = panelTop - pieceHeight / 2 + 500;
 
@@ -526,8 +546,8 @@ const startX = (boardWidth - totalWidth) / 2;
           shape={p.shape}
           initialX={x}
           initialY={y}
-          onDrop={() => delayedCheck()}
-          onRotate={() => delayedCheck()}
+          onDrop={delayedCheck}
+          onRotate={delayedCheck}
         />
       );
     });
