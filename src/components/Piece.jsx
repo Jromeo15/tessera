@@ -546,7 +546,7 @@ export default function Piece({
       
         pointerEvents: "auto",
       
-        transform: touchingPanel ? "scale(0.5)" : "scale(1)",
+        transform: touchingPanel ? "scale(0.2)" : "scale(1)",
         transformOrigin: "center center",
         transition: "transform 0.15s ease",
       }}
