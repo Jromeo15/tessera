@@ -498,7 +498,7 @@ export default function PuzzleLayout({
 
         const pieceHeight = p.shape.length * CELL_SIZE;
 
-        const y = panelTop - pieceHeight / 2 + 600;
+        const y = panelTop - pieceHeight / 2 + 400;
 
           const delayedCheck = () => {
             requestAnimationFrame(() => {
