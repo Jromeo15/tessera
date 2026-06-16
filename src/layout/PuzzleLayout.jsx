@@ -504,30 +504,20 @@ export default function PuzzleLayout({
 
     <div style={{ position: "relative", zIndex: 50 }}>
 <Board key={resetKey}>
-  {(() => {
-    const spacing = 10;
-
-    const pieceWidths = pieces.map(
-      (p) => getPieceWidth(p.shape) * CELL_SIZE
-    );
-
-    const totalWidth =
-      pieceWidths.reduce((a, b) => a + b, 0) +
-      spacing * (pieces.length - 1);
-
-    // fallback seguro si aún no hay medida del board
-    const safeBoardWidth = boardWidth || window.innerWidth;
-
-    const startX = Math.max(0, (safeBoardWidth - totalWidth) / 2);
-
-    let accX = startX;
-
-    return pieces.map((p, i) => {
-      const pieceWidth = pieceWidths[i];
+  <div
+    style={{
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-end",
+      gap: 10,
+      paddingBottom: panelTop ? Math.max(10, 10) : 10,
+    }}
+  >
+    {pieces.map((p) => {
       const pieceHeight = p.shape.length * CELL_SIZE;
-
-      const x = accX;
-      accX += pieceWidth + spacing;
 
       const y = panelTop - pieceHeight / 2 + 500;
 
@@ -544,14 +534,14 @@ export default function PuzzleLayout({
           data-id={p.id}
           color={p.color}
           shape={p.shape}
-          initialX={x}
+          initialX={0}   // ya no se usa para layout horizontal
           initialY={y}
           onDrop={delayedCheck}
           onRotate={delayedCheck}
         />
       );
-    });
-  })()}
+    })}
+  </div>
 </Board>
 </div>
   )}
