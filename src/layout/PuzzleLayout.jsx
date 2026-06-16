@@ -385,12 +385,7 @@ export default function PuzzleLayout({
 {/* CONTENIDO (CENTRADO EN PANTALLA) */}
 <div className="puzzleContent" style={{ position: "relative" }}>
 
-  {/* PANEL INFERIOR */}
-  <div
-  ref={panelRef}
-  className="puzzleBottomPanel"
-  style={{ zIndex: 1 }}
-/>
+
   
   {/* ZOOM BAR (FLOAT TOP-LEFT) */}
   <div
@@ -455,12 +450,25 @@ export default function PuzzleLayout({
   </div>
 )}
 
+<div
+    ref={panelRef}
+    className="puzzleBottomPanel"
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1
+    }}
+  />
+
   {/* CONTENIDO REAL */}
   <div
   style={{
     transform: `scale(${zoom})`,
     transformOrigin: "center center",
     transition: "transform 0.2s ease",
+    zIndex: 999
   }}
 >
   {children ? (
@@ -475,9 +483,7 @@ export default function PuzzleLayout({
     const spacing = 1;
 
     // calcular ancho total del conjunto de piezas
-    const totalWidth = pieces.reduce((sum, p, i) => {
-      return sum + getPieceWidth(p.shape) * CELL_SIZE;
-    }, 0) + spacing * (pieces.length - 1);
+    const totalWidth = 50;
 
     const startX = (BOARD_PIXEL_WIDTH - totalWidth) / 2;
 

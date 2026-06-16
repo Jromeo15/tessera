@@ -5,7 +5,6 @@ import { Undo, Redo } from "lucide-react";
 let activePieceId = null;
 let topPieceId = null;
 
-let overlapTick = 0;
 
 const forceGlobalOverlapRecalc = () => {
   requestAnimationFrame(() => {
@@ -36,7 +35,6 @@ const compatiblePairs = {
 const areCompatible = (a, b) => {
   return compatiblePairs[a] === b;
 };
-
 
 const rotateCellType  = (value) => {
   switch (value) {
@@ -220,11 +218,6 @@ export default function Piece({
     return touching;
   };
 
-
-
-  // -------------------------
-  // DRAG START
-  // -------------------------
   const startDrag = (clientX, clientY) => {
     dragging.current = true;
     moved.current = false;
@@ -267,7 +260,6 @@ export default function Piece({
   
     dragging.current = false;
   
-    // 🔥 FIX CLAVE: NO dependas de activePieceId
     const board = document.querySelector(".board");
     if (!board) return;
   
@@ -526,7 +518,6 @@ export default function Piece({
     };
   }, [gridPos, rot]);
 
-
   return (
     <div
       className={`piece piece-${id}`}
@@ -553,7 +544,7 @@ export default function Piece({
               ? 5000
               : 1,
       
-        pointerEvents: "none",
+        pointerEvents: "auto",
       
         transform: touchingPanel ? "scale(0.5)" : "scale(1)",
         transformOrigin: "center center",
@@ -599,7 +590,7 @@ export default function Piece({
             style={{
               width: CELL_SIZE,
               height: CELL_SIZE,
-              pointerEvents: "none",
+              pointerEvents: "auto",
             }}
           />
         );
