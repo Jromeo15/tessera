@@ -1981,7 +1981,7 @@ code {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 
 
-  z-index: 80;
+  z-index: 1;
 }
 
 .puzzleBottomPanel__inner {
@@ -2009,6 +2009,11 @@ code {
   transform: scale(0.75);
 
   margin: 0 4px;
+}
+
+.piece {
+  position: absolute;
+  z-index: 999;
 }
 
 .rotateButton {

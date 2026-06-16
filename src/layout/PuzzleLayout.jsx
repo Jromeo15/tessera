@@ -472,7 +472,7 @@ export default function PuzzleLayout({
     <div style={{ position: "relative", zIndex: 50 }}>
 <Board key={resetKey}>
   {(() => {
-    const spacing = 16;
+    const spacing = 1;
 
     // calcular ancho total del conjunto de piezas
     const totalWidth = pieces.reduce((sum, p, i) => {
