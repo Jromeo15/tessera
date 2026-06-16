@@ -85,10 +85,11 @@ export default function PuzzleLayout({
   
     piecesDom.forEach((piece, pi) => {
       const cells = piece.querySelectorAll(".piece-cell");
+
+      const boardRect = board.getBoundingClientRect();
   
       cells.forEach((cell) => {
         const rect = cell.getBoundingClientRect();
-        const boardRect = board.getBoundingClientRect();
   
         const zoom =
           parseFloat(getComputedStyle(document.body).getPropertyValue("--zoom")) || 1;
@@ -421,14 +422,9 @@ export default function PuzzleLayout({
           ? -80
           : window.innerHeight * 0.15;
 
-        const delayedCheck = () => {
+          const delayedCheck = () => {
             requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                setTimeout(() => {
-                  console.log("[VICTORY] FINAL CHECK TRIGGER");
-                  checkVictory(checkCellFilled);
-                }, 0);
-              });
+              checkVictory(checkCellFilled);
             });
           };
 
