@@ -386,7 +386,11 @@ export default function PuzzleLayout({
 <div className="puzzleContent" style={{ position: "relative" }}>
 
   {/* PANEL INFERIOR */}
-<div ref={panelRef} className="puzzleBottomPanel" />
+  <div
+  ref={panelRef}
+  className="puzzleBottomPanel"
+  style={{ zIndex: 1 }}
+/>
   
   {/* ZOOM BAR (FLOAT TOP-LEFT) */}
   <div
@@ -464,64 +468,53 @@ export default function PuzzleLayout({
       ? children({ isFilled: checkCellFilled })
       : children
   ) : (
-    <Board key={resetKey}>
-      {pieces.map((p, index) => {
-        const isTopRow = index < topCount;
-        const rowIndex = isTopRow ? index : index - topCount;
 
-        const pieceWidth = getPieceWidth(p.shape) * CELL_SIZE;
+    <div style={{ position: "relative", zIndex: 50 }}>
+<Board key={resetKey}>
+  {(() => {
+    const spacing = 16;
 
-        const availableWidth = BOARD_PIXEL_WIDTH - SAFE_MARGIN * 2;
+    // calcular ancho total del conjunto de piezas
+    const totalWidth = pieces.reduce((sum, p, i) => {
+      return sum + getPieceWidth(p.shape) * CELL_SIZE;
+    }, 0) + spacing * (pieces.length - 1);
 
-        const slotWidth =
-          topCount > 1 ? availableWidth / (topCount - 1) : 0;
+    const startX = (BOARD_PIXEL_WIDTH - totalWidth) / 2;
 
-        let centerX =
-          topCount > 1
-            ? SAFE_MARGIN + slotWidth * rowIndex
-            : BOARD_PIXEL_WIDTH / 2;
+    let accX = startX;
 
-        const globalBias = -40;
-        centerX += globalBias;
+    return pieces.map((p) => {
+      const pieceWidth = getPieceWidth(p.shape) * CELL_SIZE;
+      const pieceHeight = p.shape.length * CELL_SIZE;
 
-        const minCenter = SAFE_MARGIN + pieceWidth / 2;
-        const maxCenter =
-          BOARD_PIXEL_WIDTH - SAFE_MARGIN - pieceWidth / 2;
+      const x = accX;
+      accX += pieceWidth + spacing;
 
-        if (centerX < minCenter) {
-          centerX += (minCenter - centerX) * 0.6;
-        } else if (centerX > maxCenter) {
-          centerX -= (centerX - maxCenter) * 0.6;
-        }
+      const y = panelTop - pieceHeight / 2 + 400;
 
-        const x = centerX - pieceWidth / 2;
+      const delayedCheck = () => {
+        requestAnimationFrame(() => {
+          checkVictory(checkCellFilled);
+        });
+      };
 
-        const pieceHeight = p.shape.length * CELL_SIZE;
-
-        const y = panelTop - pieceHeight / 2 + 400;
-
-          const delayedCheck = () => {
-            requestAnimationFrame(() => {
-              checkVictory(checkCellFilled);
-            });
-          };
-
-        return (
-          
-          <Piece
-            key={p.id}
-            id={p.id}
-            data-id={p.id}
-            color={p.color}
-            shape={p.shape}
-            initialX={x}
-            initialY={y}
-            onDrop={() => delayedCheck()}
-            onRotate={() => delayedCheck()}
-          />
-        );
-      })}
-    </Board>
+      return (
+        <Piece
+          key={p.id}
+          id={p.id}
+          data-id={p.id}
+          color={p.color}
+          shape={p.shape}
+          initialX={x}
+          initialY={y}
+          onDrop={() => delayedCheck()}
+          onRotate={() => delayedCheck()}
+        />
+      );
+    });
+  })()}
+</Board>
+</div>
   )}
 </div>
 
