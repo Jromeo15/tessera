@@ -130,28 +130,8 @@ export default function Piece({
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
-  const isTouchingPanel = useMemo(() => {
-    const panel = document.querySelector(".puzzleBottomPanel");
-    if (!panel) return false;
-  
-    const panelRect = panel.getBoundingClientRect();
-  
-    const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
-  
-    for (const cell of myCells) {
-      const rect = cell.getBoundingClientRect();
-  
-      const intersect =
-        !(rect.right <= panelRect.left ||
-          rect.left >= panelRect.right ||
-          rect.bottom <= panelRect.top ||
-          rect.top >= panelRect.bottom);
-  
-      if (intersect) return true;
-    }
-  
-    return false;
-  }, [gridPos, rot]);
+  const [isTouchingPanel, setIsTouchingPanel] = useState(false);
+
 
   const dragging = useRef(false);
   const moved = useRef(false);
@@ -215,9 +195,9 @@ export default function Piece({
     return overlap;
   };
 
-  const checkPanelTouch = () => {
+  const updatePanelTouch = () => {
     const panel = document.querySelector(".puzzleBottomPanel");
-    if (!panel) return false;
+    if (!panel) return;
   
     const panelRect = panel.getBoundingClientRect();
   
@@ -237,10 +217,8 @@ export default function Piece({
       if (intersect) touching = true;
     });
   
-    return touching;
+    setIsTouchingPanel(touching);
   };
-
-
 
   // -------------------------
   // DRAG START
@@ -519,20 +497,7 @@ export default function Piece({
   }, [gridPos, rot]);
 
   useEffect(() => {
-    let raf;
-  
-    const update = () => {
-      cancelAnimationFrame(raf);
-  
-    };
-  
-    update();
-    window.addEventListener("global-overlap", update);
-  
-    return () => {
-      window.removeEventListener("global-overlap", update);
-      cancelAnimationFrame(raf);
-    };
+    updatePanelTouch();
   }, [gridPos, rot]);
 
 
@@ -563,8 +528,10 @@ export default function Piece({
               : 1,
       
       
-              transform: isTouchingPanel ? "scale(0.2)" : "scale(1)",
-        transformOrigin: "center center",
+              transform:
+              dragging.current || !isTouchingPanel
+                ? "scale(1)"
+                : "scale(0.2)",
         transition: "transform 0.15s ease",
       }}
     >

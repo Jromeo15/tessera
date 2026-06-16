@@ -44,22 +44,6 @@ export default function PuzzleLayout({
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
   const [panelTop, setPanelTop] = useState(0);
-  const [touchingPanel, setTouchingPanel] = useState({});
-
-  const [boardWidth, setBoardWidth] = useState(0);
-  const boardRef = useRef(null);
-
-  const getPieceWidth = (shape) => {
-    let maxX = 0;
-
-    shape.forEach((row) => {
-      row.forEach((cell, x) => {
-        if (cell) maxX = Math.max(maxX, x);
-      });
-    });
-
-    return maxX + 1;
-  };
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -294,61 +278,6 @@ export default function PuzzleLayout({
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  useEffect(() => {
-    let raf;
-  
-    const checkCollision = () => {
-      const panel = panelRef.current;
-      if (!panel) return;
-  
-      const panelRect = panel.getBoundingClientRect();
-      const piecesDom = document.querySelectorAll(".piece");
-  
-      const newTouching = {};
-  
-      piecesDom.forEach((piece) => {
-        const rect = piece.getBoundingClientRect();
-  
-        const isTouching =
-          rect.bottom >= panelRect.top &&
-          rect.top <= panelRect.bottom &&
-          rect.right >= panelRect.left &&
-          rect.left <= panelRect.right;
-  
-        const id = piece.getAttribute("data-id");
-  
-        if (id) {
-          newTouching[id] = isTouching;
-        }
-      });
-  
-      setTouchingPanel(newTouching);
-    };
-  
-    const loop = () => {
-      checkCollision();
-      raf = requestAnimationFrame(loop);
-    };
-  
-    raf = requestAnimationFrame(loop);
-  
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  useEffect(() => {
-    const el = document.querySelector(".board");
-    if (!el) return;
-  
-    const update = () => {
-      setBoardWidth(el.getBoundingClientRect().width);
-    };
-  
-    update();
-    window.addEventListener("resize", update);
-  
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -532,7 +461,6 @@ export default function PuzzleLayout({
         <Piece
           key={p.id}
           id={p.id}
-          data-id={p.id}
           color={p.color}
           shape={p.shape}
           initialX={0}   // ya no se usa para layout horizontal
