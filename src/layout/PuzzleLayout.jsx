@@ -66,16 +66,24 @@ export default function PuzzleLayout({
   });
 
   const checkVictory = (isFilledFn) => {
+    console.log("[VICTORY] checkVictory called");
+  
     const board = document.querySelector(".board");
-    if (!board) return;
+    if (!board) {
+      console.log("[VICTORY] NO BOARD FOUND");
+      return;
+    }
+  
+    const piecesDom = document.querySelectorAll(".piece");
+    console.log("[VICTORY] pieces found:", piecesDom.length);
   
     const grid = Array.from({ length: BOARD_ROWS }, () =>
       Array.from({ length: BOARD_COLS }, () => [])
     );
   
-    const piecesDom = document.querySelectorAll(".piece");
+    let totalCells = 0;
   
-    piecesDom.forEach((piece) => {
+    piecesDom.forEach((piece, pi) => {
       const cells = piece.querySelectorAll(".piece-cell");
   
       cells.forEach((cell) => {
@@ -94,13 +102,20 @@ export default function PuzzleLayout({
         if (row >= 0 && row < BOARD_ROWS && col >= 0 && col < BOARD_COLS) {
           const type = cell.dataset.cellType || "1";
           grid[row][col].push(type);
+          totalCells++;
         }
       });
     });
   
-    const win = grid.every((row) =>
-      row.every((cell) => isFilledFn(cell))
+    console.log("[VICTORY] total filled cells:", totalCells);
+  
+    console.table(grid.map(r => r.map(c => c.join(""))));
+  
+    const win = grid.every(row =>
+      row.every(cell => isFilledFn(cell))
     );
+  
+    console.log("[VICTORY] RESULT =", win);
   
     setShowVictory(win);
   };
@@ -406,7 +421,19 @@ export default function PuzzleLayout({
           ? -80
           : window.innerHeight * 0.15;
 
+        const delayedCheck = () => {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                setTimeout(() => {
+                  console.log("[VICTORY] FINAL CHECK TRIGGER");
+                  checkVictory(checkCellFilled);
+                }, 0);
+              });
+            });
+          };
+
         return (
+          
           <Piece
             key={p.id}
             id={p.id}
@@ -414,8 +441,8 @@ export default function PuzzleLayout({
             shape={p.shape}
             initialX={x}
             initialY={y}
-            onDrop={() => checkVictory(checkCellFilled)}
-            onRotate={() => checkVictory(checkCellFilled)}
+            onDrop={() => delayedCheck()}
+            onRotate={() => delayedCheck()}
           />
         );
       })}

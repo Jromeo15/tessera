@@ -1,9 +1,17 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { CELL_SIZE } from "../constants";
+import { Undo, Redo } from "lucide-react";
 
 let activePieceId = null;
+let topPieceId = null;
 
 let overlapTick = 0;
+
+const forceGlobalOverlapRecalc = () => {
+  requestAnimationFrame(() => {
+    window.dispatchEvent(new Event("global-overlap"));
+  });
+};
 
 const compatiblePairs = {
   "3": "6",
@@ -27,12 +35,6 @@ const compatiblePairs = {
 
 const areCompatible = (a, b) => {
   return compatiblePairs[a] === b;
-};
-
-
-export const bumpOverlapTick = () => {
-  overlapTick++;
-  window.dispatchEvent(new Event("overlap-change"));
 };
 
 
@@ -117,6 +119,7 @@ export default function Piece({
   initialX = 0,
   initialY = 0,
   onDrop,
+  onRotate,
 }) {
   const isTriangle = shapeMode === "triangle";
   const [gridPos, setGridPos] = useState(() => ({
@@ -125,6 +128,7 @@ export default function Piece({
   }));
 
   const [rot, setRot] = useState(0);
+  const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
 
   const dragging = useRef(false);
@@ -189,11 +193,7 @@ export default function Piece({
     return overlap;
   };
 
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      setIsOverlapping(checkOverlap());
-    });
-  }, []);
+
 
   // -------------------------
   // DRAG START
@@ -203,6 +203,7 @@ export default function Piece({
     moved.current = false;
 
     activePieceId = id;
+    topPieceId = id;
 
     start.current = {
       x: clientX,
@@ -218,6 +219,7 @@ export default function Piece({
   const moveDrag = (clientX, clientY) => {
     if (!dragging.current) return;
 
+
     const dx = Math.abs(clientX - start.current.x);
     const dy = Math.abs(clientY - start.current.y);
 
@@ -228,45 +230,62 @@ export default function Piece({
         col: Math.round((clientX - offset.current.x) / CELL_SIZE),
         row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
+
+    forceGlobalOverlapRecalc();
       
-      bumpOverlapTick();
     }
   };
-
   const endDrag = () => {
+    console.log("[PIECE] endDrag", id);
+  
     dragging.current = false;
-
-    if (activePieceId !== id) return;
-
+  
+    // 🔥 FIX CLAVE: NO dependas de activePieceId
     const board = document.querySelector(".board");
     if (!board) return;
-
+  
     const rect = board.getBoundingClientRect();
-
+  
     const xInside = gridPos.col * CELL_SIZE;
     const yInside = gridPos.row * CELL_SIZE;
-
+  
     const inside =
       xInside >= 0 &&
       yInside >= 0 &&
       xInside <= rect.width &&
       yInside <= rect.height;
-
+  
     if (!inside) {
       activePieceId = null;
+      topPieceId = null;
       return;
     }
-
+  
+    const finalCol = Math.round(xInside / CELL_SIZE);
+    const finalRow = Math.round(yInside / CELL_SIZE);
+  
     setGridPos({
-      col: Math.round(xInside / CELL_SIZE),
-      row: Math.round(yInside / CELL_SIZE),
+      col: finalCol,
+      row: finalRow,
     });
-
+  
     activePieceId = null;
-
-    bumpOverlapTick();
-
-    onDrop?.();
+  
+    // 🔥 SIEMPRE dispara onDrop
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          console.log("[PIECE] calling onDrop", id);
+  
+          onDrop?.({
+            col: finalCol,
+            row: finalRow,
+          });
+  
+          forceGlobalOverlapRecalc();
+        }, 0);
+      });
+    });
   };
 
   // -------------------------
@@ -299,16 +318,43 @@ export default function Piece({
 
   const onClick = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
-
+  
     if (!cell) return;
-
     if (!cell.closest(`.piece-${id}`)) return;
-
     if (moved.current) return;
 
+    topPieceId = id;
+  
+    setShowRotateButtons((v) => !v);
+  };
 
+  const rotateLeft = (e) => {
+    e.stopPropagation();
+  
+    setRot((r) => (r + 3) % 4);
+    topPieceId = id;
+  
+    requestAnimationFrame(() => {
+      onRotate?.();
+    });
+  
+    setShowRotateButtons(false);
+    forceGlobalOverlapRecalc();
+    
+  };
+  
+  const rotateRight = (e) => {
+    e.stopPropagation();
+  
     setRot((r) => (r + 1) % 4);
-
+    topPieceId = id;
+  
+    requestAnimationFrame(() => {
+      onRotate?.();
+    });
+  
+    setShowRotateButtons(false);
+    forceGlobalOverlapRecalc();
   };
 
   // -------------------------
@@ -374,22 +420,64 @@ export default function Piece({
     };
   }, [gridPos, rot]);
 
+
   useEffect(() => {
+    if (!showRotateButtons) return;
+  
+    const closeButtons = (e) => {
+      if (!e.target.closest(`.piece-${id}`)) {
+        setShowRotateButtons(false);
+      }
+    };
+  
+    window.addEventListener("mousedown", closeButtons);
+    window.addEventListener("touchstart", closeButtons);
+  
+    return () => {
+      window.removeEventListener("mousedown", closeButtons);
+      window.removeEventListener("touchstart", closeButtons);
+    };
+  }, [showRotateButtons, id]);
+
+  useEffect(() => {
+    const clearFocus = () => {
+      activePieceId = null;
+      topPieceId = null;
+    };
+  
+    const handleMouseUp = () => clearFocus();
+    const handleTouchEnd = () => clearFocus();
+  
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchend", handleTouchEnd);
+  
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    let raf;
+  
     const update = () => {
-      requestAnimationFrame(() => {
+      cancelAnimationFrame(raf);
+  
+      raf = requestAnimationFrame(() => {
         setIsOverlapping(checkOverlap());
       });
     };
   
-    window.addEventListener("overlap-change", update);
-  
-    // cálculo inicial (MUY IMPORTANTE para inicio + rotaciones)
     update();
   
+    window.addEventListener("global-overlap", update);
+  
     return () => {
-      window.removeEventListener("overlap-change", update);
+      window.removeEventListener("global-overlap", update);
+      cancelAnimationFrame(raf);
     };
   }, [gridPos, rot]);
+
 
   return (
     <div
@@ -410,15 +498,47 @@ export default function Piece({
         userSelect: "none",
         touchAction: "none",
   
-        zIndex: activePieceId === id ? 1000 : 1,
+        zIndex:
+  topPieceId === id
+    ? 9999
+    : activePieceId === id
+      ? 5000
+      : 1,
   
         pointerEvents: "none",
-  
-        // 🔥 VISUAL OVERLAP
-        opacity: isOverlapping ? 0.6 : 1,
-        filter: isOverlapping ? "brightness(0.6)" : "none",
       }}
     >
+
+{showRotateButtons && (
+  <div
+  style={{
+    position: "absolute",
+    top: -55,
+    left: "50%",
+    transform: "translateX(-50%)",
+    display: "flex",
+    gap: 28,
+    pointerEvents: "auto",
+    zIndex: 999999,
+    isolation: "isolate",
+  }}
+  >
+<button
+  onClick={rotateLeft}
+  className="rotateButton"
+>
+  <Undo className="rotateButtonIcon" />
+</button>
+
+<button
+  onClick={rotateRight}
+  className="rotateButton"
+>
+  <Redo className="rotateButtonIcon" />
+</button>
+  </div>
+)}
+
     {rotatedShape.flat().map((cell, i) => {
       if (!cell) {
         return (
@@ -434,15 +554,17 @@ export default function Piece({
       }
 
       return (
-      <div
-        key={i}
-        data-cell-type={cell}
-        className={`piece-cell type-${cell}`}
+        <div
+          key={i}
+          data-cell-type={cell}
+          className={`piece-cell type-${cell}`}
           style={{
             width: CELL_SIZE,
             height: CELL_SIZE,
 
             background: color,
+            opacity: isOverlapping ? 0.6 : 1,
+            filter: isOverlapping ? "brightness(0.6)" : "none",
 
             boxSizing: "border-box",
             pointerEvents: "auto",
