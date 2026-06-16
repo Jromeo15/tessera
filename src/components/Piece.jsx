@@ -131,6 +131,8 @@ export default function Piece({
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
 
+  const [touchingPanel, setTouchingPanel] = useState(false);
+
   const dragging = useRef(false);
   const moved = useRef(false);
 
@@ -191,6 +193,31 @@ export default function Piece({
     });
   
     return overlap;
+  };
+
+  const checkPanelTouch = () => {
+    const panel = document.querySelector(".puzzleBottomPanel");
+    if (!panel) return false;
+  
+    const panelRect = panel.getBoundingClientRect();
+  
+    const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
+  
+    let touching = false;
+  
+    myCells.forEach((cell) => {
+      const rect = cell.getBoundingClientRect();
+  
+      const intersect =
+        !(rect.right <= panelRect.left ||
+          rect.left >= panelRect.right ||
+          rect.bottom <= panelRect.top ||
+          rect.top >= panelRect.bottom);
+  
+      if (intersect) touching = true;
+    });
+  
+    return touching;
   };
 
 
@@ -478,6 +505,27 @@ export default function Piece({
     };
   }, [gridPos, rot]);
 
+  useEffect(() => {
+    let raf;
+  
+    const update = () => {
+      cancelAnimationFrame(raf);
+  
+      raf = requestAnimationFrame(() => {
+        setTouchingPanel(checkPanelTouch());
+      });
+    };
+  
+    update();
+  
+    window.addEventListener("global-overlap", update);
+  
+    return () => {
+      window.removeEventListener("global-overlap", update);
+      cancelAnimationFrame(raf);
+    };
+  }, [gridPos, rot]);
+
 
   return (
     <div
@@ -489,23 +537,27 @@ export default function Piece({
         position: "absolute",
         left: gridPos.col * CELL_SIZE,
         top: gridPos.row * CELL_SIZE,
-  
+      
         display: "grid",
-  
+      
         gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
-  
+      
         cursor: "grab",
         userSelect: "none",
         touchAction: "none",
-  
+      
         zIndex:
-  topPieceId === id
-    ? 9999
-    : activePieceId === id
-      ? 5000
-      : 1,
-  
+          topPieceId === id
+            ? 9999
+            : activePieceId === id
+              ? 5000
+              : 1,
+      
         pointerEvents: "none",
+      
+        transform: touchingPanel ? "scale(0.5)" : "scale(1)",
+        transformOrigin: "center center",
+        transition: "transform 0.15s ease",
       }}
     >
 

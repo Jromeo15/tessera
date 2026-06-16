@@ -44,6 +44,7 @@ export default function PuzzleLayout({
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
   const [panelTop, setPanelTop] = useState(0);
+  const [touchingPanel, setTouchingPanel] = useState({});
 
   const getPieceWidth = (shape) => {
     let maxX = 0;
@@ -290,6 +291,39 @@ export default function PuzzleLayout({
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  useEffect(() => {
+    const checkCollision = () => {
+      const panel = panelRef.current;
+      if (!panel) return;
+  
+      const panelRect = panel.getBoundingClientRect();
+      const piecesDom = document.querySelectorAll(".piece");
+  
+      const newTouching = {};
+  
+      piecesDom.forEach((piece) => {
+        const rect = piece.getBoundingClientRect();
+  
+        const isTouching =
+          rect.bottom >= panelRect.top &&
+          rect.top <= panelRect.bottom &&
+          rect.right >= panelRect.left &&
+          rect.left <= panelRect.right;
+  
+        const id = piece.getAttribute("data-id");
+  
+        if (id) {
+          newTouching[id] = isTouching;
+        }
+      });
+  
+      setTouchingPanel(newTouching);
+    };
+  
+    const interval = setInterval(checkCollision, 50);
+    return () => clearInterval(interval);
+  }, []);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -477,6 +511,7 @@ export default function PuzzleLayout({
           <Piece
             key={p.id}
             id={p.id}
+            data-id={p.id}
             color={p.color}
             shape={p.shape}
             initialX={x}
