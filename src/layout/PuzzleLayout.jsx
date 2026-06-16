@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   HelpCircle,
   RotateCcw,
@@ -42,6 +42,8 @@ export default function PuzzleLayout({
   const [hasRegistered, setHasRegistered] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
+  const panelRef = useRef(null);
+  const [panelTop, setPanelTop] = useState(0);
 
   const getPieceWidth = (shape) => {
     let maxX = 0;
@@ -274,6 +276,20 @@ export default function PuzzleLayout({
     };
   }, []);
 
+  useEffect(() => {
+    if (!panelRef.current) return;
+  
+    const update = () => {
+      const rect = panelRef.current.getBoundingClientRect();
+      setPanelTop(rect.top);
+    };
+  
+    update();
+  
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -336,7 +352,7 @@ export default function PuzzleLayout({
 <div className="puzzleContent" style={{ position: "relative" }}>
 
   {/* PANEL INFERIOR */}
-<div className="puzzleBottomPanel" />
+<div ref={panelRef} className="puzzleBottomPanel" />
   
   {/* ZOOM BAR (FLOAT TOP-LEFT) */}
   <div
@@ -446,9 +462,9 @@ export default function PuzzleLayout({
 
         const x = centerX - pieceWidth / 2;
 
-        const y = isTopRow
-          ? -80
-          : window.innerHeight * 0.15;
+        const pieceHeight = p.shape.length * CELL_SIZE;
+
+        const y = panelTop - pieceHeight / 2 + 600;
 
           const delayedCheck = () => {
             requestAnimationFrame(() => {
