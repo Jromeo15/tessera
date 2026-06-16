@@ -292,6 +292,8 @@ export default function PuzzleLayout({
   }, []);
 
   useEffect(() => {
+    let raf;
+  
     const checkCollision = () => {
       const panel = panelRef.current;
       if (!panel) return;
@@ -320,8 +322,14 @@ export default function PuzzleLayout({
       setTouchingPanel(newTouching);
     };
   
-    const interval = setInterval(checkCollision, 50);
-    return () => clearInterval(interval);
+    const loop = () => {
+      checkCollision();
+      raf = requestAnimationFrame(loop);
+    };
+  
+    raf = requestAnimationFrame(loop);
+  
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const formatTime = (t) => {
@@ -496,7 +504,7 @@ export default function PuzzleLayout({
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const x = accX;
-      accX +=  10;
+      accX += (pieceWidth + 10) * 0.2;
 
       const y = panelTop - pieceHeight / 2 + 500;
 
