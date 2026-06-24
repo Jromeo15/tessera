@@ -255,10 +255,24 @@ export default function PuzzleLayout({
 
   useEffect(() => {
     const spacing = 10;
-    let x = 20; // margen inicial
+    let x = 20;
+  
+    const debugSizes = pieces.map((p) => {
+      const el = document.querySelector(`.piece-${p.id}`);
+  
+      const size = {
+        id: p.id,
+        width: el?.offsetWidth,
+        height: el?.offsetHeight,
+      };
+  
+      console.log("[PIEZA SIZE]", size);
+  
+      return size;
+    });
   
     const newPositions = pieces.map((p) => {
-      const el = piecesRef.current[p.id];
+      const el = document.querySelector(`.piece-${p.id}`);
   
       const width = el?.offsetWidth ?? (4 * CELL_SIZE);
   
@@ -459,10 +473,14 @@ export default function PuzzleLayout({
   const screenWidth = window.innerWidth;
 
   const baseX = -screenWidth / 4;
+  let x = -screenWidth / 4;
 
-  const step = screenWidth / pieces.length;
-
-  const initialX = baseX + index * step;
+  const initialX = pieces.slice(0, index).reduce((acc, p2) => {
+    const el = document.querySelector(`.piece-${p2.id}`);
+    const width = el?.offsetWidth ?? (4 * CELL_SIZE);
+  
+    return acc + width + 10;
+  }, x);
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
