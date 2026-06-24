@@ -433,7 +433,7 @@ export default function PuzzleLayout({
       left: 0,
       right: 0,
       zIndex: 1,
-      pointerEvents: "none"  
+      pointerEvents: "none"
     }}
   />
 
@@ -452,7 +452,7 @@ export default function PuzzleLayout({
       : children
   ) : (
 
-    <div style={{ position: "relative", zIndex: 50 }}>
+    <div style={{ position: "relative", zIndex: 50, transform: "translateY(-80px)"}}>
 <Board key={resetKey}>
   <div
   style={{
