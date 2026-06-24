@@ -427,9 +427,7 @@ export default function PuzzleLayout({
   {pieces.map((p, index) => {
   const pieceHeight = p.shape.length * CELL_SIZE;
 
-  const y =
-  BOARD_ROWS * CELL_SIZE +
-  2 * CELL_SIZE;
+  const y = BOARD_ROWS * CELL_SIZE + 2 * CELL_SIZE;
 
   const screenWidth = window.innerWidth;
 
