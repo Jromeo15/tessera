@@ -42,6 +42,7 @@ export default function PuzzleLayout({
   const [panelTop, setPanelTop] = useState(0);
   const piecesRef = useRef({});
   const [positions, setPositions] = useState([]);
+  const [panelVisible, setPanelVisible] = useState(true);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -424,7 +425,8 @@ export default function PuzzleLayout({
   </div>
 )}
 
-<div
+{panelVisible ? (
+  <div
     ref={panelRef}
     className="puzzleBottomPanel"
     style={{
@@ -433,9 +435,95 @@ export default function PuzzleLayout({
       left: 0,
       right: 0,
       zIndex: 1,
-      pointerEvents: "none"
+      pointerEvents: "none",
+      overflow: "visible"
     }}
-  />
+  >
+    {/* HANDLE (CIERRA) */}
+    <button
+      onClick={() => setPanelVisible(false)}
+      style={{
+        position: "absolute",
+        top: -22,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: 90,
+        height: 18,
+
+        background: "#ffffff",
+        border: "1px solid #2f2f2f",
+        borderBottom: "none",
+        borderRadius: "12px 12px 0 0",
+
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+
+        cursor: "pointer",
+        pointerEvents: "auto",
+      }}
+    >
+      <span
+        style={{
+          fontSize: 12,
+          color: "#6f6f6f",
+          userSelect: "none",
+          transform: "translateY(-1px)",
+        }}
+      >
+        ▼
+      </span>
+    </button>
+  </div>
+) : (
+  /* HANDLE CUANDO ESTÁ OCULTO */
+  <div
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 0,
+      zIndex: 1,
+      overflow: "visible",
+    }}
+  >
+    <button
+      onClick={() => setPanelVisible(true)}
+      style={{
+        position: "absolute",
+        bottom: -1,
+        left: "50%",
+        transform: "translateX(-50%)",
+
+        width: 90,
+        height: 18,
+
+        background: "#ffffff",
+        border: "1px solid #2f2f2f",
+        borderTop: "none",
+        borderRadius: "0 0 12px 12px",
+
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+
+        cursor: "pointer",
+      }}
+    >
+      <span
+        style={{
+          fontSize: 12,
+          color: "#6f6f6f",
+          userSelect: "none",
+          transform: "translateY(1px)",
+        }}
+      >
+        ▲
+      </span>
+    </button>
+  </div>
+)}
 
   {/* CONTENIDO REAL */}
   <div
