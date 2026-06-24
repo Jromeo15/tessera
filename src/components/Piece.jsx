@@ -5,8 +5,6 @@ import { Undo, Redo } from "lucide-react";
 let activePieceId = null;
 let topPieceId = null;
 
-let overlapTick = 0;
-
 const forceGlobalOverlapRecalc = () => {
   requestAnimationFrame(() => {
     window.dispatchEvent(new Event("global-overlap"));
@@ -121,11 +119,21 @@ export default function Piece({
   onDrop,
   onRotate,
 }) {
-  const isTriangle = shapeMode === "triangle";
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE),
     row: Math.round(initialY / CELL_SIZE),
   }));
+
+  useEffect(() => {
+    console.log("MOUNT PIECE", id, {
+      initialX,
+      initialY,
+    });
+  
+    return () => {
+      console.log("UNMOUNT PIECE", id);
+    };
+  }, []);
 
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
@@ -306,9 +314,6 @@ export default function Piece({
 
   };
 
-  // -------------------------
-  // INPUTS
-  // -------------------------
   const onMouseDown = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
 
@@ -375,9 +380,6 @@ export default function Piece({
     forceGlobalOverlapRecalc();
   };
 
-  // -------------------------
-  // GLOBAL EVENTS
-  // -------------------------
   useEffect(() => {
     const handleMouseMove = (e) => {
       moveDrag(e.clientX, e.clientY);
@@ -578,7 +580,7 @@ export default function Piece({
           />
         );
       }
-
+      
       return (
         <div
           key={i}

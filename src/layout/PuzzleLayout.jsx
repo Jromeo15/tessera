@@ -18,11 +18,6 @@ import { CELL_SIZE } from "../constants";
 const BOARD_COLS = 9;
 const BOARD_ROWS = 10;
 
-const BOARD_PIXEL_WIDTH = BOARD_COLS * CELL_SIZE;
-const BOARD_PIXEL_HEIGHT = BOARD_ROWS * CELL_SIZE;
-
-const SAFE_MARGIN = 20;
-
 export default function PuzzleLayout({
   title,
   category,
@@ -44,7 +39,6 @@ export default function PuzzleLayout({
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
   const [panelTop, setPanelTop] = useState(0);
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -57,16 +51,10 @@ export default function PuzzleLayout({
   });
 
   const checkVictory = (isFilledFn) => {
-    console.log("[VICTORY] checkVictory called");
   
     const board = document.querySelector(".board");
-    if (!board) {
-      console.log("[VICTORY] NO BOARD FOUND");
-      return;
-    }
   
     const piecesDom = document.querySelectorAll(".piece");
-    console.log("[VICTORY] pieces found:", piecesDom.length);
   
     const grid = Array.from({ length: BOARD_ROWS }, () =>
       Array.from({ length: BOARD_COLS }, () => [])
@@ -99,29 +87,12 @@ export default function PuzzleLayout({
       });
     });
   
-    console.log("[VICTORY] total filled cells:", totalCells);
-  
-    console.table(grid.map(r => r.map(c => c.join(""))));
-  
     const win = grid.every(row =>
       row.every(cell => isFilledFn(cell))
     );
-  
-    console.log("[VICTORY] RESULT =", win);
-  
+
     setShowVictory(win);
   };
-
-  const topCount = Math.ceil(pieces.length / 2);
-  
-  useEffect(() => {
-    console.log("[PuzzleLayout MOUNT]", {
-      title,
-      category,
-      puzzleIndex,
-      user: user?.id,
-    });
-  }, []);
 
   const zoomOut = () => {
     setZoom((z) => Math.max(0.8, z - 0.2));
@@ -186,8 +157,6 @@ export default function PuzzleLayout({
       console.log("[registerProgress] SELECT error", error);
       return;
     }
-  
-    // si no existe fila → crearla y salir
     if (!data) {
       await supabase.from("user_progress").insert({
         user_id: user.id,
@@ -199,7 +168,6 @@ export default function PuzzleLayout({
   
     const current = data.unlocked_level ?? 1;
   
-    // 🔥 NUNCA bajar progreso, solo subirlo
     const newLevel = Math.max(current, nextLevel);
   
     if (newLevel === current) return;
@@ -279,33 +247,6 @@ export default function PuzzleLayout({
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-    };
-  
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-  
-      setScreenWidth(width);
-  
-      console.log("📱 SCREEN SIZE:", {
-        width,
-        height,
-      });
-    };
-  
-    handleResize(); // 👈 IMPORTANTE: imprime al cargar
-  
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
@@ -348,8 +289,14 @@ export default function PuzzleLayout({
 
   <button
   onClick={() => {
+    console.log("RESET PULSADO");
+  
     setShowVictory(false);
-    setResetKey((k) => k + 1);
+  
+    setResetKey((k) => {
+      console.log("NUEVO RESETKEY", k + 1);
+      return k + 1;
+    });
   }}
   className="puzzleIconBtn puzzleIconBtn--reset"
 >
@@ -480,7 +427,9 @@ export default function PuzzleLayout({
   {pieces.map((p, index) => {
   const pieceHeight = p.shape.length * CELL_SIZE;
 
-  const y = panelTop - pieceHeight / 2 + 400;
+  const y =
+  BOARD_ROWS * CELL_SIZE +
+  2 * CELL_SIZE;
 
   const screenWidth = window.innerWidth;
 
@@ -498,7 +447,7 @@ export default function PuzzleLayout({
 
   return (
     <Piece
-      key={p.id}
+      key={`${resetKey}-${p.id}`}
       id={p.id}
       color={p.color}
       shape={p.shape}
