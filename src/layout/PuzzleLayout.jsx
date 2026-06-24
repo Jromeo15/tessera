@@ -444,20 +444,21 @@ export default function PuzzleLayout({
   </div>
 )}
 {panelVisible ? (
-  <div
-    ref={panelRef}
-    className="puzzleBottomPanel"
-    style={{
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: 1,
-      overflow: "visible",
-      pointerEvents: "none",
-      zIndex: 999999998,
-    }}
-  >
+  <>
+    <div
+      ref={panelRef}
+      className="puzzleBottomPanel"
+      style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1,
+        overflow: "visible",
+        pointerEvents: "none",
+      }}
+    />
+
     <button
       onPointerDown={(e) => {
         e.preventDefault();
@@ -465,8 +466,10 @@ export default function PuzzleLayout({
       }}
       style={{
         position: "absolute",
-        top: -22,
+
         left: "50%",
+        bottom: panelHeight - 22,
+
         transform: "translateX(-50%)",
 
         width: 90,
@@ -485,7 +488,8 @@ export default function PuzzleLayout({
         pointerEvents: "auto",
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
-        zIndex: 999999999, 
+
+        zIndex: 999999999,
       }}
     >
       <span
@@ -499,25 +503,27 @@ export default function PuzzleLayout({
         ▼
       </span>
     </button>
-  </div>
+  </>
 ) : (
-  <div
-    style={{
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: 0,
-      zIndex: 1,
-      overflow: "visible",
-      pointerEvents: "none"   // IMPORTANTE también aquí
-    }}
-  >
+  <>
+    <div
+      style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 0,
+        zIndex: 1,
+        overflow: "visible",
+        pointerEvents: "none",
+      }}
+    />
+
     <button
       onPointerDown={(e) => {
         e.preventDefault();
         setPanelVisible(true);
-      }}   // FIX móvil real
+      }}
       style={{
         position: "absolute",
         bottom: -1,
@@ -540,6 +546,8 @@ export default function PuzzleLayout({
         pointerEvents: "auto",
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
+
+        zIndex: 999999999,
       }}
     >
       <span
@@ -553,7 +561,7 @@ export default function PuzzleLayout({
         ▲
       </span>
     </button>
-  </div>
+  </>
 )}
 
   {/* CONTENIDO REAL */}
