@@ -124,17 +124,6 @@ export default function Piece({
     row: Math.round(initialY / CELL_SIZE),
   }));
 
-  useEffect(() => {
-    console.log("MOUNT PIECE", id, {
-      initialX,
-      initialY,
-    });
-  
-    return () => {
-      console.log("UNMOUNT PIECE", id);
-    };
-  }, []);
-
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
@@ -580,7 +569,6 @@ export default function Piece({
           />
         );
       }
-      console.log("PIECE", id, gridPos);
 
       return (
         <div

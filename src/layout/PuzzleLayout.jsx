@@ -472,9 +472,6 @@ export default function PuzzleLayout({
 
   return (
     <Piece
-    ref={(el) => {
-    piecesRef.current[p.id] = el;
-  }}
       key={`${resetKey}-${p.id}`}
       id={p.id}
       color={p.color}
