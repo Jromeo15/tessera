@@ -439,7 +439,7 @@ export default function PuzzleLayout({
       overflow: "visible"
     }}
   >
-    {/* HANDLE (CIERRA) */}
+    {/* BULTITO (SIEMPRE IGUAL) */}
     <button
       onClick={() => setPanelVisible(false)}
       style={{
@@ -447,11 +447,12 @@ export default function PuzzleLayout({
         top: -22,
         left: "50%",
         transform: "translateX(-50%)",
+
         width: 90,
         height: 18,
 
         background: "#ffffff",
-        border: "1px solid #2f2f2f",
+        border: "5px solid #2f2f2f",
         borderBottom: "none",
         borderRadius: "12px 12px 0 0",
 
@@ -476,7 +477,7 @@ export default function PuzzleLayout({
     </button>
   </div>
 ) : (
-  /* HANDLE CUANDO ESTÁ OCULTO */
+  /* MISMO BULTITO, SOLO CAMBIA LA FLECHA */
   <div
     style={{
       position: "absolute",
@@ -501,8 +502,8 @@ export default function PuzzleLayout({
 
         background: "#ffffff",
         border: "1px solid #2f2f2f",
-        borderTop: "none",
-        borderRadius: "0 0 12px 12px",
+        borderBottom: "none",
+        borderRadius: "12px 12px 0 0",
 
         display: "flex",
         alignItems: "center",
@@ -556,7 +557,9 @@ export default function PuzzleLayout({
 >
   {pieces.map((p, index) => {
 
-  const y = BOARD_ROWS * CELL_SIZE + 2 * CELL_SIZE;
+  const screenHeight = window.innerHeight;
+
+  const y = screenHeight/2 - screenHeight/4;
 
   const screenWidth = window.innerWidth;
 
