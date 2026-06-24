@@ -477,36 +477,39 @@ export default function PuzzleLayout({
     paddingLeft: 0,
   }}
 >
-    {pieces.map((p, index) => {
-      const pieceHeight = p.shape.length * CELL_SIZE;
+  {pieces.map((p, index) => {
+  const pieceHeight = p.shape.length * CELL_SIZE;
 
-      const y = panelTop - pieceHeight / 2 + 400;
-      const BASE_LEFT = 2;   // primera pieza a 2px del borde
-const STEP = 20;       // separación fija
+  const y = panelTop - pieceHeight / 2 + 400;
 
-const screenWidth = window.innerWidth;
-const initialX = -screenWidth / 3;
+  const screenWidth = window.innerWidth;
 
-      const delayedCheck = () => {
-        requestAnimationFrame(() => {
-          checkVictory(checkCellFilled);
-        });
-      };
-      
+  const margin = 40;
+  const usableWidth = screenWidth - margin * 2;
 
-      return (
-        <Piece
-          key={p.id}
-          id={p.id}
-          color={p.color}
-          shape={p.shape}
-          initialX={initialX}   // ya no se usa para layout horizontal
-          initialY={y}
-          onDrop={delayedCheck}
-          onRotate={delayedCheck}
-        />
-      );
-    })}
+  const step = usableWidth / Math.max(pieces.length - 1, 1);
+
+  const initialX = margin + index * step;
+
+  const delayedCheck = () => {
+    requestAnimationFrame(() => {
+      checkVictory(checkCellFilled);
+    });
+  };
+
+  return (
+    <Piece
+      key={p.id}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={initialX}
+      initialY={y}
+      onDrop={delayedCheck}
+      onRotate={delayedCheck}
+    />
+  );
+})}
   </div>
 </Board>
 </div>
