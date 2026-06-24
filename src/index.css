@@ -1981,7 +1981,12 @@ code {
 
   border-top: 4px solid #ffffff;
 
-  z-index: 1;
+  z-index: 50;
+}
+
+.board {
+  position: relative;
+  z-index: 0;
 }
 
 
