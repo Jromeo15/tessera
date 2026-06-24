@@ -339,7 +339,7 @@ export default function PuzzleLayout({
     marginLeft: 10,
   }}
 >
-  PANEL
+  PAN
 </button>
 
   <button
@@ -484,6 +484,7 @@ export default function PuzzleLayout({
         pointerEvents: "auto",
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
+        zIndex: 999999999, 
       }}
     >
       <span
@@ -557,7 +558,6 @@ export default function PuzzleLayout({
   {/* CONTENIDO REAL */}
   <div
   style={{
-    transform: `scale(${zoom})`,
     transformOrigin: "center center",
     transition: "transform 0.2s ease",
     zIndex: 999
