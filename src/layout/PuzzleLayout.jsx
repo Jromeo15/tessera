@@ -503,7 +503,7 @@ export default function PuzzleLayout({
         height: 18,
 
         background: "#ffffff",
-        border: "1px solid #2f2f2f",
+        border: "2px solid #2f2f2f",
         borderBottom: "none",
         borderRadius: "12px 12px 0 0",
 
