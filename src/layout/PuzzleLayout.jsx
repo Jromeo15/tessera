@@ -468,7 +468,7 @@ export default function PuzzleLayout({
         position: "absolute",
 
         left: "50%",
-        bottom: panelHeight - 22,
+        bottom: panelHeight - 1,
 
         transform: "translateX(-50%)",
 
@@ -489,7 +489,7 @@ export default function PuzzleLayout({
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
 
-        zIndex: 999999999,
+        zIndex: 9,
       }}
     >
       <span
