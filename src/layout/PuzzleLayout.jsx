@@ -473,14 +473,10 @@ export default function PuzzleLayout({
   const screenWidth = window.innerWidth;
 
   const baseX = -screenWidth / 4;
-  let x = -screenWidth / 4;
 
-  const initialX = pieces.slice(0, index).reduce((acc, p2) => {
-    const el = document.querySelector(`.piece-${p2.id}`);
-    const width = el?.offsetWidth ?? (4 * CELL_SIZE);
-  
-    return acc + width + 10;
-  }, x);
+  const step = screenWidth / pieces.length;
+
+  const initialX = baseX + index * step;
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
