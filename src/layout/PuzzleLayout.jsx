@@ -559,7 +559,7 @@ export default function PuzzleLayout({
 
   const screenHeight = window.innerHeight;
 
-  const y = screenHeight/2 - screenHeight/4;
+  const y = screenHeight/2 ;
 
   const screenWidth = window.innerWidth;
 
