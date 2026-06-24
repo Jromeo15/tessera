@@ -484,12 +484,11 @@ export default function PuzzleLayout({
 
   const screenWidth = window.innerWidth;
 
-  const margin = 40;
-  const usableWidth = screenWidth - margin * 2;
+  const baseX = -screenWidth / 3.5;
 
-  const step = usableWidth / Math.max(pieces.length - 1, 1);
+  const step = screenWidth / pieces.length;
 
-  const initialX = margin + index * step;
+  const initialX = baseX + index * step;
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
