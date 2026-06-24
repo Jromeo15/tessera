@@ -439,31 +439,35 @@ export default function PuzzleLayout({
       overflow: "visible"
     }}
   >
-    {/* BULTITO (SIEMPRE IGUAL) */}
-    <button
-      onClick={() => setPanelVisible(false)}
-      style={{
-        position: "absolute",
-        top: -22,
-        left: "50%",
-        transform: "translateX(-50%)",
 
-        width: 90,
-        height: 18,
+<button
+  onClick={() => setPanelVisible(false)}
+  style={{
+    position: "absolute",
+    top: -22,
+    left: "50%",
+    transform: "translateX(-50%)",
 
-        background: "#ffffff",
-        border: "5px solid #2f2f2f",
-        borderBottom: "none",
-        borderRadius: "12px 12px 0 0",
+    width: 90,
+    height: 18,
 
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+    background: "#ffffff",
+    border: "5px solid #2f2f2f",
+    borderBottom: "none",
+    borderRadius: "12px 12px 0 0",
 
-        cursor: "pointer",
-        pointerEvents: "auto",
-      }}
-    >
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    cursor: "pointer",
+    pointerEvents: "auto",
+
+    /* 🔥 ESTO ES LO QUE ARREGLA MÓVIL */
+    touchAction: "manipulation",
+    WebkitTapHighlightColor: "transparent",
+  }}
+>
       <span
         style={{
           fontSize: 12,
