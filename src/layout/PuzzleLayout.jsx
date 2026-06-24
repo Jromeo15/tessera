@@ -450,11 +450,16 @@ export default function PuzzleLayout({
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const y = panelTop - pieceHeight / 2 + 400;
-      const SPACING = CELL_SIZE * 1; // ajusta aquí la separación
+      const screenWidth = window.innerWidth;
 
-      const centerOffset = (pieces.length - 1) / 2;
+      // margen inicial desde la izquierda (responsive)
+      const BASE_LEFT = Math.max(8, screenWidth * 0.02);
       
-      const initialX = (index - centerOffset) * SPACING;
+      // separación progresiva entre piezas (responsive también)
+      const STEP = Math.max(18, screenWidth * 0.03);
+      
+      // distribución: 0, 1, 2, 3...
+      const initialX = BASE_LEFT + index * STEP;
 
       const delayedCheck = () => {
         requestAnimationFrame(() => {
