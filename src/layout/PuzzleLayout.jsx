@@ -323,6 +323,25 @@ export default function PuzzleLayout({
 {/* BOTONES DERECHA */}
 <div className="puzzleActions">
 
+<button
+  onPointerDown={() => {
+    console.log("TOGGLE PANEL CLICK");
+    setPanelVisible(v => !v);
+  }}
+  style={{
+    position: "relative",
+    zIndex: 99999,
+    width: 44,
+    height: 44,
+    background: "red",
+    color: "white",
+    borderRadius: 8,
+    marginLeft: 10,
+  }}
+>
+  PANEL
+</button>
+
   <button
     onClick={() => setShowHelp(true)}
     className="puzzleIconBtn puzzleIconBtn--help"
