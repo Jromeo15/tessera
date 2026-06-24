@@ -220,15 +220,15 @@ export default function PuzzleLayout({
   }, [puzzleIndex, category]);
 
   useEffect(() => {
-    // bloquear scroll en móvil
-    const preventScroll = (e) => {
-      e.preventDefault();
-    };
   
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
   
-    document.addEventListener("touchmove", preventScroll, { passive: false });
+    const preventScroll = (e) => {
+      // SOLO bloquear si NO es interacción con botón
+      if (e.target.closest("button")) return;
+      e.preventDefault();
+    };
   
     return () => {
       document.body.style.overflow = "";
@@ -439,8 +439,10 @@ export default function PuzzleLayout({
     }}
   >
     <button
-      onClick={() => setPanelVisible(false)}
-      onTouchEnd={() => setPanelVisible(false)}   // FIX móvil real
+      onPointerDown={(e) => {
+        e.preventDefault();
+        setPanelVisible(false);
+      }}
       style={{
         position: "absolute",
         top: -22,
@@ -491,8 +493,10 @@ export default function PuzzleLayout({
     }}
   >
     <button
-      onClick={() => setPanelVisible(true)}
-      onTouchEnd={() => setPanelVisible(true)}   // FIX móvil real
+      onPointerDown={(e) => {
+        e.preventDefault();
+        setPanelVisible(true);
+      }}   // FIX móvil real
       style={{
         position: "absolute",
         bottom: -1,
