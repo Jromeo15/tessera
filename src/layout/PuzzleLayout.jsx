@@ -38,7 +38,10 @@ export default function PuzzleLayout({
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
+  const [panelHeight, setPanelHeight] = useState(0);
   const [panelTop, setPanelTop] = useState(0);
+  const piecesRef = useRef({});
+  const [positions, setPositions] = useState([]);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -238,14 +241,39 @@ export default function PuzzleLayout({
   
     const update = () => {
       const rect = panelRef.current.getBoundingClientRect();
+  
       setPanelTop(rect.top);
+      setPanelHeight(rect.height);
     };
   
     update();
   
     window.addEventListener("resize", update);
+  
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  useEffect(() => {
+    const spacing = 10;
+    let x = 20; // margen inicial
+  
+    const newPositions = pieces.map((p) => {
+      const el = piecesRef.current[p.id];
+  
+      const width = el?.offsetWidth ?? (4 * CELL_SIZE);
+  
+      const pos = {
+        id: p.id,
+        x,
+      };
+  
+      x += width + spacing;
+  
+      return pos;
+    });
+  
+    setPositions(newPositions);
+  }, [pieces, resetKey]);
 
 
   const formatTime = (t) => {
@@ -425,13 +453,12 @@ export default function PuzzleLayout({
   }}
 >
   {pieces.map((p, index) => {
-  const pieceHeight = p.shape.length * CELL_SIZE;
 
   const y = BOARD_ROWS * CELL_SIZE + 2 * CELL_SIZE;
 
   const screenWidth = window.innerWidth;
 
-  const baseX = -screenWidth / 3.5;
+  const baseX = -screenWidth / 4;
 
   const step = screenWidth / pieces.length;
 
@@ -445,6 +472,9 @@ export default function PuzzleLayout({
 
   return (
     <Piece
+    ref={(el) => {
+    piecesRef.current[p.id] = el;
+  }}
       key={`${resetKey}-${p.id}`}
       id={p.id}
       color={p.color}

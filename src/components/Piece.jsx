@@ -580,7 +580,8 @@ export default function Piece({
           />
         );
       }
-      
+      console.log("PIECE", id, gridPos);
+
       return (
         <div
           key={i}
