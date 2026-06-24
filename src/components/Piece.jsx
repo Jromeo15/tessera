@@ -123,7 +123,7 @@ export default function Piece({
 }) {
   const isTriangle = shapeMode === "triangle";
   const [gridPos, setGridPos] = useState(() => ({
-    col: Math.round(initialX / CELL_SIZE) + 1,
+    col: Math.round(initialX / CELL_SIZE),
     row: Math.round(initialY / CELL_SIZE),
   }));
 

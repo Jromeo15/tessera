@@ -44,6 +44,7 @@ export default function PuzzleLayout({
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
   const [panelTop, setPanelTop] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -278,6 +279,34 @@ export default function PuzzleLayout({
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+  
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+  
+      setScreenWidth(width);
+  
+      console.log("📱 SCREEN SIZE:", {
+        width,
+        height,
+      });
+    };
+  
+    handleResize(); // 👈 IMPORTANTE: imprime al cargar
+  
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -286,6 +315,7 @@ export default function PuzzleLayout({
   };
 
   return (
+    
     <div
       style={{
         height: "100vh",
@@ -293,6 +323,7 @@ export default function PuzzleLayout({
         flexDirection: "column",
       }}
     >
+      
       {/* HEADER */}
       <div className="puzzleHeader">
 {/* TÍTULO */}
@@ -435,31 +466,26 @@ export default function PuzzleLayout({
     <div style={{ position: "relative", zIndex: 50 }}>
 <Board key={resetKey}>
   <div
-    style={{
-      position: "relative",
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "flex-end",
-      gap: 10,
-      paddingBottom: panelTop ? Math.max(10, 10) : 10,
-    }}
-  >
+  style={{
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    gap: 10,
+    paddingLeft: 0,
+  }}
+>
     {pieces.map((p, index) => {
       const pieceHeight = p.shape.length * CELL_SIZE;
 
       const y = panelTop - pieceHeight / 2 + 400;
-      const screenWidth = window.innerWidth;
+      const BASE_LEFT = 2;   // primera pieza a 2px del borde
+const STEP = 20;       // separación fija
 
-      // margen inicial desde la izquierda (responsive)
-      const BASE_LEFT = Math.max(8, screenWidth * 0.02);
-      
-      // separación progresiva entre piezas (responsive también)
-      const STEP = Math.max(18, screenWidth * 0.03);
-      
-      // distribución: 0, 1, 2, 3...
-      const initialX = BASE_LEFT + index * STEP;
+const screenWidth = window.innerWidth;
+const initialX = -screenWidth / 3;
 
       const delayedCheck = () => {
         requestAnimationFrame(() => {
