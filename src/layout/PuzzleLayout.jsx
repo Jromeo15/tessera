@@ -435,7 +435,6 @@ export default function PuzzleLayout({
       left: 0,
       right: 0,
       zIndex: 1,
-      pointerEvents: "none",
       overflow: "visible"
     }}
   >
@@ -503,7 +502,7 @@ export default function PuzzleLayout({
         height: 18,
 
         background: "#ffffff",
-        border: "2px solid #2f2f2f",
+        border: "5px solid #2f2f2f",
         borderBottom: "none",
         borderRadius: "12px 12px 0 0",
 
