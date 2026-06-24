@@ -339,7 +339,7 @@ export default function PuzzleLayout({
     marginLeft: 10,
   }}
 >
-  PAN
+  PA
 </button>
 
   <button
@@ -454,7 +454,8 @@ export default function PuzzleLayout({
       right: 0,
       zIndex: 1,
       overflow: "visible",
-      pointerEvents: "none"   // IMPORTANTE: evita bloquear taps raros
+      pointerEvents: "none",
+      zIndex: 999999998,
     }}
   >
     <button
@@ -463,28 +464,27 @@ export default function PuzzleLayout({
         setPanelVisible(false);
       }}
       style={{
-        position: "absolute",
-        top: -22,
-        left: "50%",
-        transform: "translateX(-50%)",
-
+        position: "relative",
+        marginTop: -10,
+      
         width: 90,
         height: 18,
-
+      
         background: "#ffffff",
         border: "2px solid #2f2f2f",
         borderBottom: "none",
         borderRadius: "12px 12px 0 0",
-
+      
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-
+      
         cursor: "pointer",
         pointerEvents: "auto",
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
-        zIndex: 999999999, 
+      
+        zIndex: 999999999,
       }}
     >
       <span
