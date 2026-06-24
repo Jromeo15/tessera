@@ -449,8 +449,8 @@ export default function PuzzleLayout({
     {pieces.map((p, index) => {
       const pieceHeight = p.shape.length * CELL_SIZE;
 
-      const y = panelTop - pieceHeight / 2 + 500;
-      const SPACING = CELL_SIZE * 5; // ajusta aquí la separación
+      const y = panelTop - pieceHeight / 2 + 400;
+      const SPACING = CELL_SIZE * 1; // ajusta aquí la separación
 
       const centerOffset = (pieces.length - 1) / 2;
       
