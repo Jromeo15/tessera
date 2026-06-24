@@ -424,7 +424,6 @@ export default function PuzzleLayout({
     {externalTimer ?? formatTime(time)}
   </div>
 )}
-
 {panelVisible ? (
   <div
     ref={panelRef}
@@ -435,36 +434,37 @@ export default function PuzzleLayout({
       left: 0,
       right: 0,
       zIndex: 1,
-      overflow: "visible"
+      overflow: "visible",
+      pointerEvents: "none"   // IMPORTANTE: evita bloquear taps raros
     }}
   >
+    <button
+      onClick={() => setPanelVisible(false)}
+      onTouchEnd={() => setPanelVisible(false)}   // FIX móvil real
+      style={{
+        position: "absolute",
+        top: -22,
+        left: "50%",
+        transform: "translateX(-50%)",
 
-<button
-  onClick={() => setPanelVisible(false)}
-  style={{
-    position: "absolute",
-    top: -22,
-    left: "50%",
-    transform: "translateX(-50%)",
+        width: 90,
+        height: 18,
 
-    width: 90,
-    height: 18,
+        background: "#ffffff",
+        border: "2px solid #2f2f2f",
+        borderBottom: "none",
+        borderRadius: "12px 12px 0 0",
 
-    background: "#ffffff",
-    border: "2px solid #2f2f2f",
-    borderBottom: "none",
-    borderRadius: "12px 12px 0 0",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
 
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-
-    cursor: "pointer",
-    pointerEvents: "auto",
-    touchAction: "manipulation",
-    WebkitTapHighlightColor: "transparent",
-  }}
->
+        cursor: "pointer",
+        pointerEvents: "auto",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
+      }}
+    >
       <span
         style={{
           fontSize: 12,
@@ -478,7 +478,6 @@ export default function PuzzleLayout({
     </button>
   </div>
 ) : (
-  /* MISMO BULTITO, SOLO CAMBIA LA FLECHA */
   <div
     style={{
       position: "absolute",
@@ -488,10 +487,12 @@ export default function PuzzleLayout({
       height: 0,
       zIndex: 1,
       overflow: "visible",
+      pointerEvents: "none"   // IMPORTANTE también aquí
     }}
   >
     <button
       onClick={() => setPanelVisible(true)}
+      onTouchEnd={() => setPanelVisible(true)}   // FIX móvil real
       style={{
         position: "absolute",
         bottom: -1,
@@ -502,7 +503,7 @@ export default function PuzzleLayout({
         height: 18,
 
         background: "#ffffff",
-        border: "5px solid #2f2f2f",
+        border: "2px solid #2f2f2f",
         borderBottom: "none",
         borderRadius: "12px 12px 0 0",
 
@@ -511,6 +512,9 @@ export default function PuzzleLayout({
         justifyContent: "center",
 
         cursor: "pointer",
+        pointerEvents: "auto",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
       }}
     >
       <span
