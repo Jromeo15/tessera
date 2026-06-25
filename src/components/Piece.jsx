@@ -449,24 +449,6 @@ export default function Piece({
   }, [showRotateButtons, id]);
 
   useEffect(() => {
-    const clearFocus = () => {
-      activePieceId = null;
-      topPieceId = null;
-    };
-  
-    const handleMouseUp = () => clearFocus();
-    const handleTouchEnd = () => clearFocus();
-  
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("touchend", handleTouchEnd);
-  
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, []);
-
-  useEffect(() => {
     let raf;
   
     const update = () => {

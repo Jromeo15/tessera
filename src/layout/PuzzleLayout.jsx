@@ -46,6 +46,7 @@ export default function PuzzleLayout({
   const [hiddenPieces, setHiddenPieces] = useState({});
   const [panelReady, setPanelReady] = useState(false);
   const [reappearingPieces, setReappearingPieces] = useState({});
+  const [disappearingPieces, setDisappearingPieces] = useState({});
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -526,7 +527,13 @@ export default function PuzzleLayout({
 return (
 <div
   key={`${resetKey}-${p.id}`}
-  className={reappearingPieces[p.id] ? "pieceReappear" : ""}
+  className={
+    reappearingPieces[p.id]
+      ? "pieceReappear"
+      : disappearingPieces[p.id]
+      ? "pieceDisappear"
+      : ""
+  }
   style={{
     display:
       hiddenPieces[p.id] && !panelVisible
@@ -603,16 +610,38 @@ return (
 onPointerDown={(e) => {
   e.preventDefault();
 
-  if (!panelVisible) {
+  if (panelVisible) {
+    const toHide = {};
+
+    pieces.forEach((p) => {
+      const el = document.querySelector(`.piece-${p.id}`);
+
+      if (isPieceTouchingPanel(el)) {
+        toHide[p.id] = true;
+      }
+    });
+
+    setDisappearingPieces(toHide);
+
+    setTimeout(() => {
+      setHiddenPieces((prev) => ({
+        ...prev,
+        ...toHide,
+      }));
+
+      setDisappearingPieces({});
+    }, 180);
+  } else {
     setReappearingPieces({ ...hiddenPieces });
 
     setTimeout(() => {
       setReappearingPieces({});
     }, 300);
+
+    setHiddenPieces({});
   }
 
   setPanelVisible(!panelVisible);
-  setHiddenPieces({});
   setPanelReady(true);
 }}
       className={`puzzleToggleButton ${

@@ -2070,6 +2070,21 @@ code {
 .pieceReappear {
   animation: pieceFadeIn 0.25s ease-out 0.12s both;
 }
+
+@keyframes pieceFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.pieceDisappear {
+  animation: pieceFadeOut 0.18s ease-in forwards;
+}
+
 .puzzleBottomPanel__inner {
   display: flex;
   align-items: center;
