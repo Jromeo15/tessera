@@ -123,6 +123,11 @@ topPieceId,
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
+  const initialGridRef = useRef({
+    col: Math.round(initialX / CELL_SIZE),
+    row: Math.round(initialY / CELL_SIZE),
+  });
 
 
   const dragging = useRef(false);
@@ -258,28 +263,52 @@ topPieceId,
     }
   };
   const endDrag = () => {
-  
     dragging.current = false;
   
-    const board = document.querySelector(".board");
-    if (!board) return;
+    const panel = document.querySelector(".puzzleBottomPanel");
   
-    const rect = board.getBoundingClientRect();
+    activePieceId = null;
   
-    const xInside = gridPos.col * CELL_SIZE;
-    const yInside = gridPos.row * CELL_SIZE;
+    const myCells = document.querySelectorAll(
+      `.piece-${id} .piece-cell`
+    );
   
-    const inside =
-      xInside >= 0 &&
-      yInside >= 0 &&
-      xInside <= rect.width &&
-      yInside <= rect.height;
+    if (!myCells.length) return;
   
-    if (!inside) {
-      activePieceId = null;
-      topPieceId = null;
+    // 🧠 SOLO check panel (FINAL DECISION)
+    let touchingPanel = false;
+  
+    if (panel) {
+      const panelRect = panel.getBoundingClientRect();
+  
+      for (const cell of myCells) {
+        const rect = cell.getBoundingClientRect();
+  
+        const intersect =
+          !(
+            rect.right <= panelRect.left ||
+            rect.left >= panelRect.right ||
+            rect.bottom <= panelRect.top ||
+            rect.top >= panelRect.bottom
+          );
+  
+        if (intersect) {
+          touchingPanel = true;
+          break;
+        }
+      }
+    }
+  
+    // 🚨 SOLO AQUÍ se resetea
+    if (touchingPanel) {
+      setGridPos(initialGridRef.current);
+      setTopPieceId?.(null);
       return;
     }
+  
+    // ✅ SI NO toca panel → SNAP NORMAL
+    const xInside = gridPos.col * CELL_SIZE;
+    const yInside = gridPos.row * CELL_SIZE;
   
     const finalCol = Math.round(xInside / CELL_SIZE);
     const finalRow = Math.round(yInside / CELL_SIZE);
@@ -289,8 +318,6 @@ topPieceId,
       row: finalRow,
     });
   
-    activePieceId = null;
-  
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setTimeout(() => {
@@ -299,7 +326,6 @@ topPieceId,
         }, 0);
       });
     });
-
   };
 
   const onMouseDown = (e) => {
@@ -470,6 +496,23 @@ topPieceId,
     console.log("[loop] updatePanelTouch effect");
     updatePanelTouch();
   }, [gridPos, rot]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail !== id) return;
+  
+      setGridPos({
+        col: Math.round(initialX / CELL_SIZE),
+        row: Math.round(initialY / CELL_SIZE),
+      });
+  
+      setRot(0); // opcional si quieres reset rotación
+    };
+  
+    window.addEventListener("reset-piece", handler);
+  
+    return () => window.removeEventListener("reset-piece", handler);
+  }, [id, initialX, initialY]);
 
 
   return (
