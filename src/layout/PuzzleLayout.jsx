@@ -339,7 +339,7 @@ export default function PuzzleLayout({
     marginLeft: 10,
   }}
 >
-  PAN
+  PAX
 </button>
 
   <button
@@ -444,7 +444,6 @@ export default function PuzzleLayout({
   </div>
 )}
 
-
 {/* PANEL + BOTÓN TOGGLE */}
 <div
   style={{
@@ -505,7 +504,7 @@ export default function PuzzleLayout({
           touchAction: "manipulation",
           WebkitTapHighlightColor: "transparent",
 
-          zIndex: 9999,
+          zIndex: 999999999,
         }}
       >
         <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
