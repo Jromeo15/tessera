@@ -559,7 +559,7 @@ export default function PuzzleLayout({
           // FIX REAL: en móvil no uses top negativo
           bottom: 0,
 
-          transform: "translate(-50%, 100%)",
+          transform: "translate(-50%, 400%)",
 
           width: 90,
           height: 22,
