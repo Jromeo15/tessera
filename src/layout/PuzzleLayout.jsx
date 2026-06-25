@@ -466,12 +466,52 @@ export default function PuzzleLayout({
     position: "relative",
     width: "100%",
     height: "100%",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
     gap: 10,
     paddingLeft: 0,
   }}
 >
+  {pieces.map((p, index) => {
 
-  {/* PANEL + BOTÓN TOGGLE */}
+  const screenHeight = window.innerHeight;
+
+  const y = screenHeight/2 ;
+
+  const screenWidth = window.innerWidth;
+
+  const baseX = -screenWidth / 4;
+
+  const step = screenWidth / pieces.length;
+
+  const initialX = baseX + index * step;
+
+  const delayedCheck = () => {
+    requestAnimationFrame(() => {
+      checkVictory(checkCellFilled);
+    });
+  };
+
+  return (
+    <Piece
+      key={`${resetKey}-${p.id}`}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={initialX}
+      initialY={y}
+      onDrop={delayedCheck}
+      onRotate={delayedCheck}
+    />
+  );
+})}
+  </div>
+</Board>
+</div>
+  )}
+  
+{/* PANEL + BOTÓN TOGGLE */}
 <div
   style={{
     position: "absolute",
@@ -578,43 +618,6 @@ export default function PuzzleLayout({
     </>
   )}
 </div>
-  {pieces.map((p, index) => {
-
-  const screenHeight = window.innerHeight;
-
-  const y = screenHeight/2 ;
-
-  const screenWidth = window.innerWidth;
-
-  const baseX = -screenWidth / 4;
-
-  const step = screenWidth / pieces.length;
-
-  const initialX = baseX + index * step;
-
-  const delayedCheck = () => {
-    requestAnimationFrame(() => {
-      checkVictory(checkCellFilled);
-    });
-  };
-
-  return (
-    <Piece
-      key={`${resetKey}-${p.id}`}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={initialX}
-      initialY={y}
-      onDrop={delayedCheck}
-      onRotate={delayedCheck}
-    />
-  );
-})}
-  </div>
-</Board>
-</div>
-  )}
 </div>
 
 </div>
