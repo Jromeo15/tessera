@@ -339,7 +339,7 @@ export default function PuzzleLayout({
     marginLeft: 10,
   }}
 >
-  PAY
+  PAX
 </button>
 
   <button
@@ -451,19 +451,14 @@ export default function PuzzleLayout({
     bottom: 0,
     left: 0,
     right: 0,
-
     zIndex: 99,
     overflow: "visible",
-
     pointerEvents: "none",
-
-    // IMPORTANTE: crea stacking context limpio
-    isolation: "isolate",
   }}
 >
   {panelVisible ? (
     <>
-      {/* PANEL */}
+      {/* PANEL (SIN CAMBIOS VISUALES) */}
       <div
         ref={panelRef}
         className="puzzleBottomPanel"
@@ -486,6 +481,8 @@ export default function PuzzleLayout({
         style={{
           position: "absolute",
           left: "50%",
+
+          // FIX REAL: en móvil no uses top negativo
           bottom: 0,
 
           transform: "translate(-50%, -900%)",
@@ -507,10 +504,7 @@ export default function PuzzleLayout({
           touchAction: "manipulation",
           WebkitTapHighlightColor: "transparent",
 
-          // CLAVE REAL
-          zIndex: 1000000,
-          position: "absolute",
-          isolation: "isolate",
+          zIndex: 999999999,
         }}
       >
         <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
@@ -519,43 +513,7 @@ export default function PuzzleLayout({
   ) : (
     <>
       {/* BOTÓN ABRIR */}
-      <button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          setPanelVisible(true);
-        }}
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: 0,
-
-          transform: "translate(-50%, -900%)",
-
-          width: 90,
-          height: 22,
-
-          background: "#ffffff",
-          border: "2px solid #2f2f2f",
-          borderBottom: "none",
-          borderRadius: "12px 12px 0 0",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          cursor: "pointer",
-          pointerEvents: "auto",
-          touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
-
-          // CLAVE REAL
-          zIndex: 1000000,
-          position: "absolute",
-          isolation: "isolate",
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
-      </button>
+      
     </>
   )}
 </div>
@@ -568,6 +526,42 @@ export default function PuzzleLayout({
     zIndex: 999
   }}
 >
+
+<button
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setPanelVisible(true);
+        }}
+        style={{
+          position: "absolute",
+          left: "50%",
+          bottom: 0,
+          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
+
+          transform: "translateX(-50%)",
+
+          width: 90,
+          height: 22,
+
+          background: "#ffffff",
+          border: "2px solid #2f2f2f",
+          borderBottom: "none",
+          borderRadius: "12px 12px 0 0",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          cursor: "pointer",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+
+          zIndex: 9999,
+        }}
+      >
+        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
+      </button>
   {children ? (
     typeof children === "function"
       ? children({ isFilled: checkCellFilled })

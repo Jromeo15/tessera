@@ -1984,12 +1984,6 @@ code {
   z-index: 50;
 }
 
-.board {
-  position: relative;
-  z-index: 0;
-}
-
-
 .puzzleBottomPanel__inner {
   display: flex;
   align-items: center;
