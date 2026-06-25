@@ -520,6 +520,7 @@ export default function PuzzleLayout({
   {/* CONTENIDO REAL */}
   <div
   style={{
+    transform: `scale(${zoom})`,
     transformOrigin: "center center",
     transition: "transform 0.2s ease",
     zIndex: 999
@@ -558,7 +559,7 @@ export default function PuzzleLayout({
           // FIX REAL: en móvil no uses top negativo
           bottom: 0,
 
-          transform: "translate(-50%, 1360%)",
+          transform: "translate(-50%, -600%)",
 
           width: 90,
           height: 22,
