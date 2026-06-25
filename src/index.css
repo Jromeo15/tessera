@@ -2018,6 +2018,45 @@ code {
   }
 }
 
+/* ============================= */
+/* NUEVO: BOTÓN TOGGLE ANIMADO   */
+/* ============================= */
+
+.puzzleToggleButton {
+  position: absolute; /* 👈 clave */
+  left: 50%;
+  width: 90px;
+  height: 22px;
+
+  background: #ffffff;
+  border: 2px solid #2f2f2f;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  z-index: 999;
+
+  transition: transform 0.25s ease;
+}
+
+/* PANEL ABIERTO → botón arriba del panel */
+.toggle--open {
+  transform: translate(-50%, -222px);
+}
+
+/* PANEL CERRADO → pegado al borde del panel (VISIBLE SIEMPRE) */
+.toggle--closed {
+  transform: translate(-50%, -22px);
+}
+
 .puzzleBottomPanel__inner {
   display: flex;
   align-items: center;

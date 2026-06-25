@@ -536,118 +536,59 @@ return (
     pointerEvents: "none",
   }}
 >
-  {panelVisible ? (
-    <>
-      {/* PANEL + BOTÓN TOGGLE */}
-<div
-  style={{
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 5,
-    overflow: "visible",
-    pointerEvents: "none",
-  }}
->
-  <div
-    ref={panelRef}
-    className={`puzzleBottomPanel ${
-      panelReady
-        ? panelVisible
-          ? "panel--open"
-          : "panel--closed"
-        : ""
-    }`}
-    style={{
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      pointerEvents: "none",
-    }}
-  >
-    {/* BOTÓN CERRAR (VA DENTRO DEL PANEL PARA HEREDAR ANIMACIÓN) */}
+{panelVisible !== undefined && (
+  <>
+    {/* PANEL + BOTÓN */}
+    <div
+      style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 5,
+        overflow: "visible",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        ref={panelRef}
+        className={`puzzleBottomPanel ${
+          panelReady
+            ? panelVisible
+              ? "panel--open"
+              : "panel--closed"
+            : ""
+        }`}
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          pointerEvents: "none",
+        }}
+      >
+        {/* PANEL CONTENT (sin botón dentro ya) */}
+      </div>
+    </div>
+
+    {/* BOTÓN ÚNICO ANIMADO */}
     <button
       onPointerDown={(e) => {
         e.preventDefault();
-        setPanelVisible(false);
+        setPanelVisible(!panelVisible);
+        setHiddenPieces({});
         setPanelReady(true);
       }}
-      style={{
-        position: "absolute",
-        left: "50%",
-        top: -22, // queda pegado arriba del panel
-
-        transform: "translateX(-50%)",
-
-        width: 90,
-        height: 22,
-
-        background: "#ffffff",
-        border: "2px solid #2f2f2f",
-        borderBottom: "none",
-        borderRadius: "12px 12px 0 0",
-
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        cursor: "pointer",
-        pointerEvents: "auto",
-        touchAction: "manipulation",
-        WebkitTapHighlightColor: "transparent",
-
-        zIndex: 999,
-      }}
+      className={`puzzleToggleButton ${
+        panelVisible ? "toggle--open" : "toggle--closed"
+      }`}
     >
-      <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
+      <span style={{ fontSize: 12, color: "#6f6f6f" }}>
+        {panelVisible ? "▼" : "▲"}
+      </span>
     </button>
-  </div>
-</div>
-    </>
-  ) : (
-    <>
-      {/* BOTÓN ABRIR */}
-      <button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          setPanelVisible(true);      
-          setHiddenPieces({});
-          setPanelReady(true);
-        }}
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: 0,
-          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
-
-          transform: "translateX(-50%)",
-
-          width: 90,
-          height: 22,
-
-          background: "#ffffff",
-          border: "2px solid #2f2f2f",
-          borderBottom: "none",
-          borderRadius: "12px 12px 0 0",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          cursor: "pointer",
-          pointerEvents: "auto",
-          touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
-
-          zIndex: 9999,
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
-      </button>
-    </>
-  )}
+  </>
+)}
 </div>
 </div>
 
