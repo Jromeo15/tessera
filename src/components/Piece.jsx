@@ -480,6 +480,7 @@ topPieceId,
       onTouchStart={onTouchStart}
       onClick={onClick}
       style={{
+        pointerEvents: "none",
         position: "absolute",
         left: gridPos.col * CELL_SIZE,
         top: gridPos.row * CELL_SIZE,
@@ -538,37 +539,33 @@ topPieceId,
   </div>
 )}
 
-{rotatedShape.flat().map((cell, i) => {
-  if (cell === 0) {
+{rotatedShape.map((row, r) =>
+  row.map((cell, c) => {
+    if (cell === 0) return null;
+
     return (
       <div
-        key={i}
+        key={`${r}-${c}`}
+        data-cell-type={cell}
+        className={`piece-cell type-${cell}`}
         style={{
+          position: "absolute",
+          left: c * CELL_SIZE,
+          top: r * CELL_SIZE,
+
           width: CELL_SIZE,
           height: CELL_SIZE,
-          background: "transparent",
-          pointerEvents: "none",
+          background: color,
+
+          opacity: isOverlapping ? 0.6 : 1,
+          filter: isOverlapping ? "brightness(0.6)" : "none",
+          boxSizing: "border-box",
+          pointerEvents: "auto",
         }}
       />
     );
-  }
-
-  return (
-    <div
-      key={i}
-      data-cell-type={cell}
-      className={`piece-cell type-${cell}`}
-      style={{
-        width: CELL_SIZE,
-        height: CELL_SIZE,
-        background: color,
-        opacity: isOverlapping ? 0.6 : 1,
-        filter: isOverlapping ? "brightness(0.6)" : "none",
-        boxSizing: "border-box",
-      }}
-    />
-  );
-})}
+  })
+)}
     </div>
   );
 }
