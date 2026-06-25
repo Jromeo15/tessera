@@ -512,8 +512,7 @@ export default function PuzzleLayout({
 
 </div>
   )}
-</div>
-{/* PANEL + BOTÓN TOGGLE */}
+  {/* PANEL + BOTÓN TOGGLE */}
 <div
   style={{
     position: "absolute",
@@ -620,6 +619,8 @@ export default function PuzzleLayout({
     </>
   )}
 </div>
+</div>
+
 </div>
 
 
