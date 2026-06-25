@@ -444,6 +444,75 @@ export default function PuzzleLayout({
   </div>
 )}
 
+
+
+  {/* CONTENIDO REAL */}
+  <div
+  style={{
+    transformOrigin: "center center",
+    transition: "transform 0.2s ease",
+    zIndex: 999
+  }}
+>
+  {children ? (
+    typeof children === "function"
+      ? children({ isFilled: checkCellFilled })
+      : children
+  ) : (
+
+    <div style={{ position: "relative", zIndex: 50, transform: "translateY(-80px)"}}>
+<Board key={resetKey}>
+  <div
+  style={{
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    gap: 10,
+    paddingLeft: 0,
+  }}
+>
+  {pieces.map((p, index) => {
+
+  const screenHeight = window.innerHeight;
+
+  const y = screenHeight/2 ;
+
+  const screenWidth = window.innerWidth;
+
+  const baseX = -screenWidth / 4;
+
+  const step = screenWidth / pieces.length;
+
+  const initialX = baseX + index * step;
+
+  const delayedCheck = () => {
+    requestAnimationFrame(() => {
+      checkVictory(checkCellFilled);
+    });
+  };
+
+  return (
+    <Piece
+      key={`${resetKey}-${p.id}`}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={initialX}
+      initialY={y}
+      onDrop={delayedCheck}
+      onRotate={delayedCheck}
+    />
+  );
+})}
+  </div>
+</Board>
+
+</div>
+  )}
+</div>
 {/* PANEL + BOTÓN TOGGLE */}
 <div
   style={{
@@ -473,7 +542,42 @@ export default function PuzzleLayout({
       />
 
       {/* BOTÓN CERRAR */}
+      <button
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setPanelVisible(false);
+        }}
+        style={{
+          position: "absolute",
+          left: "50%",
 
+          // FIX REAL: en móvil no uses top negativo
+          bottom: 0,
+
+          transform: "translate(-50%, -900%)",
+
+          width: 90,
+          height: 22,
+
+          background: "#ffffff",
+          border: "2px solid #2f2f2f",
+          borderBottom: "none",
+          borderRadius: "12px 12px 0 0",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          cursor: "pointer",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+
+          zIndex: 999999999,
+        }}
+      >
+        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
+      </button>
     </>
   ) : (
     <>
@@ -516,112 +620,6 @@ export default function PuzzleLayout({
     </>
   )}
 </div>
-
-  {/* CONTENIDO REAL */}
-  <div
-  style={{
-    transform: `scale(${zoom})`,
-    transformOrigin: "center center",
-    transition: "transform 0.2s ease",
-    zIndex: 999
-  }}
->
-  {children ? (
-    typeof children === "function"
-      ? children({ isFilled: checkCellFilled })
-      : children
-  ) : (
-
-    <div style={{ position: "relative", zIndex: 50, transform: "translateY(-80px)"}}>
-<Board key={resetKey}>
-  <div
-  style={{
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 10,
-    paddingLeft: 0,
-  }}
->
-
-<button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          setPanelVisible(false);
-        }}
-        style={{
-          position: "absolute",
-          left: "50%",
-
-          // FIX REAL: en móvil no uses top negativo
-          bottom: 0,
-
-          transform: "translate(-50%, 400%)",
-
-          width: 90,
-          height: 22,
-
-          background: "#ffffff",
-          border: "2px solid #2f2f2f",
-          borderBottom: "none",
-          borderRadius: "12px 12px 0 0",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          cursor: "pointer",
-          pointerEvents: "auto",
-          touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
-
-          zIndex: 999999999,
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
-      </button>
-  {pieces.map((p, index) => {
-
-  const screenHeight = window.innerHeight;
-
-  const y = screenHeight/2 ;
-
-  const screenWidth = window.innerWidth;
-
-  const baseX = -screenWidth / 4;
-
-  const step = screenWidth / pieces.length;
-
-  const initialX = baseX + index * step;
-
-  const delayedCheck = () => {
-    requestAnimationFrame(() => {
-      checkVictory(checkCellFilled);
-    });
-  };
-
-  return (
-    <Piece
-      key={`${resetKey}-${p.id}`}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={initialX}
-      initialY={y}
-      onDrop={delayedCheck}
-      onRotate={delayedCheck}
-    />
-  );
-})}
-  </div>
-</Board>
-</div>
-  )}
-</div>
-
 </div>
 
 
