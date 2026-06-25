@@ -44,6 +44,7 @@ export default function PuzzleLayout({
   const [positions, setPositions] = useState([]);
   const [panelVisible, setPanelVisible] = useState(true);
   const [hiddenPieces, setHiddenPieces] = useState({});
+  const [panelReady, setPanelReady] = useState(false);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -537,57 +538,73 @@ return (
 >
   {panelVisible ? (
     <>
-      {/* PANEL (SIN CAMBIOS VISUALES) */}
-      <div
-        ref={panelRef}
-        className={`puzzleBottomPanel ${panelVisible ? "panel--open" : "panel--closed"}`}
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
+      {/* PANEL + BOTÓN TOGGLE */}
+<div
+  style={{
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 5,
+    overflow: "visible",
+    pointerEvents: "none",
+  }}
+>
+  <div
+    ref={panelRef}
+    className={`puzzleBottomPanel ${
+      panelReady
+        ? panelVisible
+          ? "panel--open"
+          : "panel--closed"
+        : ""
+    }`}
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      pointerEvents: "none",
+    }}
+  >
+    {/* BOTÓN CERRAR (VA DENTRO DEL PANEL PARA HEREDAR ANIMACIÓN) */}
+    <button
+      onPointerDown={(e) => {
+        e.preventDefault();
+        setPanelVisible(false);
+        setPanelReady(true);
+      }}
+      style={{
+        position: "absolute",
+        left: "50%",
+        top: -22, // queda pegado arriba del panel
 
-          pointerEvents: "none",
-        }}
-      />
+        transform: "translateX(-50%)",
 
-      {/* BOTÓN CERRAR */}
-      <button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          setPanelVisible(false);
-        }}
-        style={{
-          position: "absolute",
-          left: "50%",
+        width: 90,
+        height: 22,
 
-          // FIX REAL: en móvil no uses top negativo
-          bottom: 0,
+        background: "#ffffff",
+        border: "2px solid #2f2f2f",
+        borderBottom: "none",
+        borderRadius: "12px 12px 0 0",
 
-          transform: "translate(-50%, -900%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
 
-          width: 90,
-          height: 22,
+        cursor: "pointer",
+        pointerEvents: "auto",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
 
-          background: "#ffffff",
-          border: "2px solid #2f2f2f",
-          borderBottom: "none",
-          borderRadius: "12px 12px 0 0",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          cursor: "pointer",
-          pointerEvents: "auto",
-          touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
-
-          zIndex: 999999999,
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
-      </button>
+        zIndex: 999,
+      }}
+    >
+      <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
+    </button>
+  </div>
+</div>
     </>
   ) : (
     <>
@@ -595,9 +612,9 @@ return (
       <button
         onPointerDown={(e) => {
           e.preventDefault();
-          setPanelVisible(true);
-          
+          setPanelVisible(true);      
           setHiddenPieces({});
+          setPanelReady(true);
         }}
         style={{
           position: "absolute",
