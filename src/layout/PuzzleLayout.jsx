@@ -45,6 +45,7 @@ export default function PuzzleLayout({
   const [panelVisible, setPanelVisible] = useState(true);
   const [hiddenPieces, setHiddenPieces] = useState({});
   const [panelReady, setPanelReady] = useState(false);
+  const [reappearingPieces, setReappearingPieces] = useState({});
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -292,6 +293,28 @@ export default function PuzzleLayout({
     setPositions(newPositions);
   }, [pieces, resetKey]);
 
+  useEffect(() => {
+    if (!panelVisible) return;
+  
+    const ids = Object.keys(hiddenPieces);
+  
+    if (ids.length === 0) return;
+  
+    const newState = {};
+  
+    ids.forEach((id) => {
+      newState[id] = true;
+    });
+  
+    setReappearingPieces(newState);
+  
+    const timeout = setTimeout(() => {
+      setReappearingPieces({});
+    }, 300);
+  
+    return () => clearTimeout(timeout);
+  }, [panelVisible]);
+
 
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
@@ -501,12 +524,16 @@ export default function PuzzleLayout({
   }
 
 return (
-  <div
-    key={`${resetKey}-${p.id}`}
-    style={{
-      display: hiddenPieces[p.id] ? "none" : "block",
-    }}
-  >
+<div
+  key={`${resetKey}-${p.id}`}
+  className={reappearingPieces[p.id] ? "pieceReappear" : ""}
+  style={{
+    display:
+      hiddenPieces[p.id] && !panelVisible
+        ? "none"
+        : "block",
+  }}
+>
     <Piece
       id={p.id}
       color={p.color}
@@ -573,12 +600,21 @@ return (
 
     {/* BOTÓN ÚNICO ANIMADO */}
     <button
-      onPointerDown={(e) => {
-        e.preventDefault();
-        setPanelVisible(!panelVisible);
-        setHiddenPieces({});
-        setPanelReady(true);
-      }}
+onPointerDown={(e) => {
+  e.preventDefault();
+
+  if (!panelVisible) {
+    setReappearingPieces({ ...hiddenPieces });
+
+    setTimeout(() => {
+      setReappearingPieces({});
+    }, 300);
+  }
+
+  setPanelVisible(!panelVisible);
+  setHiddenPieces({});
+  setPanelReady(true);
+}}
       className={`puzzleToggleButton ${
         panelVisible ? "toggle--open" : "toggle--closed"
       }`}
@@ -593,8 +629,6 @@ return (
 </div>
 
 </div>
-
-
 
       {/* MODAL AYUDA */}
       {showHelp && (
