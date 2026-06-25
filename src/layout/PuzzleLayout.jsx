@@ -455,7 +455,7 @@ export default function PuzzleLayout({
       zIndex: 1,
       overflow: "visible",
       pointerEvents: "none",
-      zIndex: 999999998,
+      zIndex: 99,
     }}
   >
     <button
