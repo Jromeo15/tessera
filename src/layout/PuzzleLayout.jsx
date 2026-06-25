@@ -540,7 +540,7 @@ return (
       {/* PANEL (SIN CAMBIOS VISUALES) */}
       <div
         ref={panelRef}
-        className="puzzleBottomPanel"
+        className={`puzzleBottomPanel ${panelVisible ? "panel--open" : "panel--closed"}`}
         style={{
           position: "absolute",
           bottom: 0,

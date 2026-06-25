@@ -1963,6 +1963,7 @@ code {
   50% { transform: scale(1.4); opacity: 0.6; }
 }
 
+/* estado base */
 .puzzleBottomPanel {
   position: absolute;
   left: 0;
@@ -1973,7 +1974,6 @@ code {
 
   display: flex;
   align-items: center;
-
   padding: 0 10px;
 
   background: rgba(0, 0, 0, 0.25);
@@ -1982,6 +1982,40 @@ code {
   border-top: 4px solid #ffffff;
 
   z-index: 50;
+
+  will-change: transform;
+}
+
+/* ABIERTA */
+.puzzleBottomPanel.panel--open {
+  animation: panelSlideUp 0.25s ease forwards;
+}
+
+/* CERRADA */
+.puzzleBottomPanel.panel--closed {
+  animation: panelSlideDown 0.25s ease forwards;
+}
+
+@keyframes panelSlideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes panelSlideDown {
+  0% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0.6;
+  }
 }
 
 .puzzleBottomPanel__inner {
