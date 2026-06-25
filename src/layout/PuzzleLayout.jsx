@@ -298,6 +298,20 @@ export default function PuzzleLayout({
     return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   };
 
+  const isPieceTouchingPanel = (pieceEl) => {
+    if (!panelRef.current || !pieceEl) return false;
+  
+    const panelRect = panelRef.current.getBoundingClientRect();
+    const pieceRect = pieceEl.getBoundingClientRect();
+  
+    return !(
+      pieceRect.bottom < panelRect.top ||
+      pieceRect.top > panelRect.bottom ||
+      pieceRect.right < panelRect.left ||
+      pieceRect.left > panelRect.right
+    );
+  };
+
   return (
     
     <div
@@ -493,7 +507,15 @@ export default function PuzzleLayout({
     });
   };
 
-  return (
+  const el = document.querySelector(`.piece-${p.id}`);
+const hideBecausePanel = !panelVisible && isPieceTouchingPanel(el);
+
+return (
+  <div
+    style={{
+      visibility: hideBecausePanel ? "hidden" : "visible",
+    }}
+  >
     <Piece
       key={`${resetKey}-${p.id}`}
       id={p.id}
@@ -504,7 +526,8 @@ export default function PuzzleLayout({
       onDrop={delayedCheck}
       onRotate={delayedCheck}
     />
-  );
+  </div>
+);
 })}
   </div>
 </Board>

@@ -495,6 +495,7 @@ export default function Piece({
   return (
     <div
       className={`piece piece-${id}`}
+      data-piece-id={id}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
       onClick={onClick}
