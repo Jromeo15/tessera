@@ -339,7 +339,7 @@ export default function PuzzleLayout({
     marginLeft: 10,
   }}
 >
-  PAY
+  PAX
 </button>
 
   <button
@@ -547,41 +547,7 @@ export default function PuzzleLayout({
     paddingLeft: 0,
   }}
 >
-  {pieces.map((p, index) => {
 
-  const screenHeight = window.innerHeight;
-
-  const y = screenHeight/2 ;
-
-  const screenWidth = window.innerWidth;
-
-  const baseX = -screenWidth / 4;
-
-  const step = screenWidth / pieces.length;
-
-  const initialX = baseX + index * step;
-
-  const delayedCheck = () => {
-    requestAnimationFrame(() => {
-      checkVictory(checkCellFilled);
-    });
-  };
-
-  return (
-    <Piece
-      key={`${resetKey}-${p.id}`}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={initialX}
-      initialY={y}
-      onDrop={delayedCheck}
-      onRotate={delayedCheck}
-    />
-  );
-})}
-  </div>
-</Board>
 <button
         onPointerDown={(e) => {
           e.preventDefault();
@@ -617,6 +583,42 @@ export default function PuzzleLayout({
       >
         <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
       </button>
+  {pieces.map((p, index) => {
+
+  const screenHeight = window.innerHeight;
+
+  const y = screenHeight/2 ;
+
+  const screenWidth = window.innerWidth;
+
+  const baseX = -screenWidth / 4;
+
+  const step = screenWidth / pieces.length;
+
+  const initialX = baseX + index * step;
+
+  const delayedCheck = () => {
+    requestAnimationFrame(() => {
+      checkVictory(checkCellFilled);
+    });
+  };
+
+  return (
+    
+    <Piece
+      key={`${resetKey}-${p.id}`}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={initialX}
+      initialY={y}
+      onDrop={delayedCheck}
+      onRotate={delayedCheck}
+    />
+  );
+})}
+  </div>
+</Board>
 </div>
   )}
 </div>
