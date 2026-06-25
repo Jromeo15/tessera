@@ -443,119 +443,114 @@ export default function PuzzleLayout({
     {externalTimer ?? formatTime(time)}
   </div>
 )}
-{panelVisible ? (
-  <div
-    ref={panelRef}
-    className="puzzleBottomPanel"
-    style={{
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      zIndex: 1,
-      overflow: "visible",
-      pointerEvents: "none",
-      zIndex: 99,
-    }}
-  >
-    <button
-      onPointerDown={(e) => {
-        e.preventDefault();
-        setPanelVisible(false);
-      }}
-      style={{
-        position: "absolute",
-        top: -26, // un poco más arriba que antes (-22)
 
-        left: "50%",
-        transform: "translateX(-50%)",
 
-        width: 90,
-        height: 18,
-
-        background: "#ffffff",
-        border: "2px solid #2f2f2f",
-        borderBottom: "none",
-        borderRadius: "12px 12px 0 0",
-
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        cursor: "pointer",
-        pointerEvents: "auto",
-        touchAction: "manipulation",
-        WebkitTapHighlightColor: "transparent",
-      }}
-    >
-      <span
+{/* PANEL + BOTÓN TOGGLE */}
+<div
+  style={{
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 99,
+    overflow: "visible",
+    pointerEvents: "none",
+  }}
+>
+  {panelVisible ? (
+    <>
+      {/* PANEL (SIN CAMBIOS VISUALES) */}
+      <div
+        ref={panelRef}
+        className="puzzleBottomPanel"
         style={{
-          fontSize: 12,
-          color: "#6f6f6f",
-          userSelect: "none",
-          transform: "translateY(-1px)",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* BOTÓN CERRAR */}
+      <button
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setPanelVisible(false);
+        }}
+        style={{
+          position: "absolute",
+          left: "50%",
+
+          // FIX REAL: en móvil no uses top negativo
+          bottom: 0,
+
+          transform: "translate(-50%, -100%)",
+
+          width: 90,
+          height: 18,
+
+          background: "#ffffff",
+          border: "2px solid #2f2f2f",
+          borderBottom: "none",
+          borderRadius: "12px 12px 0 0",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          cursor: "pointer",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+
+          zIndex: 9999,
         }}
       >
-        ▼
-      </span>
-    </button>
-  </div>
-) : (
-  <div
-    style={{
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: 0,
-      zIndex: 1,
-      overflow: "visible",
-      pointerEvents: "none",
-    }}
-  >
-    <button
-      onPointerDown={(e) => {
-        e.preventDefault();
-        setPanelVisible(true);
-      }}
-      style={{
-        position: "absolute",
-        bottom: -1,
-
-        left: "50%",
-        transform: "translateX(-50%)",
-
-        width: 90,
-        height: 18,
-
-        background: "#ffffff",
-        border: "2px solid #2f2f2f",
-        borderBottom: "none",
-        borderRadius: "12px 12px 0 0",
-
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-
-        cursor: "pointer",
-        pointerEvents: "auto",
-        touchAction: "manipulation",
-        WebkitTapHighlightColor: "transparent",
-      }}
-    >
-      <span
+        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
+      </button>
+    </>
+  ) : (
+    <>
+      {/* BOTÓN ABRIR */}
+      <button
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setPanelVisible(true);
+        }}
         style={{
-          fontSize: 12,
-          color: "#6f6f6f",
-          userSelect: "none",
-          transform: "translateY(1px)",
+          position: "absolute",
+          left: "50%",
+          bottom: 0,
+
+          transform: "translate(-50%, 0)",
+
+          width: 90,
+          height: 18,
+
+          background: "#ffffff",
+          border: "2px solid #2f2f2f",
+          borderBottom: "none",
+          borderRadius: "12px 12px 0 0",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          cursor: "pointer",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+
+          zIndex: 9999,
         }}
       >
-        ▲
-      </span>
-    </button>
-  </div>
-)}
+        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
+      </button>
+    </>
+  )}
+</div>
 
   {/* CONTENIDO REAL */}
   <div
