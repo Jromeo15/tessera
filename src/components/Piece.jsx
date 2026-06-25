@@ -5,6 +5,8 @@ import { Undo, Redo } from "lucide-react";
 let activePieceId = null;
 
 const forceGlobalOverlapRecalc = () => {
+  
+  console.log("[loop] dispatch global-overlap");
   requestAnimationFrame(() => {
     window.dispatchEvent(new Event("global-overlap"));
   });
@@ -89,23 +91,16 @@ const rotateMatrix = (matrix) => {
 
 // hit test
 const getCellFromPoint = (x, y) => {
-  let el = document.elementFromPoint(x, y);
+  const el = document.elementFromPoint(x, y);
+  if (!el) return null;
 
-  while (
-    el &&
-    (
-      el.classList?.contains("type-e") ||
-      el.classList?.contains("type-f") ||
-      el.classList?.contains("type-g") ||
-      el.classList?.contains("type-h")
-    )
-  ) {
-    el.style.pointerEvents = "none";
-    el = document.elementFromPoint(x, y);
-    el?.style?.removeProperty("pointer-events");
-  }
+  const cell = el.closest?.(".piece-cell");
+  if (!cell) return null;
 
-  return el?.closest?.(".piece-cell") || null;
+  // si no tiene tipo, NO es interactivo
+  if (!cell.dataset?.cellType) return null;
+
+  return cell;
 };
 
 export default function Piece({
@@ -128,7 +123,6 @@ topPieceId,
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
-  const [isTouchingPanel, setIsTouchingPanel] = useState(false);
 
 
   const dragging = useRef(false);
@@ -136,6 +130,7 @@ topPieceId,
 
   const offset = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
+  const isTouchingPanelRef = useRef(false);
 
   const rotatedShape = useMemo(() => {
     let s = shape;
@@ -198,12 +193,11 @@ topPieceId,
     if (!panel) return;
   
     const panelRect = panel.getBoundingClientRect();
-  
     const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
   
     let touching = false;
   
-    myCells.forEach((cell) => {
+    for (const cell of myCells) {
       const rect = cell.getBoundingClientRect();
   
       const intersect =
@@ -212,10 +206,13 @@ topPieceId,
           rect.bottom <= panelRect.top ||
           rect.top >= panelRect.bottom);
   
-      if (intersect) touching = true;
-    });
+      if (intersect) {
+        touching = true;
+        break;
+      }
+    }
   
-    setIsTouchingPanel(touching);
+    isTouchingPanelRef.current = touching;
   };
 
   // -------------------------
@@ -243,6 +240,7 @@ topPieceId,
   const moveDrag = (clientX, clientY) => {
     if (!dragging.current) return;
 
+    console.log("[loop] moveDrag");
 
     const dx = Math.abs(clientX - start.current.x);
     const dy = Math.abs(clientY - start.current.y);
@@ -460,17 +458,16 @@ topPieceId,
       });
     };
   
-    update();
-  
     window.addEventListener("global-overlap", update);
   
     return () => {
       window.removeEventListener("global-overlap", update);
       cancelAnimationFrame(raf);
     };
-  }, [gridPos, rot]);
+  }, []); // 👈 CLAVE
 
   useEffect(() => {
+    console.log("[loop] updatePanelTouch effect");
     updatePanelTouch();
   }, [gridPos, rot]);
 
@@ -504,7 +501,7 @@ topPieceId,
       
       
               transform:
-              dragging.current || !isTouchingPanel
+              dragging.current || !isTouchingPanelRef.current
                 ? "scale(1)"
                 : "scale(0.4)",
         transition: "transform 0.15s ease",
@@ -541,38 +538,37 @@ topPieceId,
   </div>
 )}
 
-    {rotatedShape.flat().map((cell, i) => {
-      if (!cell) {
-        return (
-          <div
-            key={i}
-            style={{
-              width: CELL_SIZE,
-              height: CELL_SIZE,
-            }}
-          />
-        );
-      }
+{rotatedShape.flat().map((cell, i) => {
+  if (cell === 0) {
+    return (
+      <div
+        key={i}
+        style={{
+          width: CELL_SIZE,
+          height: CELL_SIZE,
+          background: "transparent",
+          pointerEvents: "none",
+        }}
+      />
+    );
+  }
 
-      return (
-        <div
-          key={i}
-          data-cell-type={cell}
-          className={`piece-cell type-${cell}`}
-          style={{
-            width: CELL_SIZE,
-            height: CELL_SIZE,
-
-            background: color,
-            opacity: isOverlapping ? 0.6 : 1,
-            filter: isOverlapping ? "brightness(0.6)" : "none",
-
-            boxSizing: "border-box",
-            pointerEvents: "auto",
-          }}
-        />
-      );
-    })}
+  return (
+    <div
+      key={i}
+      data-cell-type={cell}
+      className={`piece-cell type-${cell}`}
+      style={{
+        width: CELL_SIZE,
+        height: CELL_SIZE,
+        background: color,
+        opacity: isOverlapping ? 0.6 : 1,
+        filter: isOverlapping ? "brightness(0.6)" : "none",
+        boxSizing: "border-box",
+      }}
+    />
+  );
+})}
     </div>
   );
 }

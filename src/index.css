@@ -357,9 +357,13 @@ code {
   filter: brightness(0.98);
 }
 
+.empty-cell {
+  pointer-events: none !important;
+}
+
 .piece-cell.type-0 {
-  background: transparent;
-  pointer-events: none;
+  background: transparent !important;
+  pointer-events: none !important;
 }
 
 .piece-cell.type-1 {
@@ -526,6 +530,11 @@ code {
     transparent 0 67%,
     black 51%
   );
+}
+
+.piece-cell[data-cell-type="0"] {
+  pointer-events: none;
+  background: transparent;
 }
 
 .popupOverlay {
@@ -2110,11 +2119,6 @@ code {
   transform: scale(0.75);
 
   margin: 0 4px;
-}
-
-.piece {
-  position: absolute;
-  z-index: 999999999;
 }
 
 .rotateButton {
