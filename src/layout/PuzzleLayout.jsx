@@ -339,7 +339,7 @@ export default function PuzzleLayout({
     marginLeft: 10,
   }}
 >
-  PAX
+  PAY
 </button>
 
   <button
@@ -526,42 +526,7 @@ export default function PuzzleLayout({
     zIndex: 999
   }}
 >
-
-<button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          setPanelVisible(true);
-        }}
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: 0,
-          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
-
-          transform: "translateX(-50%)",
-
-          width: 90,
-          height: 22,
-
-          background: "#ffffff",
-          border: "2px solid #2f2f2f",
-          borderBottom: "none",
-          borderRadius: "12px 12px 0 0",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          cursor: "pointer",
-          pointerEvents: "auto",
-          touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
-
-          zIndex: 9999,
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
-      </button>
+  
   {children ? (
     typeof children === "function"
       ? children({ isFilled: checkCellFilled })
@@ -617,6 +582,41 @@ export default function PuzzleLayout({
 })}
   </div>
 </Board>
+<button
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setPanelVisible(true);
+        }}
+        style={{
+          position: "absolute",
+          left: "50%",
+          bottom: 0,
+          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
+
+          transform: "translateX(-50%)",
+
+          width: 90,
+          height: 22,
+
+          background: "#ffffff",
+          border: "2px solid #2f2f2f",
+          borderBottom: "none",
+          borderRadius: "12px 12px 0 0",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          cursor: "pointer",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+
+          zIndex: 9999,
+        }}
+      >
+        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
+      </button>
 </div>
   )}
 </div>
