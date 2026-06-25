@@ -522,8 +522,9 @@ export default function PuzzleLayout({
           position: "absolute",
           left: "50%",
           bottom: 0,
+          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
 
-          transform: "translate(-50%, 0)",
+          transform: "translateX(-50%)",
 
           width: 90,
           height: 22,
