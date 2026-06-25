@@ -3,7 +3,6 @@ import { CELL_SIZE } from "../constants";
 import { Undo, Redo } from "lucide-react";
 
 let activePieceId = null;
-let topPieceId = null;
 
 const forceGlobalOverlapRecalc = () => {
   requestAnimationFrame(() => {
@@ -118,6 +117,8 @@ export default function Piece({
   initialY = 0,
   onDrop,
   onRotate,
+  setTopPieceId,
+topPieceId,
 }) {
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE),
@@ -226,7 +227,7 @@ export default function Piece({
 
 
     activePieceId = id;
-    topPieceId = id;
+    setTopPieceId?.(id);
 
     start.current = {
       x: clientX,
@@ -335,7 +336,7 @@ export default function Piece({
     if (!cell.closest(`.piece-${id}`)) return;
     if (moved.current) return;
 
-    topPieceId = id;
+    setTopPieceId?.(id);
   
     setShowRotateButtons((v) => !v);
   };
@@ -344,7 +345,7 @@ export default function Piece({
     e.stopPropagation();
   
     setRot((r) => (r + 3) % 4);
-    topPieceId = id;
+    setTopPieceId?.(id);
   
     requestAnimationFrame(() => {
       onRotate?.();
@@ -359,7 +360,7 @@ export default function Piece({
     e.stopPropagation();
   
     setRot((r) => (r + 1) % 4);
-    topPieceId = id;
+    setTopPieceId?.(id);
   
     requestAnimationFrame(() => {
       onRotate?.();

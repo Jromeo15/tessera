@@ -47,6 +47,7 @@ export default function PuzzleLayout({
   const [panelReady, setPanelReady] = useState(false);
   const [reappearingPieces, setReappearingPieces] = useState({});
   const [disappearingPieces, setDisappearingPieces] = useState({});
+  const [topPieceId, setTopPieceId] = useState(null);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -541,15 +542,17 @@ return (
         : "block",
   }}
 >
-    <Piece
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={initialX}
-      initialY={y}
-      onDrop={delayedCheck}
-      onRotate={delayedCheck}
-    />
+<Piece
+  id={p.id}
+  color={p.color}
+  shape={p.shape}
+  initialX={initialX}
+  initialY={y}
+  onDrop={delayedCheck}
+  onRotate={delayedCheck}
+  setTopPieceId={setTopPieceId}
+  topPieceId={topPieceId}
+/>
   </div>
 );
 })}
