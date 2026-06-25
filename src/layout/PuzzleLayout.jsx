@@ -518,7 +518,7 @@ export default function PuzzleLayout({
     bottom: 0,
     left: 0,
     right: 0,
-    zIndex: 99,
+    zIndex: 5,
     overflow: "visible",
     pointerEvents: "none",
   }}
