@@ -43,6 +43,7 @@ export default function PuzzleLayout({
   const piecesRef = useRef({});
   const [positions, setPositions] = useState([]);
   const [panelVisible, setPanelVisible] = useState(true);
+  const [hiddenPieces, setHiddenPieces] = useState({});
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -337,25 +338,6 @@ export default function PuzzleLayout({
 {/* BOTONES DERECHA */}
 <div className="puzzleActions">
 
-<button
-  onPointerDown={() => {
-    console.log("TOGGLE PANEL CLICK");
-    setPanelVisible(v => !v);
-  }}
-  style={{
-    position: "relative",
-    zIndex: 99999,
-    width: 44,
-    height: 44,
-    background: "red",
-    color: "white",
-    borderRadius: 8,
-    marginLeft: 10,
-  }}
->
-  PAX
-</button>
-
   <button
     onClick={() => setShowHelp(true)}
     className="puzzleIconBtn puzzleIconBtn--help"
@@ -508,16 +490,23 @@ export default function PuzzleLayout({
   };
 
   const el = document.querySelector(`.piece-${p.id}`);
-const hideBecausePanel = !panelVisible && isPieceTouchingPanel(el);
+  const shouldHide = !panelVisible && isPieceTouchingPanel(el);
+
+  if (shouldHide && !hiddenPieces[p.id]) {
+    setHiddenPieces(prev => ({
+      ...prev,
+      [p.id]: true,
+    }));
+  }
 
 return (
   <div
+    key={`${resetKey}-${p.id}`}
     style={{
-      visibility: hideBecausePanel ? "hidden" : "visible",
+      display: hiddenPieces[p.id] ? "none" : "block",
     }}
   >
     <Piece
-      key={`${resetKey}-${p.id}`}
       id={p.id}
       color={p.color}
       shape={p.shape}
@@ -607,6 +596,8 @@ return (
         onPointerDown={(e) => {
           e.preventDefault();
           setPanelVisible(true);
+          
+          setHiddenPieces({});
         }}
         style={{
           position: "absolute",
