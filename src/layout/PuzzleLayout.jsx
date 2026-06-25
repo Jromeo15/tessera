@@ -473,7 +473,80 @@ export default function PuzzleLayout({
       />
 
       {/* BOTÓN CERRAR */}
+
+    </>
+  ) : (
+    <>
+      {/* BOTÓN ABRIR */}
       <button
+        onPointerDown={(e) => {
+          e.preventDefault();
+          setPanelVisible(true);
+        }}
+        style={{
+          position: "absolute",
+          left: "50%",
+          bottom: 0,
+          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
+
+          transform: "translateX(-50%)",
+
+          width: 90,
+          height: 22,
+
+          background: "#ffffff",
+          border: "2px solid #2f2f2f",
+          borderBottom: "none",
+          borderRadius: "12px 12px 0 0",
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+
+          cursor: "pointer",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+          WebkitTapHighlightColor: "transparent",
+
+          zIndex: 9999,
+        }}
+      >
+        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
+      </button>
+    </>
+  )}
+</div>
+
+  {/* CONTENIDO REAL */}
+  <div
+  style={{
+    transformOrigin: "center center",
+    transition: "transform 0.2s ease",
+    zIndex: 999
+  }}
+>
+  {children ? (
+    typeof children === "function"
+      ? children({ isFilled: checkCellFilled })
+      : children
+  ) : (
+
+    <div style={{ position: "relative", zIndex: 50, transform: "translateY(-80px)"}}>
+<Board key={resetKey}>
+  <div
+  style={{
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    gap: 10,
+    paddingLeft: 0,
+  }}
+>
+
+<button
         onPointerDown={(e) => {
           e.preventDefault();
           setPanelVisible(false);
@@ -509,80 +582,6 @@ export default function PuzzleLayout({
       >
         <span style={{ fontSize: 12, color: "#6f6f6f" }}>▼</span>
       </button>
-    </>
-  ) : (
-    <>
-      {/* BOTÓN ABRIR */}
-      
-    </>
-  )}
-</div>
-
-  {/* CONTENIDO REAL */}
-  <div
-  style={{
-    transformOrigin: "center center",
-    transition: "transform 0.2s ease",
-    zIndex: 999
-  }}
->
-  
-  {children ? (
-    typeof children === "function"
-      ? children({ isFilled: checkCellFilled })
-      : children
-  ) : (
-
-    <div style={{ position: "relative", zIndex: 50, transform: "translateY(-80px)"}}>
-<Board key={resetKey}>
-  <div
-  style={{
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    gap: 10,
-    paddingLeft: 0,
-  }}
->
-
-<button
-        onPointerDown={(e) => {
-          e.preventDefault();
-          setPanelVisible(true);
-        }}
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: 0,
-          bottom: "900%",   // puedes mantenerlo si necesitas ese layout
-
-          transform: "translateX(-50%)",
-
-          width: 90,
-          height: 22,
-
-          background: "#ffffff",
-          border: "2px solid #2f2f2f",
-          borderBottom: "none",
-          borderRadius: "12px 12px 0 0",
-
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-
-          cursor: "pointer",
-          pointerEvents: "auto",
-          touchAction: "manipulation",
-          WebkitTapHighlightColor: "transparent",
-
-          zIndex: 9999,
-        }}
-      >
-        <span style={{ fontSize: 12, color: "#6f6f6f" }}>▲</span>
-      </button>
   {pieces.map((p, index) => {
 
   const screenHeight = window.innerHeight;
@@ -604,7 +603,6 @@ export default function PuzzleLayout({
   };
 
   return (
-    
     <Piece
       key={`${resetKey}-${p.id}`}
       id={p.id}
