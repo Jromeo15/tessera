@@ -44,6 +44,8 @@ export default function PuzzleLayout({
   const [reappearingPieces, setReappearingPieces] = useState({});
   const [disappearingPieces, setDisappearingPieces] = useState({});
   const [topPieceId, setTopPieceId] = useState(null);
+  const [xPositions, setXPositions] = useState({});
+const [layoutReady, setLayoutReady] = useState(false);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -221,6 +223,48 @@ export default function PuzzleLayout({
     };
   }, []);
 
+  useEffect(() => {
+    const placedRects = [];
+  
+    const overlaps = (a, b) => {
+      return !(
+        a.x + a.w < b.x ||
+        a.x > b.x + b.w ||
+        a.y + a.h < b.y ||
+        a.y > b.y + b.h
+      );
+    };
+  
+    const result = {};
+  
+    shapes.forEach((_, index) => {
+      const id = index + 1;
+      const el = document.querySelector(`.piece-${id}`);
+  
+      if (!el) return;
+  
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
+  
+      const y = window.innerHeight / 1.8;
+      let x = -window.innerWidth / 5;
+  
+      while (
+        placedRects.some((r) =>
+          overlaps({ x, y, w, h }, r)
+        )
+      ) {
+        x += 1;
+      }
+  
+      placedRects.push({ x, y, w, h });
+      result[id] = x;
+    });
+  
+    setXPositions(result);
+    setLayoutReady(true);
+  }, [shapes, resetKey]);
+
 
   useEffect(() => {
     if (!panelVisible) return;
@@ -306,6 +350,9 @@ export default function PuzzleLayout({
     setResetKey((k) => {
       return k + 1;
     });
+
+    setLayoutReady(false);
+setXPositions({});
   }}
   className="puzzleIconBtn puzzleIconBtn--reset"
 >
@@ -432,7 +479,7 @@ export default function PuzzleLayout({
 
   const step = screenWidth / pieces.length;
 
-  const initialX = baseX + index * step;
+  const initialX = xPositions[p.id] ?? (baseX + index * step);
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
