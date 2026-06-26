@@ -423,7 +423,6 @@ export default function PuzzleLayout({
 >
   {pieces.map((p, index) => {
 
-console.log(p.width);
 
   const screenHeight = window.innerHeight;
 
@@ -434,7 +433,7 @@ console.log(p.width);
   let x = baseX;
   
   for (let i = 0; i < index; i++) {
-    x += pieces[i].width * CELL_SIZE + CELL_SIZE;
+    x += pieces[i].width * CELL_SIZE*0.4 + CELL_SIZE*0.4;
   }
   
   const initialX = x;
