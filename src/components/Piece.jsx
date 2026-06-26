@@ -132,6 +132,7 @@ topPieceId,
   const offset = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
   const isTouchingPanelRef = useRef(false);
+  const [isTouchingPanel, setIsTouchingPanel] = useState(true);
 
   const rotatedShape = useMemo(() => {
     let s = shape;
@@ -212,6 +213,7 @@ topPieceId,
     }
   
     isTouchingPanelRef.current = touching;
+setIsTouchingPanel(touching);
   };
 
   // -------------------------
@@ -532,10 +534,8 @@ topPieceId,
             : activePieceId === id
               ? 5000
               : 1,
-      
-      
               transform:
-              dragging.current || !isTouchingPanelRef.current
+              dragging.current || !isTouchingPanel
                 ? "scale(1)"
                 : "scale(0.4)",
         transition: "transform 0.15s ease",
