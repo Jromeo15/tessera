@@ -29,6 +29,7 @@ export default function PuzzleLayout({
   isFilled,
   shapes,
 }) {
+  let stp = 0;
   const { user } = useAuth();
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
@@ -54,19 +55,21 @@ export default function PuzzleLayout({
       shape,
       height: shape.length,
       width: (() => {
-        let min = Infinity;
-        let max = -Infinity;
+        let maxFilled = 0;
       
         for (let r = 0; r < shape.length; r++) {
+          let filled = 0;
+      
           for (let c = 0; c < shape[0].length; c++) {
             if (shape[r][c] !== 0) {
-              min = Math.min(min, c);
-              max = Math.max(max, c);
+              filled++;
             }
           }
+      
+          maxFilled = Math.max(maxFilled, filled);
         }
       
-        return max - min + 1;
+        return maxFilled;
       })(),
     }));
   });
@@ -436,8 +439,14 @@ export default function PuzzleLayout({
     paddingLeft: 0,
   }}
 >
+  
   {pieces.map((p, index) => {
 
+console.log("VISUAL WIDTH CHECK", {
+  id: p.id,
+  width: p.width,
+  expectedPx: p.width * CELL_SIZE * 0.4,
+});
 
   const screenHeight = window.innerHeight;
 
@@ -447,11 +456,10 @@ export default function PuzzleLayout({
 
   let x = baseX;
   
-  for (let i = 0; i < index; i++) {
-    x += pieces[i].width * CELL_SIZE*0.4 + CELL_SIZE*0.4;
-  }
-  
-  const initialX = x;
+  const initialX = x + stp;
+
+
+  stp += pieces[index].width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
@@ -460,6 +468,7 @@ export default function PuzzleLayout({
   };
 
   const el = document.querySelector(`.piece-${p.id}`);
+  console.log("DOM CHECK", p.id, el?.getBoundingClientRect());
   const shouldHide = !panelVisible && isPieceTouchingPanel(el);
 
   if (shouldHide && !hiddenPieces[p.id]) {
