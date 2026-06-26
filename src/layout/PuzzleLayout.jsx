@@ -428,7 +428,7 @@ export default function PuzzleLayout({
 
   const screenWidth = window.innerWidth;
 
-  const baseX = -screenWidth / 4;
+  const baseX = -screenWidth / 5;
 
   const step = screenWidth / pieces.length;
 

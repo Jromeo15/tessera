@@ -161,6 +161,7 @@ export default function PuzzleTimeAttack({ onBack }) {
   const [gameOver, setGameOver] = useState(false);
 
   const savedRef = useRef(false);
+  const advancingRef = useRef(false);
 
   // TIMER
   useEffect(() => {
@@ -203,6 +204,7 @@ export default function PuzzleTimeAttack({ onBack }) {
   const checkVictory = () => {
     const board = document.querySelector(".board");
     if (!board) return;
+    if (advancingRef.current) return;
 
     const grid = Array.from({ length: BOARD_ROWS }, () =>
       Array(BOARD_COLS).fill(false)
@@ -238,10 +240,15 @@ export default function PuzzleTimeAttack({ onBack }) {
 
     const next = Math.min(piecesCount + 1, MAX_PIECES);
 
+    advancingRef.current = true;
+
     setScore((s) => s + 1);
     setPiecesCount(next);
     setPieces(generatePieces(next));
     setResetKey((k) => k + 1);
+    requestAnimationFrame(() => {
+      advancingRef.current = false;
+    });
   };
 
   const reset = () => setResetKey((k) => k + 1);

@@ -105,7 +105,6 @@ export default function Piece({
   shape,
   color,
   id,
-  shapeMode = "square",
   initialX = 0,
   initialY = 0,
   onDrop,
