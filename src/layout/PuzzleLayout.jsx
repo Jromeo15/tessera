@@ -40,8 +40,6 @@ export default function PuzzleLayout({
   const panelRef = useRef(null);
   const [panelHeight, setPanelHeight] = useState(0);
   const [panelTop, setPanelTop] = useState(0);
-  const piecesRef = useRef({});
-  const [positions, setPositions] = useState([]);
   const [panelVisible, setPanelVisible] = useState(true);
   const [hiddenPieces, setHiddenPieces] = useState({});
   const [panelReady, setPanelReady] = useState(false);
@@ -163,7 +161,6 @@ export default function PuzzleLayout({
       .maybeSingle();
   
     if (error) {
-      console.log("[registerProgress] SELECT error", error);
       return;
     }
     if (!data) {
@@ -214,11 +211,6 @@ export default function PuzzleLayout({
   }, [zoom]);
 
   useEffect(() => {
-    console.log("[PuzzleLayout RESET STATE]", {
-      puzzleIndex,
-      category,
-    });
-  
     setHasRegistered(false);
     setRunning(true);
     setTime(0);
@@ -258,42 +250,6 @@ export default function PuzzleLayout({
   
     return () => window.removeEventListener("resize", update);
   }, []);
-
-  useEffect(() => {
-    const spacing = 10;
-    let x = 20;
-  
-    const debugSizes = pieces.map((p) => {
-      const el = document.querySelector(`.piece-${p.id}`);
-  
-      const size = {
-        id: p.id,
-        width: el?.offsetWidth,
-        height: el?.offsetHeight,
-      };
-  
-      console.log("[PIEZA SIZE]", size);
-  
-      return size;
-    });
-  
-    const newPositions = pieces.map((p) => {
-      const el = document.querySelector(`.piece-${p.id}`);
-  
-      const width = el?.offsetWidth ?? (4 * CELL_SIZE);
-  
-      const pos = {
-        id: p.id,
-        x,
-      };
-  
-      x += width + spacing;
-  
-      return pos;
-    });
-  
-    setPositions(newPositions);
-  }, [pieces, resetKey]);
 
   useEffect(() => {
     if (!panelVisible) return;
@@ -373,12 +329,10 @@ export default function PuzzleLayout({
 
   <button
   onClick={() => {
-    console.log("RESET PULSADO");
   
     setShowVictory(false);
   
     setResetKey((k) => {
-      console.log("NUEVO RESETKEY", k + 1);
       return k + 1;
     });
   }}

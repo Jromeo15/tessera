@@ -5,8 +5,6 @@ import { Undo, Redo } from "lucide-react";
 let activePieceId = null;
 
 const forceGlobalOverlapRecalc = () => {
-  
-  console.log("[loop] dispatch global-overlap");
   requestAnimationFrame(() => {
     window.dispatchEvent(new Event("global-overlap"));
   });
@@ -123,7 +121,6 @@ topPieceId,
   const [rot, setRot] = useState(0);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
-  const [resetKey, setResetKey] = useState(0);
   const initialGridRef = useRef({
     col: Math.round(initialX / CELL_SIZE),
     row: Math.round(initialY / CELL_SIZE),
@@ -178,8 +175,6 @@ topPieceId,
           const a = getType(cell);
           const b = getType(t);
         
-          // si son triángulos compatibles, NO es overlap
-          console.log("compatibilidad", a, b);
           if (a && b && areCompatible(a, b)) {
             return;
           }
@@ -275,7 +270,6 @@ topPieceId,
   
     if (!myCells.length) return;
   
-    // 🧠 SOLO check panel (FINAL DECISION)
     let touchingPanel = false;
   
     if (panel) {
@@ -299,14 +293,12 @@ topPieceId,
       }
     }
   
-    // 🚨 SOLO AQUÍ se resetea
     if (touchingPanel) {
       setGridPos(initialGridRef.current);
       setTopPieceId?.(null);
       return;
     }
   
-    // ✅ SI NO toca panel → SNAP NORMAL
     const xInside = gridPos.col * CELL_SIZE;
     const yInside = gridPos.row * CELL_SIZE;
   
@@ -490,10 +482,9 @@ topPieceId,
       window.removeEventListener("global-overlap", update);
       cancelAnimationFrame(raf);
     };
-  }, []); // 👈 CLAVE
+  }, []);
 
   useEffect(() => {
-    console.log("[loop] updatePanelTouch effect");
     updatePanelTouch();
   }, [gridPos, rot]);
 
