@@ -74,6 +74,8 @@ export default function PuzzleLayout({
     }));
   });
 
+  const sortedPieces = [...pieces].sort((a, b) => b.width - a.width);
+
   const checkVictory = (isFilledFn) => {
   
     const board = document.querySelector(".board");
@@ -440,7 +442,7 @@ export default function PuzzleLayout({
   }}
 >
   
-  {pieces.map((p, index) => {
+  {sortedPieces.map((p, index) => {
 
 const screenHeight = window.innerHeight;
 
@@ -458,10 +460,10 @@ console.log(
   "stp",
   stp,
   "WIDTH",
-  pieces[index].width
+  p.width
 );
 
-stp += pieces[index].width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4*2;
+stp += p.width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
