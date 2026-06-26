@@ -52,7 +52,22 @@ export default function PuzzleLayout({
       id: i + 1,
       color: colors[i],
       shape,
-      width: shape[0].length,
+      height: shape.length,
+      width: (() => {
+        let min = Infinity;
+        let max = -Infinity;
+      
+        for (let r = 0; r < shape.length; r++) {
+          for (let c = 0; c < shape[0].length; c++) {
+            if (shape[r][c] !== 0) {
+              min = Math.min(min, c);
+              max = Math.max(max, c);
+            }
+          }
+        }
+      
+        return max - min + 1;
+      })(),
     }));
   });
 
