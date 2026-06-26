@@ -461,9 +461,7 @@ console.log(
   pieces[index].width
 );
 
-stp += Math.ceil(
-  pieces[index].width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4*2
-);
+stp += pieces[index].width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4*2;
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
