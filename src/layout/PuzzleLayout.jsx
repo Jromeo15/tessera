@@ -444,11 +444,11 @@ export default function PuzzleLayout({
 
 const screenHeight = window.innerHeight;
 
-const y = Math.ceil(screenHeight / 1.8);
+const y = screenHeight / 1.8;
 
-const baseX = Math.ceil(-window.innerWidth / 5);
+const baseX = -window.innerWidth / 5;
 
-let initialX = Math.ceil(baseX + stp);
+let initialX = baseX + stp;
 
 console.log(
   "INDEX",
