@@ -38,8 +38,6 @@ export default function PuzzleLayout({
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
-  const [panelHeight, setPanelHeight] = useState(0);
-  const [panelTop, setPanelTop] = useState(0);
   const [panelVisible, setPanelVisible] = useState(true);
   const [hiddenPieces, setHiddenPieces] = useState({});
   const [panelReady, setPanelReady] = useState(false);
@@ -67,9 +65,7 @@ export default function PuzzleLayout({
       Array.from({ length: BOARD_COLS }, () => [])
     );
   
-    let totalCells = 0;
-  
-    piecesDom.forEach((piece, pi) => {
+    piecesDom.forEach((piece) => {
       const cells = piece.querySelectorAll(".piece-cell");
 
       const boardRect = board.getBoundingClientRect();
@@ -89,7 +85,6 @@ export default function PuzzleLayout({
         if (row >= 0 && row < BOARD_ROWS && col >= 0 && col < BOARD_COLS) {
           const type = cell.dataset.cellType || "1";
           grid[row][col].push(type);
-          totalCells++;
         }
       });
     });
@@ -217,39 +212,15 @@ export default function PuzzleLayout({
   }, [puzzleIndex, category]);
 
   useEffect(() => {
-  
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
-  
-    const preventScroll = (e) => {
-      // SOLO bloquear si NO es interacción con botón
-      if (e.target.closest("button")) return;
-      e.preventDefault();
-    };
   
     return () => {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
-      document.removeEventListener("touchmove", preventScroll);
     };
   }, []);
 
-  useEffect(() => {
-    if (!panelRef.current) return;
-  
-    const update = () => {
-      const rect = panelRef.current.getBoundingClientRect();
-  
-      setPanelTop(rect.top);
-      setPanelHeight(rect.height);
-    };
-  
-    update();
-  
-    window.addEventListener("resize", update);
-  
-    return () => window.removeEventListener("resize", update);
-  }, []);
 
   useEffect(() => {
     if (!panelVisible) return;
