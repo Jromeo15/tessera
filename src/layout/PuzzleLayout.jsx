@@ -442,24 +442,28 @@ export default function PuzzleLayout({
   
   {pieces.map((p, index) => {
 
-console.log("VISUAL WIDTH CHECK", {
-  id: p.id,
-  width: p.width,
-  expectedPx: p.width * CELL_SIZE * 0.4,
-});
+const screenHeight = window.innerHeight;
 
-  const screenHeight = window.innerHeight;
+const y = Math.ceil(screenHeight / 1.8);
 
-  const y = screenHeight/ 1.8;
+const baseX = Math.ceil(-window.innerWidth / 5);
 
-  const baseX = -window.innerWidth / 5;
+let initialX = Math.ceil(baseX + stp);
 
-  let x = baseX;
-  
-  const initialX = x + stp;
+console.log(
+  "INDEX",
+  index,
+  "X",
+  initialX,
+  "stp",
+  stp,
+  "WIDTH",
+  pieces[index].width
+);
 
-
-  stp += pieces[index].width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
+stp += Math.ceil(
+  pieces[index].width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4*2
+);
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
@@ -468,7 +472,6 @@ console.log("VISUAL WIDTH CHECK", {
   };
 
   const el = document.querySelector(`.piece-${p.id}`);
-  console.log("DOM CHECK", p.id, el?.getBoundingClientRect());
   const shouldHide = !panelVisible && isPieceTouchingPanel(el);
 
   if (shouldHide && !hiddenPieces[p.id]) {
