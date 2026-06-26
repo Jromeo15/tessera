@@ -44,8 +44,6 @@ export default function PuzzleLayout({
   const [reappearingPieces, setReappearingPieces] = useState({});
   const [disappearingPieces, setDisappearingPieces] = useState({});
   const [topPieceId, setTopPieceId] = useState(null);
-  const [xPositions, setXPositions] = useState({});
-const [layoutReady, setLayoutReady] = useState(false);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -54,6 +52,7 @@ const [layoutReady, setLayoutReady] = useState(false);
       id: i + 1,
       color: colors[i],
       shape,
+      width: shape[0].length,
     }));
   });
 
@@ -223,48 +222,6 @@ const [layoutReady, setLayoutReady] = useState(false);
     };
   }, []);
 
-  useEffect(() => {
-    const placedRects = [];
-  
-    const overlaps = (a, b) => {
-      return !(
-        a.x + a.w < b.x ||
-        a.x > b.x + b.w ||
-        a.y + a.h < b.y ||
-        a.y > b.y + b.h
-      );
-    };
-  
-    const result = {};
-  
-    shapes.forEach((_, index) => {
-      const id = index + 1;
-      const el = document.querySelector(`.piece-${id}`);
-  
-      if (!el) return;
-  
-      const w = el.offsetWidth;
-      const h = el.offsetHeight;
-  
-      const y = window.innerHeight / 1.8;
-      let x = -window.innerWidth / 5;
-  
-      while (
-        placedRects.some((r) =>
-          overlaps({ x, y, w, h }, r)
-        )
-      ) {
-        x += 1;
-      }
-  
-      placedRects.push({ x, y, w, h });
-      result[id] = x;
-    });
-  
-    setXPositions(result);
-    setLayoutReady(true);
-  }, [shapes, resetKey]);
-
 
   useEffect(() => {
     if (!panelVisible) return;
@@ -350,9 +307,6 @@ const [layoutReady, setLayoutReady] = useState(false);
     setResetKey((k) => {
       return k + 1;
     });
-
-    setLayoutReady(false);
-setXPositions({});
   }}
   className="puzzleIconBtn puzzleIconBtn--reset"
 >
@@ -469,17 +423,21 @@ setXPositions({});
 >
   {pieces.map((p, index) => {
 
+console.log(p.width);
+
   const screenHeight = window.innerHeight;
 
   const y = screenHeight/ 1.8;
 
-  const screenWidth = window.innerWidth;
+  const baseX = -window.innerWidth / 5;
 
-  const baseX = -screenWidth / 5;
-
-  const step = screenWidth / pieces.length;
-
-  const initialX = xPositions[p.id] ?? (baseX + index * step);
+  let x = baseX;
+  
+  for (let i = 0; i < index; i++) {
+    x += pieces[i].width * CELL_SIZE + CELL_SIZE;
+  }
+  
+  const initialX = x;
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
