@@ -543,25 +543,50 @@ return (
         pointerEvents: "none",
       }}
     >
+<div
+  ref={panelRef}
+  className={`puzzleBottomPanel ${
+    panelReady
+      ? panelVisible
+        ? "panel--open"
+        : "panel--closed"
+      : ""
+  }`}
+  style={{
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    pointerEvents: "none",
+    overflow: "hidden",
+  }}
+>
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      display: "grid",
+      gridTemplateColumns: `repeat(auto-fill, ${CELL_SIZE * 0.4}px)`,
+      gridAutoRows: `${CELL_SIZE * 0.4}px`,
+      pointerEvents: "none",
+    }}
+  >
+    {Array.from({
+      length:
+        Math.ceil(window.innerWidth / (CELL_SIZE * 0.4)) *
+        Math.ceil(220 / (CELL_SIZE * 0.4)),
+    }).map((_, i) => (
       <div
-        ref={panelRef}
-        className={`puzzleBottomPanel ${
-          panelReady
-            ? panelVisible
-              ? "panel--open"
-              : "panel--closed"
-            : ""
-        }`}
+        key={i}
         style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          pointerEvents: "none",
+          borderRight: "1px solid rgba(0,0,0,0.06)",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
+          boxSizing: "border-box",
         }}
-      >
-        {/* PANEL CONTENT (sin botón dentro ya) */}
-      </div>
+      />
+    ))}
+  </div>
+</div>
     </div>
 
     {/* BOTÓN ÚNICO ANIMADO */}
