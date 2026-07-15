@@ -432,7 +432,7 @@ const screenHeight = window.innerHeight;
 
 const y = screenHeight / 1.8;
 
-const baseX = -window.innerWidth / 5;
+const baseX = -window.innerWidth / 5 + 2*0.4*CELL_SIZE;
 
 let initialX = baseX + stp;
 
