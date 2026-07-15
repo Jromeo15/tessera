@@ -134,7 +134,6 @@ topPieceId,
   const isTouchingPanelRef = useRef(false);
   const [isTouchingPanel, setIsTouchingPanel] = useState(true);
   const [hasBeenMoved, setHasBeenMoved] = useState(false);
-  console.log("hasbm",hasBeenMoved)
 
   const rotatedShape = useMemo(() => {
     let s = shape;
@@ -227,7 +226,6 @@ setIsTouchingPanel(touching);
 
     if (!hasBeenMoved) {
       setHasBeenMoved(true);
-      console.log("hasbm",hasBeenMoved)
     }
 
     activePieceId = id;
@@ -246,8 +244,6 @@ setIsTouchingPanel(touching);
 
   const moveDrag = (clientX, clientY) => {
     if (!dragging.current) return;
-
-    console.log("[loop] moveDrag");
 
     const dx = Math.abs(clientX - start.current.x);
     const dy = Math.abs(clientY - start.current.y);

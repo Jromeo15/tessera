@@ -60,6 +60,28 @@ export default function PuzzleLayout({
 
   const sortedPieces = [...pieces].sort((a, b) => b.width - a.width);
 
+  const initialPositions = useRef(null);
+
+if (!initialPositions.current) {
+  let stp = 0;
+
+  const screenHeight = window.innerHeight;
+  const y = screenHeight / 1.8 + 2 * 0.4 * CELL_SIZE;
+  const baseX = -window.innerWidth / 5 + 2 * 0.4 * CELL_SIZE;
+
+  initialPositions.current = sortedPieces.map((p) => {
+    const initialX = baseX + stp;
+
+    stp += p.width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
+
+    return {
+      id: p.id,
+      initialX,
+      initialY: y,
+    };
+  });
+}
+
   const checkVictory = (isFilledFn) => {
   
     const board = document.querySelector(".board");
@@ -424,30 +446,12 @@ export default function PuzzleLayout({
     gap: 10,
     paddingLeft: 0,
   }}
->
+>´
+
   
   {sortedPieces.map((p, index) => {
 
-const screenHeight = window.innerHeight;
-
-const y = screenHeight / 1.8;
-
-const baseX = -window.innerWidth / 5 + 2*0.4*CELL_SIZE;
-
-let initialX = baseX + stp;
-
-console.log(
-  "INDEX",
-  index,
-  "X",
-  initialX,
-  "stp",
-  stp,
-  "WIDTH",
-  p.width
-);
-
-stp += p.width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
+const { initialX, initialY } = initialPositions.current[index];
 
   const delayedCheck = () => {
     requestAnimationFrame(() => {
@@ -487,7 +491,7 @@ return (
   color={p.color}
   shape={p.shape}
   initialX={initialX}
-  initialY={y}
+  initialY={initialY}
   onDrop={delayedCheck}
   onRotate={delayedCheck}
   setTopPieceId={setTopPieceId}
