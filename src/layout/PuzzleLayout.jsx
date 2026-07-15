@@ -66,7 +66,7 @@ if (!initialPositions.current) {
   let stp = 0;
 
   const screenHeight = window.innerHeight;
-  const y = screenHeight / 1.8 + 2 * 0.4 * CELL_SIZE;
+  const y = screenHeight / 1.8 - 2 * 0.4 * CELL_SIZE;
   const baseX = -window.innerWidth / 5 + 2 * 0.4 * CELL_SIZE;
 
   initialPositions.current = sortedPieces.map((p) => {
