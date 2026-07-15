@@ -133,6 +133,8 @@ topPieceId,
   const start = useRef({ x: 0, y: 0 });
   const isTouchingPanelRef = useRef(false);
   const [isTouchingPanel, setIsTouchingPanel] = useState(true);
+  const [hasBeenMoved, setHasBeenMoved] = useState(false);
+  console.log("hasbm",hasBeenMoved)
 
   const rotatedShape = useMemo(() => {
     let s = shape;
@@ -223,6 +225,10 @@ setIsTouchingPanel(touching);
     dragging.current = true;
     moved.current = false;
 
+    if (!hasBeenMoved) {
+      setHasBeenMoved(true);
+      console.log("hasbm",hasBeenMoved)
+    }
 
     activePieceId = id;
     setTopPieceId?.(id);
@@ -233,8 +239,8 @@ setIsTouchingPanel(touching);
     };
 
     offset.current = {
-      x: clientX - gridPos.col * CELL_SIZE,
-      y: clientY - gridPos.row * CELL_SIZE,
+      x: clientX - (hasBeenMoved ? gridPos.col * CELL_SIZE : initialX),
+      y: clientY - (hasBeenMoved ? gridPos.row * CELL_SIZE : initialY),
     };
   };
 
@@ -517,7 +523,9 @@ setIsTouchingPanel(touching);
       style={{
         pointerEvents: "none",
         position: "absolute",
-        left: gridPos.col * CELL_SIZE,
+        left: hasBeenMoved
+  ? gridPos.col * CELL_SIZE
+  : initialX,
         top: gridPos.row * CELL_SIZE,
       
         display: "grid",
@@ -538,6 +546,7 @@ setIsTouchingPanel(touching);
               dragging.current || !isTouchingPanel
                 ? "scale(1)"
                 : "scale(0.4)",
+              transformOrigin: "top left",
         transition: "transform 0.15s ease",
       }}
     >

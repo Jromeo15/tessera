@@ -1,11 +1,12 @@
 import { CELL_SIZE } from "../constants";
 
-export default function Board({ children }) {
+export default function Board({ children, boardRef }) {
   const cols = 9;
   const rows = 10;
 
   return (
     <div
+    ref={boardRef}
       className="board"
       style={{
         position: "relative",
