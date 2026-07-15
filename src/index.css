@@ -856,7 +856,7 @@ code {
   }
 
   .puzzleTitleLine {
-    width: 240px;
+    width: 200px;
     margin-top: 6px;
   }
 
@@ -1979,7 +1979,7 @@ code {
   right: 0;
   bottom: 0;
 
-  height: 240px;
+  height: 200px;
 
   display: flex;
   align-items: center;
