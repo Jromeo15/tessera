@@ -54,23 +54,7 @@ export default function PuzzleLayout({
       color: colors[i],
       shape,
       height: shape.length,
-      width: (() => {
-        let maxFilled = 0;
-      
-        for (let r = 0; r < shape.length; r++) {
-          let filled = 0;
-      
-          for (let c = 0; c < shape[0].length; c++) {
-            if (shape[r][c] !== 0) {
-              filled++;
-            }
-          }
-      
-          maxFilled = Math.max(maxFilled, filled);
-        }
-      
-        return maxFilled;
-      })(),
+      width: shape[0].length,
     }));
   });
 
