@@ -261,7 +261,7 @@ export default function PuzzleTimeAttack({ onBack }) {
           title="Contrarreloj"
           onBack={onBack}
           hideInternalTimer={true}
-          shapes={pieces}
+           shapes={pieces.map(p => p.shape)}
         >
           <div style={{ visibility: "hidden" }} />
         </PuzzleLayout>
@@ -303,7 +303,7 @@ export default function PuzzleTimeAttack({ onBack }) {
       title="Contrarreloj"
       onBack={onBack}
       hideInternalTimer={true}
-      shapes={pieces}
+       shapes={pieces.map(p => p.shape)}
     >
       {() => (
         <>
@@ -316,30 +316,31 @@ export default function PuzzleTimeAttack({ onBack }) {
             }}
           >
             <Board key={resetKey}>
-              {pieces.map((p, i) => {
-                const cols = Math.min(4, pieces.length);
-                const boardWidth = BOARD_COLS * CELL_SIZE;
+            {pieces
+  .map((p) => ({
+    ...p,
+    height: p.shape.length,
+    width: Math.max(...p.shape.map((r) => r.length)),
+  }))
+  .sort((a, b) => {
+    if (a.height !== b.height) {
+      return b.height - a.height;
+    }
 
-                const x =
-                  (i % 4) * 65 +
-                  boardWidth / 2 -
-                  (cols * 65) / 2;
-
-                const y = -100 + Math.random() * 250;
-
-                return (
-                  <Piece
-                    key={p.id}
-                    id={p.id}
-                    color={p.color}
-                    shape={p.shape}
-                    initialX={x}
-                    initialY={y}
-                    onDrop={checkVictory}
-                    onRotate={checkVictory}
-                  />
-                );
-              })}
+    return b.width - a.width;
+  })
+  .map((p) => (
+    <Piece
+      key={p.id}
+      id={p.id}
+      color={p.color}
+      shape={p.shape}
+      initialX={0}
+      initialY={0}
+      onDrop={checkVictory}
+      onRotate={checkVictory}
+    />
+  ))}
             </Board>
           </div>
 

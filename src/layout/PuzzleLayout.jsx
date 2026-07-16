@@ -28,6 +28,7 @@ export default function PuzzleLayout({
   hideInternalTimer = false,
   isFilled,
   shapes,
+  pieceProps = {},
 }) {
   let stp = 0;
   const { user } = useAuth();
@@ -540,11 +541,13 @@ initialX = baseX + row2Offset;
 
 const { initialX, initialY } = initialPositions.current[index];
 
-  const delayedCheck = () => {
-    requestAnimationFrame(() => {
-      checkVictory(checkCellFilled);
-    });
-  };
+const delayedCheck = () => {
+  requestAnimationFrame(() => {
+    checkVictory(checkCellFilled);
+
+    pieceProps.onDrop?.();
+  });
+};
 
   const el = document.querySelector(`.piece-${p.id}`);
   const shouldHide = !panelVisible && isPieceTouchingPanel(el);
@@ -579,8 +582,19 @@ return (
   shape={p.shape}
   initialX={initialX}
   initialY={initialY}
-  onDrop={delayedCheck}
-  onRotate={delayedCheck}
+  onDrop={() => {
+    requestAnimationFrame(() => {
+      checkVictory(checkCellFilled);
+      pieceProps.onDrop?.();
+    });
+  }}
+  
+  onRotate={() => {
+    requestAnimationFrame(() => {
+      checkVictory(checkCellFilled);
+      pieceProps.onRotate?.();
+    });
+  }}
   setTopPieceId={setTopPieceId}
   topPieceId={topPieceId}
 />
