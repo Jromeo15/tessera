@@ -584,17 +584,23 @@ return (
   initialY={initialY}
   onDrop={() => {
     requestAnimationFrame(() => {
-      checkVictory(checkCellFilled);
-      pieceProps.onDrop?.();
+      if (pieceProps.onDrop) {
+        pieceProps.onDrop();
+      } else {
+        checkVictory(checkCellFilled);
+      }
     });
   }}
-  
   onRotate={() => {
     requestAnimationFrame(() => {
-      checkVictory(checkCellFilled);
-      pieceProps.onRotate?.();
+      if (pieceProps.onRotate) {
+        pieceProps.onRotate();
+      } else {
+        checkVictory(checkCellFilled);
+      }
     });
   }}
+
   setTopPieceId={setTopPieceId}
   topPieceId={topPieceId}
 />

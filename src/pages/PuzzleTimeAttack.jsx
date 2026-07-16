@@ -299,59 +299,25 @@ export default function PuzzleTimeAttack({ onBack }) {
   }
 
   return (
-    <PuzzleLayout
-      title="Contrarreloj"
-      onBack={onBack}
-      hideInternalTimer={true}
-       shapes={pieces.map(p => p.shape)}
-    >
-      {() => (
-        <>
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "flex-end",
-            }}
-          >
-            <Board key={resetKey}>
-            {pieces
-  .map((p) => ({
-    ...p,
-    height: p.shape.length,
-    width: Math.max(...p.shape.map((r) => r.length)),
-  }))
-  .sort((a, b) => {
-    if (a.height !== b.height) {
-      return b.height - a.height;
-    }
-
-    return b.width - a.width;
-  })
-  .map((p) => (
-    <Piece
-      key={p.id}
-      id={p.id}
-      color={p.color}
-      shape={p.shape}
-      initialX={0}
-      initialY={0}
-      onDrop={checkVictory}
-      onRotate={checkVictory}
-    />
-  ))}
-            </Board>
-          </div>
-
-          {createPortal(
-            <div className="timeAttackHud">
-              ⏱ {formatTime(timeLeft)} · ⭐ {score}
-            </div>,
-            document.body
-          )}
-        </>
+    <>
+      <PuzzleLayout
+        key={resetKey}
+        title="Contrarreloj"
+        onBack={onBack}
+        hideInternalTimer={true}
+        shapes={pieces.map((p) => p.shape)}
+        pieceProps={{
+          onDrop: checkVictory,
+          onRotate: checkVictory,
+        }}
+      />
+  
+      {createPortal(
+        <div className="timeAttackHud">
+          ⏱ {formatTime(timeLeft)} · ⭐ {score}
+        </div>,
+        document.body
       )}
-    </PuzzleLayout>
+    </>
   );
 }
