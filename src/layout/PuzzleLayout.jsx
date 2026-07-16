@@ -145,7 +145,7 @@ initialX = baseX + row2Offset;
     row2Offset += (p.width + 1) * CELL_SIZE * 0.4;
   } else {
     const start = row1Offset;
-    const end = row1Offset + p.width * CELL_SIZE * 0.4;
+    const end = row1Offset + p.height * CELL_SIZE * 0.4;
     
     firstRowPieces.push({
       x: initialX,
@@ -153,7 +153,7 @@ initialX = baseX + row2Offset;
       height: p.height,
     });
     
-    if (p.width >= 8) {
+    if (p.height >= 8) {
       row2MinOffset = Math.max(row2MinOffset, end + CELL_SIZE * 0.4);
     }
 
