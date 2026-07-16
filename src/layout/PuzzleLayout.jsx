@@ -58,7 +58,14 @@ export default function PuzzleLayout({
     }));
   });
 
-  const sortedPieces = [...pieces].sort((a, b) => b.width - a.width);
+  const sortedPieces = [...pieces].sort((a, b) => {
+    if (a.height !== b.height) {
+      return b.height - a.height;
+    }
+  
+    // Desempate opcional: mayor ancho primero
+    return b.width - a.width;
+  });
 
   const initialPositions = useRef(null);
 
@@ -68,20 +75,34 @@ if (!initialPositions.current) {
   const screenHeight = window.innerHeight;
 
   const firstRowY = screenHeight / 1.8 - 1 * 0.4 * CELL_SIZE;
-  const secondRowY = firstRowY + CELL_SIZE * 1.8;
   
   const baseX = -window.innerWidth / 5 + 2 * 0.4 * CELL_SIZE;
   
   const MAX_ROW_CELLS = 35;
+  let occupiedCells = 1; // margen izquierdo
+let tallestFirstRow = 0;
+
+for (const p of sortedPieces) {
+  const needed = p.width + (occupiedCells > 1 ? 1 : 0);
+
+  if (occupiedCells + needed > MAX_ROW_CELLS) {
+    break;
+  }
+
+  occupiedCells += needed;
+  tallestFirstRow = Math.max(tallestFirstRow, p.height);
+}
 
 let row1Offset = 0;
 let row2Offset = 0;
+let row2MinOffset = 0;
 
-let row1Cells = 1; // margen izquierdo de 1 celda
+let row1Cells = 1;
 let secondRow = false;
 
+const firstRowPieces = [];
+
 initialPositions.current = sortedPieces.map((p) => {
-  // ¿Cabe esta pieza en la primera fila?
   if (
     !secondRow &&
     row1Cells + p.width + (row1Cells > 1 ? 1 : 0) > MAX_ROW_CELLS
@@ -89,17 +110,53 @@ initialPositions.current = sortedPieces.map((p) => {
     secondRow = true;
   }
 
-  const initialX = secondRow
-    ? baseX + row2Offset
-    : baseX + row1Offset;
+  let initialX = secondRow
+  ? baseX + row2Offset
+  : baseX + row1Offset;
 
-  const initialY = secondRow
-    ? secondRowY
-    : firstRowY;
+  let initialY = firstRowY;
 
   if (secondRow) {
+    row2Offset = Math.max(row2Offset, row2MinOffset);
+initialX = baseX + row2Offset;
+    // Buscar la pieza de la primera fila que más coincide horizontalmente
+    let best = null;
+    let bestOverlap = -1;
+
+    for (const fp of firstRowPieces) {
+      const overlap = Math.min(
+        initialX + p.width * CELL_SIZE * 0.4,
+        fp.x + fp.width * CELL_SIZE * 0.4
+      ) - Math.max(initialX, fp.x);
+
+      if (overlap > bestOverlap) {
+        bestOverlap = overlap;
+        best = fp;
+      }
+    }
+
+    const heightAbove = best ? best.height : tallestFirstRow;
+
+    initialY =
+      firstRowY +
+      heightAbove * CELL_SIZE * 0.4 +
+      CELL_SIZE * 0.2;
+
     row2Offset += (p.width + 1) * CELL_SIZE * 0.4;
   } else {
+    const start = row1Offset;
+    const end = row1Offset + p.width * CELL_SIZE * 0.4;
+    
+    firstRowPieces.push({
+      x: initialX,
+      width: p.width,
+      height: p.height,
+    });
+    
+    if (p.width >= 8) {
+      row2MinOffset = Math.max(row2MinOffset, end + CELL_SIZE * 0.4);
+    }
+
     row1Offset += (p.width + 1) * CELL_SIZE * 0.4;
     row1Cells += p.width + 1;
   }
