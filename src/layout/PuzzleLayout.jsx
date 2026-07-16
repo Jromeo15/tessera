@@ -72,32 +72,44 @@ if (!initialPositions.current) {
   
   const baseX = -window.innerWidth / 5 + 2 * 0.4 * CELL_SIZE;
   
-  let row1Offset = 0;
-  let row2Offset = 0;
-  
-  initialPositions.current = sortedPieces.map((p, index) => {
-    const secondRow = sortedPieces.length > 6 && index >= 6;
-  
-    const initialX = secondRow
-      ? baseX + row2Offset
-      : baseX + row1Offset;
-  
-    const initialY = secondRow
-      ? secondRowY
-      : firstRowY;
-  
-    if (secondRow) {
-      row2Offset += p.width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
-    } else {
-      row1Offset += p.width * CELL_SIZE * 0.4 + CELL_SIZE * 0.4;
-    }
-  
-    return {
-      id: p.id,
-      initialX,
-      initialY,
-    };
-  });
+  const MAX_ROW_CELLS = 35;
+
+let row1Offset = 0;
+let row2Offset = 0;
+
+let row1Cells = 1; // margen izquierdo de 1 celda
+let secondRow = false;
+
+initialPositions.current = sortedPieces.map((p) => {
+  // ¿Cabe esta pieza en la primera fila?
+  if (
+    !secondRow &&
+    row1Cells + p.width + (row1Cells > 1 ? 1 : 0) > MAX_ROW_CELLS
+  ) {
+    secondRow = true;
+  }
+
+  const initialX = secondRow
+    ? baseX + row2Offset
+    : baseX + row1Offset;
+
+  const initialY = secondRow
+    ? secondRowY
+    : firstRowY;
+
+  if (secondRow) {
+    row2Offset += (p.width + 1) * CELL_SIZE * 0.4;
+  } else {
+    row1Offset += (p.width + 1) * CELL_SIZE * 0.4;
+    row1Cells += p.width + 1;
+  }
+
+  return {
+    id: p.id,
+    initialX,
+    initialY,
+  };
+});
 }
 
   const checkVictory = (isFilledFn) => {
