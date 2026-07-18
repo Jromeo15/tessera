@@ -385,7 +385,7 @@ initialX = baseX + row2Offset;
     
     <div
       style={{
-        height: "100vh",
+        height: "100dvh",
         display: "flex",
         flexDirection: "column",
       }}
