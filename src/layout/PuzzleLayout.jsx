@@ -75,7 +75,7 @@ if (!initialPositions.current) {
 
   const screenHeight = window.innerHeight;
 
-  const firstRowY = screenHeight / 1.8 - 1 * 0.4 * CELL_SIZE;
+  const firstRowY = screenHeight / 1.8 - 3 * 0.4 * CELL_SIZE;
   
   const baseX = -window.innerWidth / 5 + 2 * 0.4 * CELL_SIZE;
   
