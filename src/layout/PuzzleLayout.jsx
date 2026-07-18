@@ -141,7 +141,7 @@ initialX = baseX + row2Offset;
     initialY =
       firstRowY +
       heightAbove * CELL_SIZE * 0.4 +
-      CELL_SIZE * 0.2;
+      CELL_SIZE * 0.6;
 
     row2Offset += (p.width + 1) * CELL_SIZE * 0.4;
   } else {

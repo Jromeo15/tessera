@@ -1,6 +1,6 @@
 {
     "name": "TileX",
-    "short_name": "Tessera",
+    "short_name": "TileX",
     "start_url": "/tessera/",
     "scope": "/tessera/",
     "display": "standalone",
