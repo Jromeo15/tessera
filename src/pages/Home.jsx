@@ -14,7 +14,7 @@ export default function Home({
   const [showPopup, setShowPopup] = useState(false);
   const [value, setValue] = useState(2);
 
-  const title = "TESSERA";
+  const title = "TILEX";
 
   const titleColors = [
     "#00F5FF", // cyan tech (base futurista)
