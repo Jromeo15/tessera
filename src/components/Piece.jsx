@@ -110,7 +110,8 @@ export default function Piece({
   onDrop,
   onRotate,
   setTopPieceId,
-topPieceId,
+  topPieceId,
+  zoom = 1,
 }) {
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE),
@@ -520,9 +521,11 @@ setIsTouchingPanel(touching);
         pointerEvents: "none",
         position: "absolute",
         left: hasBeenMoved
-  ? gridPos.col * CELL_SIZE
-  : initialX,
-        top: gridPos.row * CELL_SIZE,
+        ? gridPos.col * CELL_SIZE
+        : (isTouchingPanel ? initialX / zoom : initialX),
+        top: hasBeenMoved
+        ? gridPos.row * CELL_SIZE
+        : (isTouchingPanel ? initialY / zoom : initialY),
       
         display: "grid",
       
@@ -538,10 +541,15 @@ setIsTouchingPanel(touching);
             : activePieceId === id
               ? 5000
               : 1,
-              transform:
-              dragging.current || !isTouchingPanel
-                ? "scale(1)"
-                : "scale(0.4)",
+              transform: (() => {
+                const baseScale =
+                  dragging.current || !isTouchingPanel ? 1 : 0.4;
+              
+                const zoomCorrection =
+                  isTouchingPanel ? 1 / zoom : 1;
+              
+                return `scale(${baseScale * zoomCorrection})`;
+              })(),
               transformOrigin: "top left",
         transition: "transform 0.15s ease",
       }}
