@@ -112,6 +112,7 @@ export default function Piece({
   setTopPieceId,
   topPieceId,
   zoom = 1,
+  refreshPieces,
 }) {
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE),

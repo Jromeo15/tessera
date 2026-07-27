@@ -46,6 +46,7 @@ export default function PuzzleLayout({
   const [reappearingPieces, setReappearingPieces] = useState({});
   const [disappearingPieces, setDisappearingPieces] = useState({});
   const [topPieceId, setTopPieceId] = useState(null);
+  const [refreshPieces, setRefreshPieces] = useState(0);
 
   const [pieces] = useState(() => {
     const colors = getUniqueColors(shapes.length);
@@ -588,6 +589,7 @@ return (
 <Piece
   id={p.id}
   color={p.color}
+  refreshPieces={refreshPieces}
   shape={p.shape}
   initialX={initialX}
   initialY={initialY}
@@ -731,6 +733,7 @@ onPointerDown={(e) => {
   }
 
   setPanelVisible(!panelVisible);
+  setRefreshPieces((r) => r + 1);
   setPanelReady(true);
 }}
       className={`puzzleToggleButton ${
