@@ -1,8 +1,16 @@
 import { CELL_SIZE } from "../constants";
 
-export default function Board({ children, boardRef }) {
+export default function Board({ children, boardRef, zoom = 1 }) {
   const cols = 9;
   const rows = 10;
+  const gridCellSize = CELL_SIZE * zoom;
+
+  const rect = boardRef?.current?.getBoundingClientRect();
+
+console.log("BOARD", rect && {
+  left: rect.left,
+  top: rect.top,
+});
 
   return (
     <div
@@ -10,8 +18,8 @@ export default function Board({ children, boardRef }) {
       className="board"
       style={{
         position: "relative",
-        width: cols * CELL_SIZE,
-        height: rows * CELL_SIZE,
+        width: cols * gridCellSize,
+        height: rows * gridCellSize,
 
         margin: "0 auto",
 
@@ -41,8 +49,8 @@ export default function Board({ children, boardRef }) {
           inset: 0,
 
           display: "grid",
-          gridTemplateColumns: `repeat(${cols}, ${CELL_SIZE}px)`,
-          gridTemplateRows: `repeat(${rows}, ${CELL_SIZE}px)`,
+          gridTemplateColumns: `repeat(${cols}, ${gridCellSize}px)`,
+          gridTemplateRows: `repeat(${rows}, ${gridCellSize}px)`,
 
           pointerEvents: "none",
 
@@ -55,8 +63,8 @@ export default function Board({ children, boardRef }) {
           <div
             key={i}
             style={{
-              width: CELL_SIZE,
-              height: CELL_SIZE,
+              width: gridCellSize,
+              height: gridCellSize,
 
               borderRight: "1px solid rgba(0,0,0,0.06)",
               borderBottom: "1px solid rgba(0,0,0,0.06)",
