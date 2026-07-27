@@ -502,6 +502,11 @@ setIsTouchingPanel(touching);
   }, [gridPos, rot]);
 
   useEffect(() => {
+    updatePanelTouch();
+    forceGlobalOverlapRecalc();
+  }, [refreshPieces]);
+
+  useEffect(() => {
     const handler = (e) => {
       if (e.detail !== id) return;
   
