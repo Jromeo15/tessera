@@ -112,7 +112,6 @@ export default function Piece({
   setTopPieceId,
   topPieceId,
   zoom = 1,
-  boardRef,
 }) {
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE),
@@ -134,7 +133,6 @@ export default function Piece({
   const offset = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
   const isTouchingPanelRef = useRef(false);
-  
   const [isTouchingPanel, setIsTouchingPanel] = useState(true);
   const [hasBeenMoved, setHasBeenMoved] = useState(false);
 
@@ -253,11 +251,10 @@ setIsTouchingPanel(touching);
 
     if (dx > 3 || dy > 3) {
       moved.current = true;
-
     
       setGridPos({
-        col: Math.round((clientX - offset.current.x) / (CELL_SIZE * effectiveZoom)),
-        row: Math.round((clientY - offset.current.y) / (CELL_SIZE * effectiveZoom)),
+        col: Math.round((clientX - offset.current.x) / CELL_SIZE),
+        row: Math.round((clientY - offset.current.y) / CELL_SIZE),
       });
 
     forceGlobalOverlapRecalc();
@@ -316,7 +313,7 @@ setIsTouchingPanel(touching);
       col: finalCol,
       row: finalRow,
     });
-
+  
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setTimeout(() => {
@@ -512,13 +509,6 @@ setIsTouchingPanel(touching);
     return () => window.removeEventListener("reset-piece", handler);
   }, [id, initialX, initialY]);
 
-  const effectiveZoom =
-  isTouchingPanel ? 1 : zoom;
-
-  const gridCellSize =
-  (dragging.current || !isTouchingPanel)
-    ? CELL_SIZE * effectiveZoom
-    : CELL_SIZE * 0.4;
 
   return (
     <div
@@ -531,12 +521,11 @@ setIsTouchingPanel(touching);
         pointerEvents: "none",
         position: "absolute",
         left: hasBeenMoved
-        ? gridPos.col * gridCellSize
-        : initialX,
-
+        ? gridPos.col * CELL_SIZE
+        : (isTouchingPanel ? initialX / zoom : initialX),
         top: hasBeenMoved
-        ? gridPos.row * gridCellSize
-        : initialY,
+        ? gridPos.row * CELL_SIZE
+        : (isTouchingPanel ? initialY / zoom : initialY),
       
         display: "grid",
       
@@ -552,11 +541,15 @@ setIsTouchingPanel(touching);
             : activePieceId === id
               ? 5000
               : 1,
-              transform: `scale(${
-                dragging.current || !isTouchingPanel
-                  ? effectiveZoom
-                  : 0.4
-              })`,
+              transform: (() => {
+                const baseScale =
+                  dragging.current || !isTouchingPanel ? 1 : 0.4;
+              
+                const zoomCorrection =
+                  isTouchingPanel ? 1 / zoom : 1;
+              
+                return `scale(${baseScale * zoomCorrection})`;
+              })(),
               transformOrigin: "top left",
         transition: "transform 0.15s ease",
       }}

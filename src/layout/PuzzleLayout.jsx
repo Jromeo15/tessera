@@ -40,7 +40,6 @@ export default function PuzzleLayout({
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
   const panelRef = useRef(null);
-  const boardRef = useRef(null);
   const [panelVisible, setPanelVisible] = useState(true);
   const [hiddenPieces, setHiddenPieces] = useState({});
   const [panelReady, setPanelReady] = useState(false);
@@ -455,7 +454,6 @@ initialX = baseX + row2Offset;
     zIndex: 50,
   }}
 >
-
   {/*
 <button
   onClick={zoomOut}
@@ -524,38 +522,17 @@ initialX = baseX + row2Offset;
       : children
   ) : (
 
-<div
+    <div
   style={{
     position: "relative",
     zIndex: 50,
-    transform: "translateY(-80px)",
+    transform: `translateY(-80px) scale(${zoom})`,
+    transformOrigin: "center center",
+    transition: "transform 0.2s ease",
   }}
 >
-<div
-  style={{
-    transition: "transform .2s ease",
-  }}
->
-  <Board
-    key={resetKey}
-    boardRef={boardRef}
-    zoom={zoom}
-  />
-</div>
-
-<div
-    style={{
-        position: "absolute",
-        inset: 0,
-
-        transformOrigin: "top left",
-        transition: "transform .2s ease",
-
-        pointerEvents: "none",
-    }}
->
-
-<div
+<Board key={resetKey}>
+  <div
   style={{
     position: "relative",
     width: "100%",
@@ -583,7 +560,6 @@ const delayedCheck = () => {
 
   const el = document.querySelector(`.piece-${p.id}`);
   const shouldHide = !panelVisible && isPieceTouchingPanel(el);
-  const touchingPanel = isPieceTouchingPanel(el);
 
   if (shouldHide && !hiddenPieces[p.id]) {
     setHiddenPieces(prev => ({
@@ -607,7 +583,6 @@ return (
       hiddenPieces[p.id] && !panelVisible
         ? "none"
         : "block",
-
   }}
 >
 <Piece
@@ -616,7 +591,6 @@ return (
   shape={p.shape}
   initialX={initialX}
   initialY={initialY}
-  boardRef={boardRef}
   zoom={zoom}
   onDrop={() => {
     requestAnimationFrame(() => {
@@ -643,8 +617,8 @@ return (
   </div>
 );
 })}
-</div>
   </div>
+</Board>
 </div>
   )}
   
