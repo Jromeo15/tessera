@@ -490,6 +490,14 @@ setIsTouchingPanel(touching);
 
   useEffect(() => {
     updatePanelTouch();
+  
+    requestAnimationFrame(() => {
+      updatePanelTouch();
+    });
+  
+    setTimeout(() => {
+      updatePanelTouch();
+    }, 50);
   }, [gridPos, rot]);
 
   useEffect(() => {
