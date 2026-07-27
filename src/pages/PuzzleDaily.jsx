@@ -167,54 +167,6 @@ export default function PuzzleDaily({ onBack }) {
 
   };
 
-  const checkVictory = () => {
-    if (solvedRef.current) return;
-  
-    const board = document.querySelector(".board");
-    if (!board) return;
-  
-    const boardRect = board.getBoundingClientRect();
-  
-    const grid = Array.from({ length: BOARD_ROWS }, () =>
-      Array.from({ length: BOARD_COLS }, () => [])
-    );
-  
-    document.querySelectorAll(".piece").forEach((piece) => {
-      piece.querySelectorAll(".piece-cell").forEach((cell) => {
-        const rect = cell.getBoundingClientRect();
-  
-        const zoom =
-          parseFloat(
-            getComputedStyle(document.body).getPropertyValue("--zoom")
-          ) || 1;
-  
-        const x = (rect.left - boardRect.left) / zoom;
-        const y = (rect.top - boardRect.top) / zoom;
-  
-        const col = Math.round(x / CELL_SIZE);
-        const row = Math.round(y / CELL_SIZE);
-  
-        if (
-          row >= 0 &&
-          row < BOARD_ROWS &&
-          col >= 0 &&
-          col < BOARD_COLS
-        ) {
-          grid[row][col].push("1");
-        }
-      });
-    });
-  
-    const win = grid.every((row) =>
-      row.every((cell) => cell.length > 0)
-    );
-  
-    if (!win) return;
-  
-    solvedRef.current = true;
-    setFinished(true);
-  };
-
   const reset = () => {
     setResetKey((k) => k + 1);
   };
@@ -253,10 +205,12 @@ export default function PuzzleDaily({ onBack }) {
         showVictory={finished}
         onCloseVictory={() => {}}
         shapes={pieces.map((p) => p.shape)}
-        pieceProps={{
-          onDrop: checkVictory,
-          onRotate: checkVictory,
-        }}
+        onVictory={() => {
+            if (solvedRef.current) return;
+        
+            solvedRef.current = true;
+            setFinished(true);
+          }}
       />
 
       {createPortal(

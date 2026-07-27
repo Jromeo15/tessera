@@ -318,7 +318,7 @@ export default function PuzzleRandom({
 
   return (
 <PuzzleLayout
-  title="Puzzle 1"
+  title="Puzzle Random"
   onBack={onBack}
   onReset={() => {
     setShowVictory(false);

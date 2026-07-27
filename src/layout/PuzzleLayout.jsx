@@ -29,6 +29,7 @@ export default function PuzzleLayout({
   isFilled,
   shapes,
   pieceProps = {},
+  onVictory,
 }) {
   let stp = 0;
   const { user } = useAuth();
@@ -208,8 +209,12 @@ initialX = baseX + row2Offset;
     const win = grid.every(row =>
       row.every(cell => isFilledFn(cell))
     );
-
+    
     setShowVictory(win);
+    
+    if (win) {
+      onVictory?.();
+    }
   };
 
   const zoomOut = () => {
@@ -397,7 +402,13 @@ initialX = baseX + row2Offset;
 {/* TÍTULO */}
 <div className="puzzleTitleWrap">
   <div className="puzzleTitleBlock">
-  <h1 className={`puzzleTitle ${title === "Contrarreloj" ? "puzzleTitle--small" : ""}`}>
+  <h1
+    className={`puzzleTitle ${
+      title === "Contrarreloj" || title === "Puzle diario"
+        ? "puzzleTitle--small"
+        : ""
+    }`}
+  >
     {title}
   </h1>
     <div className="puzzleTitleLine" />
