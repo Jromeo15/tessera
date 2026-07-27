@@ -724,12 +724,22 @@ onPointerDown={(e) => {
     }, 180);
   } else {
     setReappearingPieces({ ...hiddenPieces });
-
+  
     setTimeout(() => {
       setReappearingPieces({});
     }, 300);
-
+  
     setHiddenPieces({});
+  
+    setTimeout(() => {
+      document.body.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          clientX: 10,
+          clientY: 10,
+        })
+      );
+    }, 500);
   }
 
   setPanelVisible(!panelVisible);
