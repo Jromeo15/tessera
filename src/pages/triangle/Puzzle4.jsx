@@ -4,9 +4,9 @@ import { SHAPES } from "./shapes/shapes2";
 export default function App({ onBack }) {
   return (
     <PuzzleLayout
-      title="Puzzle 2"
+      title="Puzzle 4"
       category="triangle"
-      puzzleIndex={2}
+      puzzleIndex={4}
       shapes={SHAPES}
       onBack={onBack}
     />
