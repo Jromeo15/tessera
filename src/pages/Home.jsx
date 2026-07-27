@@ -1,10 +1,11 @@
 import { useState } from "react";
 import logo from "../../images/logo.png";
-import { Grid, Trophy, Play, Shuffle, Medal } from "lucide-react";
+import { Grid, Trophy, CalendarDays, Shuffle, Medal } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home({
   onLevels,
+  onDaily,
   onTimeAttack,
   onRandom,
   onLeaderboard,
@@ -70,6 +71,14 @@ export default function Home({
         >
           <Grid size={18} style={{ marginRight: 8 }} />
           Niveles
+        </button>
+
+        <button
+          className="home__button"
+          onClick={onDaily}
+        >
+          <CalendarDays size={18} style={{ marginRight: 8 }} />
+          Puzle diario
         </button>
 
         <button

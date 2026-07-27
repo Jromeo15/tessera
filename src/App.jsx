@@ -8,6 +8,8 @@ import PuzzleTimeAttack from "./pages/PuzzleTimeAttack";
 import TimeAttack from "./pages/TimeAttack";
 import UserMenu from "./components/UserMenu";
 import Leaderboard from "./pages/Leaderboard";
+import Daily from "./pages/Daily";
+import PuzzleDaily from "./pages/PuzzleDaily";
 
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
@@ -43,11 +45,12 @@ export default function App() {
 
   let content = null;
 
-  // 🔥 NUEVO: screens donde NO queremos usuario
   const isPuzzleScreen =
     screen === "puzzle" ||
     screen === "random" ||
-    screen === "timeattack-game";
+    screen === "timeattack-game" ||
+    screen === "daily" ||
+    screen === "daily-game";
 
   // ---------------- HOME ----------------
   if (screen === "home") {
@@ -55,6 +58,7 @@ export default function App() {
       <Home
         onLevels={() => setScreen("levels")}
         onTimeAttack={() => setScreen("timeattack")}
+        onDaily={() => setScreen("daily")}
         onRandom={(count) => {
           setRandomCount(count);
           setScreen("random");
@@ -129,6 +133,25 @@ export default function App() {
     content = (
       <PuzzleRandom
         piecesCount={randomCount}
+        onBack={() => setScreen("home")}
+      />
+    );
+  }
+
+  // ---------------- DAILY ----------------
+  else if (screen === "daily") {
+    content = (
+      <Daily
+        onBack={() => setScreen("home")}
+        onStart={() => setScreen("daily-game")}
+      />
+    );
+  }
+
+  // ---------------- DAILY GAME ----------------
+  else if (screen === "daily-game") {
+    content = (
+      <PuzzleDaily
         onBack={() => setScreen("home")}
       />
     );
