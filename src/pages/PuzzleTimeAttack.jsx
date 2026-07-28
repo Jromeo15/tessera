@@ -25,6 +25,16 @@ const COLORS = [
 
 // -------------------- GENERADOR ORIGINAL (NO TOCADO) --------------------
 
+const rotateCellType = (value) => {
+  switch (value) {
+    case 3: return 5;
+    case 5: return 6;
+    case 6: return 4;
+    case 4: return 3;
+    default: return value;
+  }
+};
+
 const rotateMatrix = (matrix) => {
   const rows = matrix.length;
   const cols = matrix[0].length;
@@ -35,14 +45,266 @@ const rotateMatrix = (matrix) => {
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      rotated[c][rows - 1 - r] = matrix[r][c];
+      rotated[c][rows - 1 - r] =
+        rotateCellType(matrix[r][c]);
     }
   }
 
   return rotated;
 };
 
-const generatePieces = (count) => {
+const createSquareShape = (piece) => {
+  const minR = Math.min(...piece.cells.map(([r]) => r));
+  const minC = Math.min(...piece.cells.map(([, c]) => c));
+  const maxR = Math.max(...piece.cells.map(([r]) => r));
+  const maxC = Math.max(...piece.cells.map(([, c]) => c));
+
+  const shape = Array.from(
+    { length: maxR - minR + 1 },
+    () => Array(maxC - minC + 1).fill(0)
+  );
+
+  piece.cells.forEach(([r, c]) => {
+    shape[r - minR][c - minC] = 1;
+  });
+
+  return shape;
+};
+
+const addDiagonalBorders = (shapes, pieces, grid) => {
+
+  const result = shapes.map(shape =>
+    shape.map(row => [...row])
+  );
+
+  const hasCell = (matrix, r, c) => {
+    return (
+      r >= 0 &&
+      r < matrix.length &&
+      c >= 0 &&
+      c < matrix[0].length &&
+      matrix[r][c] === 1
+    );
+  };
+
+  const hasValue = (matrix, r, c, values) => {
+    return (
+      r >= 0 &&
+      r < matrix.length &&
+      c >= 0 &&
+      c < matrix[0].length &&
+      values.includes(matrix[r][c])
+    );
+  };
+
+  // ============================================
+  // COMPROBACIONES DE APOYO
+  // ============================================
+// 3:
+// izquierda + abajo
+const canPlace3 = (matrix, r, c) => {
+
+  const left = hasValue(matrix, r, c - 1, [1, 4]);
+  const down = hasValue(matrix, r + 1, c, [1, 5]);
+
+  return (
+    left &&
+    down &&
+    (hasCell(matrix, r, c - 1) || hasCell(matrix, r + 1, c)) &&
+    !hasCell(matrix, r - 1, c) &&
+    !hasCell(matrix, r, c + 1)
+  );
+
+};
+
+// 6:
+// arriba + derecha
+const canPlace6 = (matrix, r, c) => {
+
+  const up = hasValue(matrix, r - 1, c, [1, 4]);
+  const right = hasValue(matrix, r, c + 1, [1, 5]);
+
+  return (
+    up &&
+    right &&
+    (hasCell(matrix, r - 1, c) || hasCell(matrix, r, c + 1)) &&
+    !hasCell(matrix, r + 1, c) &&
+    !hasCell(matrix, r, c - 1)
+  );
+
+};
+
+// 4:
+// abajo + derecha
+const canPlace4 = (matrix, r, c) => {
+
+  const down = hasValue(matrix, r + 1, c, [1, 5]);
+  const right = hasValue(matrix, r, c + 1, [1, 6]);
+
+  return (
+    down &&
+    right &&
+    (hasCell(matrix, r + 1, c) || hasCell(matrix, r, c + 1)) &&
+    !hasCell(matrix, r - 1, c) &&
+    !hasCell(matrix, r, c - 1)
+  );
+
+};
+
+// 5:
+// izquierda + arriba
+const canPlace5 = (matrix, r, c) => {
+
+  const left = hasValue(matrix, r, c - 1, [1, 3]);
+  const up = hasValue(matrix, r - 1, c, [1, 6]);
+
+  return (
+    left &&
+    up &&
+    (hasCell(matrix, r, c - 1) || hasCell(matrix, r - 1, c)) &&
+    !hasCell(matrix, r + 1, c) &&
+    !hasCell(matrix, r, c + 1)
+  );
+
+};
+
+  pieces.forEach((piece, index) => {
+    const minRow = Math.min(...piece.cells.map(([r]) => r));
+    const minCol = Math.min(...piece.cells.map(([, c]) => c));
+    piece.cells.forEach(([r, c]) => {
+      let sr = r - minRow;
+      let sc = c - minCol;
+
+      // =================================================
+      // BORDE DERECHO
+      // 3 -> 6
+      // =================================================
+      if (
+        c < BOARD_COLS - 1 &&
+        grid[r][c + 1] !== grid[r][c]
+      ) {
+
+          const neighbourId = grid[r][c + 1];
+          const neighbour = pieces[neighbourId];
+          const nMinRow =
+            Math.min(...neighbour.cells.map(([rr]) => rr));
+
+          const nMinCol =
+            Math.min(...neighbour.cells.map(([, cc]) => cc));
+
+          const nr = r - nMinRow;
+          const nc = (c + 1) - nMinCol;
+
+          // ampliar columna si hace falta
+          if (sc + 1 >= result[index][0].length) {
+
+            result[index].forEach(row =>
+              row.push(0)
+            );
+          }
+
+          // comprobar las DOS piezas antes de tocar nada
+
+          if (
+            canPlace3(result[index], sr, sc + 1) &&
+            canPlace6(result[neighbourId], nr, nc)
+          ) {
+
+            result[index][sr][sc + 1] = 3;
+            result[neighbourId][nr][nc] = 6;
+          }
+        
+      }
+
+      // =================================================
+      // BORDE SUPERIOR
+      // 4 -> 5
+      // =================================================
+      if (
+        r > 0 &&
+        grid[r - 1][c] !== grid[r][c]
+      ) {
+        if (Math.random() < 0.5) {
+          const neighbourId = grid[r - 1][c];
+          const neighbour = pieces[neighbourId];
+          const nMinRow =
+            Math.min(...neighbour.cells.map(([rr]) => rr));
+          const nMinCol =
+            Math.min(...neighbour.cells.map(([, cc]) => cc));
+          const nr = (r - 1) - nMinRow;
+          const nc = c - nMinCol;
+          // ampliar fila arriba si hace falta
+          if (sr === 0) {
+
+            result[index].unshift(
+              Array(result[index][0].length).fill(0)
+            );
+            sr++;
+          }
+
+          if (
+            canPlace4(result[index], sr - 1, sc) &&
+            canPlace5(result[neighbourId], nr, nc)
+          ) {
+            result[index][sr - 1][sc] = 4;
+
+            result[neighbourId][nr][nc] = 5;
+
+          }
+        }
+      }
+    });
+
+  });
+  console.log("========== RESULTADO ANTES RETURN ==========");
+  result.forEach((shape, index) => {
+    console.log("PIEZA", index + 1);
+    console.table(shape);
+  });
+  // detectar 1s aislados
+  result.forEach((shape, index) => {
+    shape.forEach((row, r) => {
+      row.forEach((value, c) => {
+        if (value !== 1) return;
+        const neighbours = [
+          [r - 1, c],
+          [r + 1, c],
+          [r, c - 1],
+          [r, c + 1],
+        ];
+        const hasNeighbour = neighbours.some(([nr, nc]) => {
+          return (
+            nr >= 0 &&
+            nr < shape.length &&
+            nc >= 0 &&
+            nc < shape[0].length &&
+            (
+              shape[nr][nc] === 1 ||
+              shape[nr][nc] === 3 ||
+              shape[nr][nc] === 4 ||
+              shape[nr][nc] === 5 ||
+              shape[nr][nc] === 6
+            )
+          );
+        });
+        if (!hasNeighbour) {
+          console.warn(
+            "⚠️ 1 AISLADO EN PIEZA",
+            index + 1,
+            "fila:",
+            r,
+            "columna:",
+            c
+          );
+          console.table(shape);
+        }
+      });
+    });
+  });
+  return result;
+};
+
+const generatePieces = (count, difficulty) => {
   const grid = Array.from({ length: BOARD_ROWS }, () =>
     Array(BOARD_COLS).fill(null)
   );
@@ -74,7 +336,7 @@ const generatePieces = (count) => {
         (r > 0 && grid[r - 1][c] === null) ||
         (r < BOARD_ROWS - 1 && grid[r + 1][c] === null) ||
         (c > 0 && grid[r][c - 1] === null) ||
-        (c < BOARD_ROWS - 1 && grid[r][c + 1] === null)
+        (c < BOARD_COLS - 1 && grid[r][c + 1] === null)
       )
     );
 
@@ -114,25 +376,24 @@ const generatePieces = (count) => {
     remaining--;
   }
 
-  return pieces.map((p) => {
-    const minR = Math.min(...p.cells.map(([r]) => r));
-    const minC = Math.min(...p.cells.map(([, c]) => c));
-    const maxR = Math.max(...p.cells.map(([r]) => r));
-    const maxC = Math.max(...p.cells.map(([, c]) => c));
+  // --------------------------------------------
+  // Crear shapes
+  // --------------------------------------------
+  const shapes = pieces.map(createSquareShape);
 
-    const shape = Array.from(
-      { length: maxR - minR + 1 },
-      () => Array(maxC - minC + 1).fill(0)
-    );
+  // Añadir diagonales solo en medium
+  const finalShapes =
+    difficulty === "medium"
+      ? addDiagonalBorders(shapes, pieces, grid)
+      : shapes;
 
-    p.cells.forEach(([r, c]) => {
-      shape[r - minR][c - minC] = 1;
-    });
+  // Rotar piezas aleatoriamente
+  return pieces.map((p, i) => {
+    let rotatedShape = finalShapes[i];
 
-    let rotatedShape = shape;
     const rotations = Math.floor(Math.random() * 4);
 
-    for (let i = 0; i < rotations; i++) {
+    for (let j = 0; j < rotations; j++) {
       rotatedShape = rotateMatrix(rotatedShape);
     }
 
@@ -146,12 +407,13 @@ const generatePieces = (count) => {
 
 // -------------------- GAME --------------------
 
-export default function PuzzleTimeAttack({ onBack }) {
+export default function PuzzleTimeAttack({ onBack, config }) {
   const { user } = useAuth();
+  const difficulty = config?.difficulty ?? "easy";
 
   const [piecesCount, setPiecesCount] = useState(START_PIECES);
   const [pieces, setPieces] = useState(() =>
-    generatePieces(START_PIECES)
+    generatePieces(START_PIECES, difficulty)
   );
 
   const [resetKey, setResetKey] = useState(0);
@@ -189,6 +451,7 @@ export default function PuzzleTimeAttack({ onBack }) {
       await saveTimeAttackScore({
         userId: user.id,
         score,
+        difficulty,
       });
     }
 
@@ -244,7 +507,7 @@ export default function PuzzleTimeAttack({ onBack }) {
 
     setScore((s) => s + 1);
     setPiecesCount(next);
-    setPieces(generatePieces(next));
+    setPieces(generatePieces(next, difficulty));
     setResetKey((k) => k + 1);
     requestAnimationFrame(() => {
       advancingRef.current = false;
@@ -312,12 +575,17 @@ export default function PuzzleTimeAttack({ onBack }) {
         }}
       />
   
-      {createPortal(
-        <div className="timeAttackHud">
-          ⏱ {formatTime(timeLeft)} · ⭐ {score}
-        </div>,
-        document.body
-      )}
+    {createPortal(
+      <div className="timeAttackHud">
+        {difficulty === "easy" && "🟢 Fácil"}
+        {difficulty === "medium" && "🟡 Medio"}
+        {difficulty === "hard" && "🔴 Difícil"}
+
+        {" · "}⏱ {formatTime(timeLeft)}
+        {" · "}⭐ {score}
+      </div>,
+      document.body
+    )}
     </>
   );
 }

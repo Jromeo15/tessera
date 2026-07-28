@@ -7,23 +7,31 @@ export default function TimeAttack({ onBack, onStart }) {
   const [difficulty, setDifficulty] = useState("easy");
 
   const { user } = useAuth();
-  const [bestScore, setBestScore] = useState(0);
+
+  const [bestEasy, setBestEasy] = useState(0);
+  const [bestMedium, setBestMedium] = useState(0);
+  const [bestHard, setBestHard] = useState(0);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function load() {
       if (!user) {
-        setBestScore(0);
+        setBestEasy(0);
+        setBestMedium(0);
+        setBestHard(0);
         return;
       }
 
       setLoading(true);
 
-      const res = await getBestTimeAttackScore(user.id);
+      const easy = await getBestTimeAttackScore(user.id, "easy");
+      const medium = await getBestTimeAttackScore(user.id, "medium");
+      const hard = await getBestTimeAttackScore(user.id, "hard");
 
-      console.log("TIME ATTACK BEST SCORE RESPONSE:", res);
-
-      setBestScore(res.bestScore ?? 0);
+      setBestEasy(easy.bestScore ?? 0);
+      setBestMedium(medium.bestScore ?? 0);
+      setBestHard(hard.bestScore ?? 0);
 
       setLoading(false);
     }
@@ -65,10 +73,18 @@ export default function TimeAttack({ onBack, onStart }) {
         </select>
 
         {user && (
-          <p style={{ textAlign: "center", marginTop: 10 }}>
-            🏆 Mejor puntuación:{" "}
-            {loading ? "..." : bestScore}
-          </p>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: 12,
+              lineHeight: 1.8,
+            }}
+          >
+            <strong>🏆 Tus mejores puntuaciones</strong>
+            <div>Fácil: {loading ? "..." : bestEasy}</div>
+            <div>Medio: {loading ? "..." : bestMedium}</div>
+            <div>Difícil: {loading ? "..." : bestHard}</div>
+          </div>
         )}
 
         {!user && (

@@ -59,77 +59,266 @@ const getNeighbors = (idx, poolSet) => {
     .filter((i) => poolSet.has(i));
 };
 
-/**
- * construye una pieza CONECTADA
- */
-const buildConnectedPiece = (pool, size) => {
-  const poolSet = new Set(pool);
-
-  const used = [];
-
-  const start =
-    pool[Math.floor(Math.random() * pool.length)];
-
-  used.push(start);
-  poolSet.delete(start);
-
-  while (used.length < size) {
-    const candidates = [];
-
-    for (const u of used) {
-      candidates.push(...getNeighbors(u, poolSet));
-    }
-
-    if (candidates.length === 0) break;
-
-    const next =
-      candidates[Math.floor(Math.random() * candidates.length)];
-
-    used.push(next);
-    poolSet.delete(next);
+const rotateCellType = (value) => {
+  switch (value) {
+    case 3: return 5;
+    case 5: return 6;
+    case 6: return 4;
+    case 4: return 3;
+    default: return value;
   }
-
-  return used;
-};
-
-/**
- * convierte celdas a matriz shape
- */
-const buildShape = (cells) => {
-  const coords = cells.map(toGrid);
-
-  const minRow = Math.min(...coords.map(c => c.row));
-  const minCol = Math.min(...coords.map(c => c.col));
-  const maxRow = Math.max(...coords.map(c => c.row));
-  const maxCol = Math.max(...coords.map(c => c.col));
-
-  const shape = Array.from(
-    { length: maxRow - minRow + 1 },
-    () => Array(maxCol - minCol + 1).fill(0)
-  );
-
-  coords.forEach(({ row, col }) => {
-    shape[row - minRow][col - minCol] = 1;
-  });
-
-  return shape;
 };
 
 const rotateMatrix = (matrix) => {
   const rows = matrix.length;
   const cols = matrix[0].length;
 
-  const rotated = Array.from({ length: cols }, () =>
-    Array(rows).fill(0)
+  const rotated = Array.from(
+    { length: cols },
+    () => Array(rows).fill(0)
   );
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      rotated[c][rows - 1 - r] = matrix[r][c];
+      rotated[c][rows - 1 - r] =
+        rotateCellType(matrix[r][c]);
     }
   }
 
   return rotated;
+};
+
+const addDiagonalBorders = (shapes, pieces, grid) => {
+
+  const result = shapes.map(shape =>
+    shape.map(row => [...row])
+  );
+
+  const hasCell = (matrix, r, c) => {
+    return (
+      r >= 0 &&
+      r < matrix.length &&
+      c >= 0 &&
+      c < matrix[0].length &&
+      matrix[r][c] === 1
+    );
+  };
+
+  const hasValue = (matrix, r, c, values) => {
+    return (
+      r >= 0 &&
+      r < matrix.length &&
+      c >= 0 &&
+      c < matrix[0].length &&
+      values.includes(matrix[r][c])
+    );
+  };
+
+  // ============================================
+  // COMPROBACIONES DE APOYO
+  // ============================================
+// 3:
+// izquierda + abajo
+const canPlace3 = (matrix, r, c) => {
+
+  const left = hasValue(matrix, r, c - 1, [1, 4]);
+  const down = hasValue(matrix, r + 1, c, [1, 5]);
+
+  return (
+    left &&
+    down &&
+    (hasCell(matrix, r, c - 1) || hasCell(matrix, r + 1, c)) &&
+    !hasCell(matrix, r - 1, c) &&
+    !hasCell(matrix, r, c + 1)
+  );
+
+};
+
+// 6:
+// arriba + derecha
+const canPlace6 = (matrix, r, c) => {
+
+  const up = hasValue(matrix, r - 1, c, [1, 4]);
+  const right = hasValue(matrix, r, c + 1, [1, 5]);
+
+  return (
+    up &&
+    right &&
+    (hasCell(matrix, r - 1, c) || hasCell(matrix, r, c + 1)) &&
+    !hasCell(matrix, r + 1, c) &&
+    !hasCell(matrix, r, c - 1)
+  );
+
+};
+
+// 4:
+// abajo + derecha
+const canPlace4 = (matrix, r, c) => {
+
+  const down = hasValue(matrix, r + 1, c, [1, 5]);
+  const right = hasValue(matrix, r, c + 1, [1, 6]);
+
+  return (
+    down &&
+    right &&
+    (hasCell(matrix, r + 1, c) || hasCell(matrix, r, c + 1)) &&
+    !hasCell(matrix, r - 1, c) &&
+    !hasCell(matrix, r, c - 1)
+  );
+
+};
+
+// 5:
+// izquierda + arriba
+const canPlace5 = (matrix, r, c) => {
+
+  const left = hasValue(matrix, r, c - 1, [1, 3]);
+  const up = hasValue(matrix, r - 1, c, [1, 6]);
+
+  return (
+    left &&
+    up &&
+    (hasCell(matrix, r, c - 1) || hasCell(matrix, r - 1, c)) &&
+    !hasCell(matrix, r + 1, c) &&
+    !hasCell(matrix, r, c + 1)
+  );
+
+};
+
+  pieces.forEach((piece, index) => {
+    const minRow = Math.min(...piece.cells.map(([r]) => r));
+    const minCol = Math.min(...piece.cells.map(([, c]) => c));
+    piece.cells.forEach(([r, c]) => {
+      let sr = r - minRow;
+      let sc = c - minCol;
+
+      // =================================================
+      // BORDE DERECHO
+      // 3 -> 6
+      // =================================================
+      if (
+        c < BOARD_COLS - 1 &&
+        grid[r][c + 1] !== grid[r][c]
+      ) {
+
+          const neighbourId = grid[r][c + 1];
+          const neighbour = pieces[neighbourId];
+          const nMinRow =
+            Math.min(...neighbour.cells.map(([rr]) => rr));
+
+          const nMinCol =
+            Math.min(...neighbour.cells.map(([, cc]) => cc));
+
+          const nr = r - nMinRow;
+          const nc = (c + 1) - nMinCol;
+
+          // ampliar columna si hace falta
+          if (sc + 1 >= result[index][0].length) {
+
+            result[index].forEach(row =>
+              row.push(0)
+            );
+          }
+
+          // comprobar las DOS piezas antes de tocar nada
+
+          if (
+            canPlace3(result[index], sr, sc + 1) &&
+            canPlace6(result[neighbourId], nr, nc)
+          ) {
+
+            result[index][sr][sc + 1] = 3;
+            result[neighbourId][nr][nc] = 6;
+          }
+        
+      }
+
+      // =================================================
+      // BORDE SUPERIOR
+      // 4 -> 5
+      // =================================================
+      if (
+        r > 0 &&
+        grid[r - 1][c] !== grid[r][c]
+      ) {
+        if (Math.random() < 0.5) {
+          const neighbourId = grid[r - 1][c];
+          const neighbour = pieces[neighbourId];
+          const nMinRow =
+            Math.min(...neighbour.cells.map(([rr]) => rr));
+          const nMinCol =
+            Math.min(...neighbour.cells.map(([, cc]) => cc));
+          const nr = (r - 1) - nMinRow;
+          const nc = c - nMinCol;
+          // ampliar fila arriba si hace falta
+          if (sr === 0) {
+
+            result[index].unshift(
+              Array(result[index][0].length).fill(0)
+            );
+            sr++;
+          }
+
+          if (
+            canPlace4(result[index], sr - 1, sc) &&
+            canPlace5(result[neighbourId], nr, nc)
+          ) {
+            result[index][sr - 1][sc] = 4;
+
+            result[neighbourId][nr][nc] = 5;
+
+          }
+        }
+      }
+    });
+
+  });
+  console.log("========== RESULTADO ANTES RETURN ==========");
+  result.forEach((shape, index) => {
+    console.log("PIEZA", index + 1);
+    console.table(shape);
+  });
+  // detectar 1s aislados
+  result.forEach((shape, index) => {
+    shape.forEach((row, r) => {
+      row.forEach((value, c) => {
+        if (value !== 1) return;
+        const neighbours = [
+          [r - 1, c],
+          [r + 1, c],
+          [r, c - 1],
+          [r, c + 1],
+        ];
+        const hasNeighbour = neighbours.some(([nr, nc]) => {
+          return (
+            nr >= 0 &&
+            nr < shape.length &&
+            nc >= 0 &&
+            nc < shape[0].length &&
+            (
+              shape[nr][nc] === 1 ||
+              shape[nr][nc] === 3 ||
+              shape[nr][nc] === 4 ||
+              shape[nr][nc] === 5 ||
+              shape[nr][nc] === 6
+            )
+          );
+        });
+        if (!hasNeighbour) {
+          console.warn(
+            "⚠️ 1 AISLADO EN PIEZA",
+            index + 1,
+            "fila:",
+            r,
+            "columna:",
+            c
+          );
+          console.table(shape);
+        }
+      });
+    });
+  });
+  return result;
 };
 
 /**
@@ -232,38 +421,51 @@ const generatePieces = (count) => {
   // -------------------------
   // 3. convertir a shapes
   // -------------------------
-  return pieces.map((p) => {
+  const shapes = pieces.map((p) => {
+
     const minR = Math.min(...p.cells.map(([r]) => r));
     const minC = Math.min(...p.cells.map(([, c]) => c));
-
+  
     const maxR = Math.max(...p.cells.map(([r]) => r));
     const maxC = Math.max(...p.cells.map(([, c]) => c));
-
+  
     const shape = Array.from(
       { length: maxR - minR + 1 },
       () => Array(maxC - minC + 1).fill(0)
     );
-
+  
     p.cells.forEach(([r, c]) => {
       shape[r - minR][c - minC] = 1;
     });
-
-    let rotatedShape = shape;
-
-    // 0, 1, 2 o 3 rotaciones (0º, 90º, 180º, 270º)
-    const rotations = Math.floor(Math.random() * 4);
-    
-    for (let i = 0; i < rotations; i++) {
-      rotatedShape = rotateMatrix(rotatedShape);
-    }
-    
-    return {
-      id: p.id,
-      color: p.color,
-      shape: rotatedShape,
-      shapeMode: "square",
-    };
+  
+  
+    return shape;
   });
+  
+  const borderedShapes = addDiagonalBorders(
+    shapes,
+    pieces,
+    grid
+  );
+
+  const rotatedShapes = borderedShapes.map(shape => {
+    let result = shape;
+  
+    const rotations = Math.floor(Math.random() * 4);
+  
+    for (let i = 0; i < rotations; i++) {
+      result = rotateMatrix(result);
+    }
+  
+    return result;
+  });
+  
+  return pieces.map((p, i) => ({
+    id: p.id,
+    color: p.color,
+    shape: rotatedShapes[i],
+    shapeMode: "square",
+  }));
 };
 
 export default function PuzzleRandom({
@@ -278,43 +480,6 @@ export default function PuzzleRandom({
     generatePieces(piecesCount)
   );
 
-  const checkVictory = () => {
-    const board = document.querySelector(".board");
-    if (!board) return;
-
-    const grid = Array.from({ length: BOARD_ROWS }, () =>
-      Array(BOARD_COLS).fill(false)
-    );
-
-    const boardRect = board.getBoundingClientRect();
-    const piecesDom = document.querySelectorAll(".piece");
-
-    piecesDom.forEach((piece) => {
-      const cells = piece.querySelectorAll(".piece-cell");
-
-      cells.forEach((cell) => {
-        const rect = cell.getBoundingClientRect();
-
-        const x = rect.left + rect.width / 2 - boardRect.left;
-        const y = rect.top + rect.height / 2 - boardRect.top;
-
-        const col = Math.floor(x / CELL_SIZE);
-        const row = Math.floor(y / CELL_SIZE);
-
-        if (
-          row >= 0 &&
-          row < BOARD_ROWS &&
-          col >= 0 &&
-          col < BOARD_COLS
-        ) {
-          grid[row][col] = true;
-        }
-      });
-    });
-
-    const win = grid.every((row) => row.every(Boolean));
-    setShowVictory(win);
-  };
 
   return (
 <PuzzleLayout

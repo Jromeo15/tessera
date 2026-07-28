@@ -1,8 +1,24 @@
 import { supabase } from "./supabaseClient";
 
-export async function saveTimeAttackScore({ userId, score }) {
+const scoreTables = {
+  easy: "time_attack_scores",
+  medium: "time_attack_scores_medium",
+  hard: "time_attack_scores_hard",
+};
+
+const leaderboardTables = {
+  easy: "time_attack_leaderboard",
+  medium: "time_attack_leaderboard_medium",
+  hard: "time_attack_leaderboard_hard",
+};
+
+export async function saveTimeAttackScore({
+  userId,
+  score,
+  difficulty = "easy",
+}) {
   const { error } = await supabase
-    .from("time_attack_scores")
+    .from(scoreTables[difficulty])
     .insert([
       {
         user_id: userId,
@@ -13,9 +29,12 @@ export async function saveTimeAttackScore({ userId, score }) {
   return { error };
 }
 
-export async function getBestTimeAttackScore(userId) {
+export async function getBestTimeAttackScore(
+  userId,
+  difficulty = "easy"
+) {
   const { data, error } = await supabase
-    .from("time_attack_scores")
+    .from(scoreTables[difficulty])
     .select("score")
     .eq("user_id", userId)
     .order("score", { ascending: false });
@@ -29,9 +48,11 @@ export async function getBestTimeAttackScore(userId) {
   };
 }
 
-export async function getLeaderboard() {
+export async function getLeaderboard(
+  difficulty = "easy"
+) {
   const { data, error } = await supabase
-    .from("time_attack_leaderboard")
+    .from(leaderboardTables[difficulty])
     .select("*")
     .order("best_score", { ascending: false })
     .limit(10);
