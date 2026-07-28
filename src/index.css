@@ -1368,7 +1368,7 @@ code {
 
 .timeAttackHud {
   position: fixed;
-  top: 80px;
+  top: 90px;
   left: 50%;
   transform: translateX(-50%);
 
