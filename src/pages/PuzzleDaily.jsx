@@ -5,9 +5,12 @@ import { CELL_SIZE } from "../constants";
 import PuzzleLayout from "../layout/PuzzleLayout";
 
 import {
-  getDailyPuzzle,
-  createDailyPuzzle,
-} from "../lib/dailyPuzzle";
+    getDailyPuzzle,
+    createDailyPuzzle,
+    setDailyCompleted,
+  } from "../lib/dailyPuzzle";
+  
+import { useAuth } from "../context/AuthContext";
 
 import { generatePieces } from "../lib/puzzleGenerator";
 
@@ -44,6 +47,8 @@ function getTodayId() {
   }
 
 export default function PuzzleDaily({ onBack }) {
+
+  const { user } = useAuth();
 
   const [pieces, setPieces] = useState([]);
 
@@ -205,10 +210,23 @@ export default function PuzzleDaily({ onBack }) {
         showVictory={finished}
         onCloseVictory={() => {}}
         shapes={pieces.map((p) => p.shape)}
-        onVictory={() => {
+        onVictory={async () => {
+
+            console.log("ON VICTORY DAILY");
             if (solvedRef.current) return;
-        
+          
             solvedRef.current = true;
+          
+            if (user) {
+               console.log("user id dentro", user.id);
+               
+               const today = getTodayId();
+
+               await setDailyCompleted(user.id, today);
+            } else{
+                console.log("No hay user");
+            }
+          
             setFinished(true);
           }}
       />

@@ -1,24 +1,49 @@
 import { CalendarDays, ArrowLeft, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { supabase } from "../lib/supabaseClient";
 
 export default function Daily({ onBack, onStart }) {
   const { user } = useAuth();
 
   const [today, setToday] = useState("");
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     const now = new Date();
-
+  
     const date =
       now.getDate().toString().padStart(2, "0") +
       "/" +
       (now.getMonth() + 1).toString().padStart(2, "0") +
       "/" +
       now.getFullYear();
-
+  
     setToday(date);
-  }, []);
+  
+    async function checkDailyCompleted() {
+      if (!user) return;
+  
+      const puzzleId =
+        now.getFullYear().toString() +
+        (now.getMonth() + 1).toString().padStart(2, "0") +
+        now.getDate().toString().padStart(2, "0");
+  
+        const { data, error } = await supabase
+        .from("daily_puzzle_progress")
+        .select("puzzle_id")
+        .eq("user_id", user.id)
+        .eq("puzzle_id", puzzleId)
+        .maybeSingle();
+  
+      if (!error && data) {
+        setCompleted(true);
+      }
+    }
+  
+    checkDailyCompleted();
+  
+  }, [user]);
 
   return (
     <div className="home">
@@ -66,9 +91,15 @@ export default function Daily({ onBack, onStart }) {
             style={{
               textAlign: "center",
               marginBottom: 20,
+              fontWeight: 700,
+              color: completed
+                ? "#22c55e"
+                : "#777",
             }}
           >
-            Tu progreso se guardará automáticamente.
+            {completed
+              ? "Puzle diario completado"
+              : "Puzle diario sin completar"}
           </p>
         ) : (
           <p
@@ -77,7 +108,7 @@ export default function Daily({ onBack, onStart }) {
               marginBottom: 20,
             }}
           >
-            Puedes jugar sin iniciar sesión.
+            Inicia sesión para guardar tu progreso.
           </p>
         )}
 

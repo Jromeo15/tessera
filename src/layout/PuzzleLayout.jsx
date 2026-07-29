@@ -12,7 +12,6 @@ import { useAuth } from "../context/AuthContext";
 import Board from "../components/Board";
 import Piece from "../components/Piece";
 import { getUniqueColors } from "../components/colors";
-
 import { CELL_SIZE } from "../constants";
 
 const BOARD_COLS = 9;
@@ -31,7 +30,7 @@ export default function PuzzleLayout({
   pieceProps = {},
   onVictory,
 }) {
-  let stp = 0;
+  
   const { user } = useAuth();
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
@@ -265,6 +264,9 @@ initialX = baseX + row2Offset;
 
   const registerProgress = async () => {
     if (!user) return;
+  
+    if (category == null || puzzleIndex == null) return;
+  
     if (puzzleIndex <= 1) return;
   
     const nextLevel = puzzleIndex + 1;
@@ -279,6 +281,7 @@ initialX = baseX + row2Offset;
     if (error) {
       return;
     }
+  
     if (!data) {
       await supabase.from("user_progress").insert({
         user_id: user.id,
@@ -302,6 +305,7 @@ initialX = baseX + row2Offset;
       .eq("user_id", user.id)
       .eq("category", category);
   };
+  
   useEffect(() => {
     if (!running) return;
   
