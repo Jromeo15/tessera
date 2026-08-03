@@ -857,7 +857,7 @@ onPointerDown={(e) => {
     <div className="victoryPopup">
 
     <button
-  onClick={() => setShowVictory(false)}
+  onClick={onBack}
   className="victoryClose"
 >
         ×
