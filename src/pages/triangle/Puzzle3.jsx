@@ -1,5 +1,5 @@
 import PuzzleLayout from "../../layout/PuzzleLayout";
-import { SHAPES } from "./shapes/shapes2";
+import { SHAPES } from "./shapes/shapes3";
 
 export default function App({ onBack }) {
   return (
