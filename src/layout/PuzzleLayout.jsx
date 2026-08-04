@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   HelpCircle,
   RotateCcw,
@@ -60,14 +60,15 @@ export default function PuzzleLayout({
     }));
   });
 
-  const sortedPieces = [...pieces].sort((a, b) => {
-    if (a.height !== b.height) {
-      return b.height - a.height;
-    }
+  const sortedPieces = useMemo(() => {
+    return [...pieces].sort((a, b) => {
+      if (a.height !== b.height) {
+        return b.height - a.height;
+      }
   
-    // Desempate opcional: mayor ancho primero
-    return b.width - a.width;
-  });
+      return b.width - a.width;
+    });
+  }, [pieces]);
 
   const initialPositions = useRef(null);
 

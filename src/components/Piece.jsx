@@ -4,8 +4,13 @@ import { Undo, Redo } from "lucide-react";
 
 let activePieceId = null;
 
+let overlapRaf = null;
+
 const forceGlobalOverlapRecalc = () => {
-  requestAnimationFrame(() => {
+  if (overlapRaf !== null) return;
+
+  overlapRaf = requestAnimationFrame(() => {
+    overlapRaf = null;
     window.dispatchEvent(new Event("global-overlap"));
   });
 };
@@ -153,6 +158,17 @@ export default function Piece({
   const checkOverlap = () => {
     const pieces = document.querySelectorAll(".piece");
     const myCells = document.querySelectorAll(`.piece-${id} .piece-cell`);
+  
+    const otherCells = [];
+  
+    pieces.forEach((el) => {
+      if (el.classList.contains(`piece-${id}`)) return;
+  
+      el.querySelectorAll(".piece-cell").forEach((cell) => {
+        otherCells.push(cell);
+      });
+    });
+  
     const getType = (el) => {
       const match = [...el.classList].find(c => c.startsWith("type-"));
       return match ? match.replace("type-", "") : null;
@@ -163,31 +179,25 @@ export default function Piece({
     myCells.forEach((cell) => {
       const rect = cell.getBoundingClientRect();
   
-      pieces.forEach((el) => {
-        if (el.classList.contains(`piece-${id}`)) return;
-  
-        const targetCells = el.querySelectorAll(".piece-cell");
-  
-        targetCells.forEach((t) => {
-          const r = t.getBoundingClientRect();
+      otherCells.forEach((t) => {
+        const r = t.getBoundingClientRect();
   
         const intersect =
           !(rect.right <= r.left ||
             rect.left >= r.right ||
             rect.bottom <= r.top ||
             rect.top >= r.bottom);
-        
+  
         if (intersect) {
           const a = getType(cell);
           const b = getType(t);
-        
+  
           if (a && b && areCompatible(a, b)) {
             return;
           }
-        
+  
           overlap = true;
         }
-        });
       });
     });
   
@@ -613,9 +623,9 @@ setIsTouchingPanel(touching);
         style={{
           position: "absolute",
     
-          // 0.45 / 0.4 = 1.125
+          // 0.5 / 0.4 = 1.25
           // Al estar la pieza escalada a 0.4,
-          // el área táctil final será 0.45.
+          // el área táctil final será 0.5.
           left: c * CELL_SIZE - CELL_SIZE * 0.125,
           top: r * CELL_SIZE - CELL_SIZE * 0.125,
     
