@@ -91,7 +91,7 @@ export default function PuzzleDaily({ onBack }) {
         // No existe -> lo generamos
       
         const piecesCount =
-          Math.floor(Math.random() * 5) + 8;
+          Math.floor(Math.random() * 3) + 8;
       
         const generatedPieces =
           generatePieces(piecesCount);

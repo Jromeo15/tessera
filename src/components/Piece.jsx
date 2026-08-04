@@ -137,10 +137,10 @@ export default function Piece({
 
   const dragging = useRef(false);
   const moved = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const offset = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
-  const isTouchingPanelRef = useRef(false);
   const [isTouchingPanel, setIsTouchingPanel] = useState(true);
   const [hasBeenMoved, setHasBeenMoved] = useState(false);
 
@@ -227,7 +227,6 @@ export default function Piece({
       }
     }
   
-    isTouchingPanelRef.current = touching;
 setIsTouchingPanel(touching);
   };
 
@@ -236,8 +235,8 @@ setIsTouchingPanel(touching);
   // -------------------------
   const startDrag = (clientX, clientY) => {
     dragging.current = true;
+    setIsDragging(true);
     moved.current = false;
-
     if (!hasBeenMoved) {
       setHasBeenMoved(true);
     }
@@ -276,6 +275,7 @@ setIsTouchingPanel(touching);
   };
   const endDrag = () => {
     dragging.current = false;
+    setIsDragging(false);
   
     const panel = document.querySelector(".puzzleBottomPanel");
   
@@ -316,11 +316,8 @@ setIsTouchingPanel(touching);
       return;
     }
   
-    const xInside = gridPos.col * CELL_SIZE;
-    const yInside = gridPos.row * CELL_SIZE;
-  
-    const finalCol = Math.round(xInside / CELL_SIZE);
-    const finalRow = Math.round(yInside / CELL_SIZE);
+    const finalCol = gridPos.col;
+    const finalRow = gridPos.row;
   
     setGridPos({
       col: finalCol,
@@ -580,6 +577,43 @@ setIsTouchingPanel(touching);
         transition: "transform 0.15s ease",
       }}
     >
+
+{isDragging && (
+  <div
+    style={{
+      position: "absolute",
+      left: CELL_SIZE * 0.28,
+      top: CELL_SIZE * 0.28,
+      display: "grid",
+      gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
+      pointerEvents: "none",
+      zIndex: -1,
+      filter: "blur(5px)",
+      opacity: 0.55,
+    }}
+  >
+    {rotatedShape.map((row, r) =>
+      row.map((cell, c) => {
+        if (cell === 0) return null;
+
+        return (
+          <div
+            key={`shadow-${r}-${c}`}
+            style={{
+              position: "absolute",
+              left: c * CELL_SIZE,
+              top: r * CELL_SIZE,
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+              background: "#777",
+              borderRadius: 3,
+            }}
+          />
+        );
+      })
+    )}
+  </div>
+)}
 
 {showRotateButtons && (
   <div

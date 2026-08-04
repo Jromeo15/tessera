@@ -73,7 +73,6 @@ export default function PuzzleLayout({
   const initialPositions = useRef(null);
 
 if (!initialPositions.current) {
-  let stp = 0;
 
   const screenHeight = window.innerHeight;
 
@@ -83,7 +82,7 @@ if (!initialPositions.current) {
   
   const MAX_ROW_CELLS = 35;
   let occupiedCells = 1; // margen izquierdo
-let tallestFirstRow = 0;
+  let tallestFirstRow = 0;
 
 for (const p of sortedPieces) {
   const needed = p.width + (occupiedCells > 1 ? 1 : 0);
@@ -147,7 +146,6 @@ initialX = baseX + row2Offset;
 
     row2Offset += (p.width + 1) * CELL_SIZE * 0.4;
   } else {
-    const start = row1Offset;
     const end = row1Offset + p.height * CELL_SIZE * 0.4;
     
     firstRowPieces.push({
@@ -347,30 +345,6 @@ initialX = baseX + row2Offset;
     };
   }, []);
 
-
-  useEffect(() => {
-    if (!panelVisible) return;
-  
-    const ids = Object.keys(hiddenPieces);
-  
-    if (ids.length === 0) return;
-  
-    const newState = {};
-  
-    ids.forEach((id) => {
-      newState[id] = true;
-    });
-  
-    setReappearingPieces(newState);
-  
-    const timeout = setTimeout(() => {
-      setReappearingPieces({});
-    }, 300);
-  
-    return () => clearTimeout(timeout);
-  }, [panelVisible]);
-
-
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -561,19 +535,10 @@ initialX = baseX + row2Offset;
     paddingLeft: 0,
   }}
 >
-
-  
+ 
   {sortedPieces.map((p, index) => {
 
-const { initialX, initialY } = initialPositions.current[index];
-
-const delayedCheck = () => {
-  requestAnimationFrame(() => {
-    checkVictory(checkCellFilled);
-
-    pieceProps.onDrop?.();
-  });
-};
+  const { initialX, initialY } = initialPositions.current[index];
 
   const el = document.querySelector(`.piece-${p.id}`);
   const shouldHide = !panelVisible && isPieceTouchingPanel(el);
@@ -654,18 +619,7 @@ return (
 >
 {panelVisible !== undefined && (
   <>
-    {/* PANEL + BOTÓN */}
-    <div
-      style={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 5,
-        overflow: "visible",
-        pointerEvents: "none",
-      }}
-    >
+    <div>
 <div
   ref={panelRef}
   className={`puzzleBottomPanel ${
