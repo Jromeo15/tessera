@@ -12,26 +12,37 @@ export default function Board({ children, boardRef }) {
         position: "relative",
         width: cols * CELL_SIZE,
         height: rows * CELL_SIZE,
-
+      
         margin: "0 auto",
-
+      
         background: `
-          radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), transparent 40%),
-          radial-gradient(circle at 80% 90%, rgba(0,200,255,0.08), transparent 50%),
-          linear-gradient(145deg, #f5f5f5, #e6e6e6)
+          radial-gradient(
+            circle at 50% 45%,
+            rgba(0, 210, 255, 0.07),
+            transparent 55%
+          ),
+          linear-gradient(
+            145deg,
+            #f4f7f9,
+            #e7ecef 55%,
+            #dfe5e8
+          )
         `,
-
-        border: "1px solid rgba(0,0,0,0.12)",
-
+      
+        border: "1px solid rgba(70, 150, 175, 0.35)",
+      
         boxShadow: `
-          0 12px 35px rgba(0,0,0,0.18),
-          inset 0 1px 0 rgba(255,255,255,0.9),
-          inset 0 -2px 8px rgba(0,0,0,0.05)
+          0 18px 40px rgba(0,0,0,0.20),
+          0 0 18px rgba(0,180,220,0.08),
+          inset 0 1px 0 rgba(255,255,255,0.95),
+          inset 0 -3px 10px rgba(0,60,80,0.08)
         `,
-
-        borderRadius: 5,
-
+      
+        borderRadius: 7,
+      
         boxSizing: "content-box",
+      
+        overflow: "visible",
       }}
     >
       {/*GRID VISUAL */}
@@ -58,8 +69,8 @@ export default function Board({ children, boardRef }) {
               width: CELL_SIZE,
               height: CELL_SIZE,
 
-              borderRight: "1px solid rgba(0,0,0,0.06)",
-              borderBottom: "1px solid rgba(0,0,0,0.06)",
+              borderRight: "1px solid rgba(40,150,180,0.10)",
+              borderBottom: "1px solid rgba(40,150,180,0.10)",
 
               boxSizing: "border-box",
 
