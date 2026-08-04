@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { CELL_SIZE } from "../constants";
 import { Undo, Redo } from "lucide-react";
+import "../styles/pieces.css";
 
 let activePieceId = null;
 
@@ -120,6 +121,7 @@ export default function Piece({
   topPieceId,
   zoom = 1,
   refreshPieces,
+  pieceStyle = "basic",
 }) {
   const [gridPos, setGridPos] = useState(() => ({
     col: Math.round(initialX / CELL_SIZE),
@@ -531,11 +533,9 @@ setIsTouchingPanel(touching);
   
     return () => window.removeEventListener("reset-piece", handler);
   }, [id, initialX, initialY]);
-
-
   return (
     <div
-      className={`piece piece-${id}`}
+      className={`piece piece-${id} piece-style-${pieceStyle}`}
       data-piece-id={id}
       onMouseDown={onMouseDown}
       onTouchStart={onTouchStart}
@@ -549,146 +549,149 @@ setIsTouchingPanel(touching);
         top: hasBeenMoved
         ? gridPos.row * CELL_SIZE
         : (isTouchingPanel ? initialY / zoom : initialY),
-      
+  
         display: "grid",
-      
+  
         gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
-      
+  
         cursor: "grab",
         userSelect: "none",
         touchAction: "none",
-      
+  
         zIndex:
         showRotateButtons || topPieceId === id
           ? 999999
           : activePieceId === id
             ? 5000
             : 1,
-              transform: (() => {
-                const baseScale =
-                  dragging.current || !isTouchingPanel ? 1 : 0.4;
-              
-                const zoomCorrection =
-                  isTouchingPanel ? 1 / zoom : 1;
-              
-                return `scale(${baseScale * zoomCorrection})`;
-              })(),
-              transformOrigin: "top left",
+  
+        transform: (() => {
+          const baseScale =
+            dragging.current || !isTouchingPanel ? 1 : 0.4;
+  
+          const zoomCorrection =
+            isTouchingPanel ? 1 / zoom : 1;
+  
+          return `scale(${baseScale * zoomCorrection})`;
+        })(),
+  
+        transformOrigin: "top left",
         transition: "transform 0.15s ease",
       }}
     >
-
-{isDragging && (
-  <div
-    style={{
-      position: "absolute",
-      left: CELL_SIZE * 0.28,
-      top: CELL_SIZE * 0.28,
-      display: "grid",
-      gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
-      pointerEvents: "none",
-      zIndex: -1,
-      filter: "blur(5px)",
-      opacity: 0.55,
-    }}
-  >
-    {rotatedShape.map((row, r) =>
-      row.map((cell, c) => {
-        if (cell === 0) return null;
-        return (
-          <div
-            key={`shadow-${r}-${c}`}
-            style={{
-              position: "absolute",
-              left: c * CELL_SIZE,
-              top: r * CELL_SIZE,
-              width: CELL_SIZE,
-              height: CELL_SIZE,
-              background: "#777",
-              borderRadius: 3,
-            }}
-          />
-        );
-      })
-    )}
-  </div>
-)}
-
-{showRotateButtons && (
-  <div
-  style={{
-    position: "absolute",
-    top: -55,
-    left: "50%",
-    transform: "translateX(-50%)",
-    display: "flex",
-    gap: 28,
-    pointerEvents: "auto",
-    zIndex: 999999,
-    isolation: "isolate",
-  }}
-  >
-<button
-  onClick={rotateLeft}
-  className="rotateButton"
->
-  <Undo className="rotateButtonIcon" />
-</button>
-
-<button
-  onClick={rotateRight}
-  className="rotateButton"
->
-  <Redo className="rotateButtonIcon" />
-</button>
-  </div>
-)}
-
-{rotatedShape.map((row, r) =>
-  row.map((cell, c) => {
-    if (cell === 0) return null;
-    return (
-      <div
-        key={`${r}-${c}`}
-        className="piece-hitbox"
-        style={{
-          position: "absolute",
-    
-          left: c * CELL_SIZE - CELL_SIZE * 0.5,
-          top: r * CELL_SIZE - CELL_SIZE * 0.5,
-    
-          width: CELL_SIZE * 2,
-          height: CELL_SIZE * 2,
-    
-          pointerEvents: "auto",
-        }}
-      >
+  
+      {isDragging && (
         <div
-          data-cell-type={cell}
-          className={`piece-cell type-${cell}`}
           style={{
             position: "absolute",
-    
-            left: CELL_SIZE * 0.5,
-            top: CELL_SIZE * 0.5,
-    
-            width: CELL_SIZE,
-            height: CELL_SIZE,
-    
-            background: color,
-    
-            opacity: isOverlapping ? 0.6 : 1,
-            filter: isOverlapping ? "brightness(0.6)" : "none",
-    
-            boxSizing: "border-box",
-    
+            left: CELL_SIZE * 0.28,
+            top: CELL_SIZE * 0.28,
+            display: "grid",
+            gridTemplateColumns: `repeat(${rotatedShape[0].length}, ${CELL_SIZE}px)`,
             pointerEvents: "none",
+            zIndex: -1,
+            filter: "blur(5px)",
+            opacity: 0.55,
           }}
-        />
-      </div>
-    );
-  })
-)}
+        >
+          {rotatedShape.map((row, r) =>
+            row.map((cell, c) => {
+              if (cell === 0) return null;
+  
+              return (
+                <div
+                  key={`shadow-${r}-${c}`}
+                  style={{
+                    position: "absolute",
+                    left: c * CELL_SIZE,
+                    top: r * CELL_SIZE,
+                    width: CELL_SIZE,
+                    height: CELL_SIZE,
+                    background: "#777",
+                    borderRadius: 3,
+                  }}
+                />
+              );
+            })
+          )}
+        </div>
+      )}
+  
+      {showRotateButtons && (
+        <div
+          style={{
+            position: "absolute",
+            top: -55,
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: 28,
+            pointerEvents: "auto",
+            zIndex: 999999,
+            isolation: "isolate",
+          }}
+        >
+          <button
+            onClick={rotateLeft}
+            className="rotateButton"
+          >
+            <Undo className="rotateButtonIcon" />
+          </button>
+  
+          <button
+            onClick={rotateRight}
+            className="rotateButton"
+          >
+            <Redo className="rotateButtonIcon" />
+          </button>
+        </div>
+      )}
+  
+      {rotatedShape.map((row, r) =>
+        row.map((cell, c) => {
+          if (cell === 0) return null;
+  
+          return (
+            <div
+              key={`${r}-${c}`}
+              className="piece-hitbox"
+              style={{
+                position: "absolute",
+  
+                left: c * CELL_SIZE - CELL_SIZE * 0.5,
+                top: r * CELL_SIZE - CELL_SIZE * 0.5,
+  
+                width: CELL_SIZE * 2,
+                height: CELL_SIZE * 2,
+  
+                pointerEvents: "auto",
+              }}
+            >
+              <div
+                data-cell-type={cell}
+                className={`piece-cell type-${cell}`}
+                style={{
+                  position: "absolute",
+  
+                  left: CELL_SIZE * 0.5,
+                  top: CELL_SIZE * 0.5,
+  
+                  width: CELL_SIZE,
+                  height: CELL_SIZE,
+
+                  background: color,
+  
+                  opacity: isOverlapping ? 0.6 : 1,
+                  filter: isOverlapping ? "brightness(0.6)" : "none",
+  
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
+          );
+        })
+      )}
     </div>
   );
+  
 }

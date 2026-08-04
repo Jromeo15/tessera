@@ -8,10 +8,15 @@ import {
 } from "lucide-react";
 
 import { supabase } from "../lib/supabaseClient";
+import { getUserPieceStyle } from "../lib/userSettings";
 import { useAuth } from "../context/AuthContext";
 import Board from "../components/Board";
 import Piece from "../components/Piece";
-import { getUniqueColors } from "../components/colors";
+import {
+  getUniqueColors,
+  COLORS_BASIC,
+  COLORS_CARTOON,
+} from "../components/colors";
 import { CELL_SIZE } from "../constants";
 
 const BOARD_COLS = 9;
@@ -47,9 +52,11 @@ export default function PuzzleLayout({
   const [disappearingPieces, setDisappearingPieces] = useState({});
   const [topPieceId, setTopPieceId] = useState(null);
   const [refreshPieces, setRefreshPieces] = useState(0);
+  const [piecesReady, setPiecesReady] = useState(false);
+  const [pieceStyle, setPieceStyle] = useState(null);
 
-  const [pieces] = useState(() => {
-    const colors = getUniqueColors(shapes.length);
+  const [pieces, setPieces] = useState(() => {
+    const colors = getUniqueColors(COLORS_BASIC, shapes.length);
   
     return shapes.map((shape, i) => ({
       id: i + 1,
@@ -345,6 +352,44 @@ initialX = baseX + row2Offset;
     };
   }, []);
 
+  useEffect(() => {
+    if (!user) {
+      setPieceStyle("basic");
+      return;
+    }
+  
+    const loadPieceStyle = async () => {
+      const style = await getUserPieceStyle(user.id);
+      console.log("PIECE STYLE EN LAYOUT:", style);
+      setPieceStyle(style);
+    };
+  
+    loadPieceStyle();
+  }, [user]);
+
+  useEffect(() => {
+    if (!pieceStyle) return;
+  
+    const colors =
+      pieceStyle === "cartoon"
+        ? COLORS_CARTOON
+        : COLORS_BASIC;
+  
+    const selectedColors = getUniqueColors(
+      colors,
+      shapes.length
+    );
+  
+    setPieces((currentPieces) =>
+      currentPieces.map((piece, index) => ({
+        ...piece,
+        color: selectedColors[index],
+      }))
+    );
+  
+    setPiecesReady(true);
+  }, [pieceStyle, shapes.length]);
+
   const formatTime = (t) => {
     const min = Math.floor(t / 60);
     const sec = t % 60;
@@ -507,21 +552,36 @@ initialX = baseX + row2Offset;
     zIndex: 999
   }}
 >
-  {children ? (
-    typeof children === "function"
-      ? children({ isFilled: checkCellFilled })
-      : children
-  ) : (
+{pieceStyle === null ? (
+  <div
+    style={{
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 18,
+      fontWeight: "600",
+    }}
+  >
+    CARGANDO...
+  </div>
+) : children ? (
+  typeof children === "function"
+    ? children({ isFilled: checkCellFilled })
+    : children
+) : (
 
-    <div
-  style={{
-    position: "relative",
-    zIndex: 50,
-    transform: `translateY(-80px) scale(${zoom})`,
-    transformOrigin: "center center",
-    transition: "transform 0.2s ease",
-  }}
->
+  <div
+    style={{
+      position: "relative",
+      zIndex: 50,
+      transform: `translateY(-80px) scale(${zoom})`,
+      transformOrigin: "center center",
+      transition: "transform 0.2s ease",
+      visibility: piecesReady ? "visible" : "hidden",
+    }}
+  >
 <Board key={resetKey}>
   <div
   style={{
@@ -575,6 +635,7 @@ return (
   initialX={initialX}
   initialY={initialY}
   zoom={zoom}
+  pieceStyle={pieceStyle}
   onDrop={() => {
     requestAnimationFrame(() => {
       if (pieceProps.onDrop) {

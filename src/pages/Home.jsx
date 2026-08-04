@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../../images/logo.png";
-import { Grid, Trophy, CalendarDays, Shuffle, Medal } from "lucide-react";
+import { Grid, Trophy, CalendarDays, Shuffle, Medal, Star } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Home({
@@ -9,6 +9,7 @@ export default function Home({
   onTimeAttack,
   onRandom,
   onLeaderboard,
+  onExtras,
 }) {
   const { user } = useAuth();
 
@@ -95,6 +96,14 @@ export default function Home({
         >
           <Medal size={18} style={{ marginRight: 8 }} />
           Clasificación
+        </button>
+
+        <button
+          className="home__button"
+          onClick={onExtras}
+        >
+          <Star size={18} style={{ marginRight: 8 }} />
+          Extras
         </button>
 
       </div>

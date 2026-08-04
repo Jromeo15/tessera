@@ -10,6 +10,7 @@ import UserMenu from "./components/UserMenu";
 import Leaderboard from "./pages/Leaderboard";
 import Daily from "./pages/Daily";
 import PuzzleDaily from "./pages/PuzzleDaily";
+import Extras from "./pages/Extras";
 
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
@@ -64,6 +65,7 @@ export default function App() {
           setScreen("random");
         }}
         onLeaderboard={() => setScreen("leaderboard")}
+        onExtras={() => setScreen("extras")}
       />
     );
   }
@@ -152,6 +154,15 @@ export default function App() {
   else if (screen === "daily-game") {
     content = (
       <PuzzleDaily
+        onBack={() => setScreen("home")}
+      />
+    );
+  }
+
+  // ---------------- EXTRAS ----------------
+  else if (screen === "extras") {
+    content = (
+      <Extras
         onBack={() => setScreen("home")}
       />
     );
