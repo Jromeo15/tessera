@@ -92,7 +92,10 @@ const getCellFromPoint = (x, y) => {
   const el = document.elementFromPoint(x, y);
   if (!el) return null;
 
-  const cell = el.closest?.(".piece-cell");
+  const hitbox = el.closest?.(".piece-hitbox");
+  if (!hitbox) return null;
+
+  const cell = hitbox.querySelector(".piece-cell");
   if (!cell) return null;
 
   // si no tiene tipo, NO es interactivo
@@ -550,11 +553,11 @@ setIsTouchingPanel(touching);
         touchAction: "none",
       
         zIndex:
-          topPieceId === id
-            ? 9999
-            : activePieceId === id
-              ? 5000
-              : 1,
+        showRotateButtons || topPieceId === id
+          ? 999999
+          : activePieceId === id
+            ? 5000
+            : 1,
               transform: (() => {
                 const baseScale =
                   dragging.current || !isTouchingPanel ? 1 : 0.4;
@@ -606,23 +609,45 @@ setIsTouchingPanel(touching);
     return (
       <div
         key={`${r}-${c}`}
-        data-cell-type={cell}
-        className={`piece-cell type-${cell}`}
+        className="piece-hitbox"
         style={{
           position: "absolute",
-          left: c * CELL_SIZE,
-          top: r * CELL_SIZE,
-
-          width: CELL_SIZE,
-          height: CELL_SIZE,
-          background: color,
-
-          opacity: isOverlapping ? 0.6 : 1,
-          filter: isOverlapping ? "brightness(0.6)" : "none",
-          boxSizing: "border-box",
+    
+          // 0.45 / 0.4 = 1.125
+          // Al estar la pieza escalada a 0.4,
+          // el área táctil final será 0.45.
+          left: c * CELL_SIZE - CELL_SIZE * 0.125,
+          top: r * CELL_SIZE - CELL_SIZE * 0.125,
+    
+          width: CELL_SIZE * 1.25,
+          height: CELL_SIZE * 1.25,
+    
           pointerEvents: "auto",
         }}
-      />
+      >
+        <div
+          data-cell-type={cell}
+          className={`piece-cell type-${cell}`}
+          style={{
+            position: "absolute",
+            left: CELL_SIZE * 0.0625,
+            top: CELL_SIZE * 0.0625,
+    
+            width: CELL_SIZE,
+            height: CELL_SIZE,
+            background: color,
+    
+            opacity: isOverlapping ? 0.6 : 1,
+            filter: isOverlapping ? "brightness(0.6)" : "none",
+            boxSizing: "border-box",
+    
+            // IMPORTANTE:
+            // el elemento visual sigue siendo el que ocupa
+            // exactamente CELL_SIZE x CELL_SIZE.
+            pointerEvents: "none",
+          }}
+        />
+      </div>
     );
   })
 )}
