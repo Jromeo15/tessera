@@ -595,7 +595,6 @@ setIsTouchingPanel(touching);
     {rotatedShape.map((row, r) =>
       row.map((cell, c) => {
         if (cell === 0) return null;
-
         return (
           <div
             key={`shadow-${r}-${c}`}
