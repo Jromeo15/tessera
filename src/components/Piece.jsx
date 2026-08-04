@@ -103,7 +103,6 @@ const getCellFromPoint = (x, y) => {
   const cell = hitbox.querySelector(".piece-cell");
   if (!cell) return null;
 
-  // si no tiene tipo, NO es interactivo
   if (!cell.dataset?.cellType) return null;
 
   return cell;
@@ -615,7 +614,6 @@ setIsTouchingPanel(touching);
 {rotatedShape.map((row, r) =>
   row.map((cell, c) => {
     if (cell === 0) return null;
-
     return (
       <div
         key={`${r}-${c}`}
@@ -623,14 +621,11 @@ setIsTouchingPanel(touching);
         style={{
           position: "absolute",
     
-          // 0.5 / 0.4 = 1.25
-          // Al estar la pieza escalada a 0.4,
-          // el área táctil final será 0.5.
-          left: c * CELL_SIZE - CELL_SIZE * 0.125,
-          top: r * CELL_SIZE - CELL_SIZE * 0.125,
+          left: c * CELL_SIZE - CELL_SIZE * 0.5,
+          top: r * CELL_SIZE - CELL_SIZE * 0.5,
     
-          width: CELL_SIZE * 1.25,
-          height: CELL_SIZE * 1.25,
+          width: CELL_SIZE * 2,
+          height: CELL_SIZE * 2,
     
           pointerEvents: "auto",
         }}
@@ -640,20 +635,20 @@ setIsTouchingPanel(touching);
           className={`piece-cell type-${cell}`}
           style={{
             position: "absolute",
-            left: CELL_SIZE * 0.0625,
-            top: CELL_SIZE * 0.0625,
+    
+            left: CELL_SIZE * 0.5,
+            top: CELL_SIZE * 0.5,
     
             width: CELL_SIZE,
             height: CELL_SIZE,
+    
             background: color,
     
             opacity: isOverlapping ? 0.6 : 1,
             filter: isOverlapping ? "brightness(0.6)" : "none",
+    
             boxSizing: "border-box",
     
-            // IMPORTANTE:
-            // el elemento visual sigue siendo el que ocupa
-            // exactamente CELL_SIZE x CELL_SIZE.
             pointerEvents: "none",
           }}
         />
