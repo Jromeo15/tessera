@@ -694,5 +694,4 @@ setIsTouchingPanel(touching);
       )}
     </div>
   );
-  
 }
