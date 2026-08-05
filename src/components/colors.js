@@ -138,69 +138,67 @@ export const COLORS_CANDY = [
   "#FFFFFF",
 ];
 
-export const COLORS_NEON = [
-  // 🔴 LASER RED
-  "#FF1744",
-  "#FF003C",
-  "#FF2A6D",
+export const COLORS_TILES = [
+  // 🔴 ROJO CERÁMICA
+  "#F28B82",
+  "#FFAAA5",
+  "#EFA3A3",
 
-  // 🟠 NEON ORANGE
-  "#FF5F00",
-  "#FF7A00",
-  "#FF9500",
+  // 🟠 MELocotón
+  "#FFB38A",
+  "#FFC09A",
+  "#F7B58B",
 
-  // 🟡 ELECTRIC YELLOW
-  "#FFF000",
-  "#FFE600",
-  "#FFD500",
+  // 🟡 CREMA / AMARILLO
+  "#FFE59A",
+  "#FFF0B3",
+  "#F6DFA0",
 
-  // 🟢 LASER GREEN
-  "#39FF14",
-  "#00FF66",
-  "#00FF85",
+  // 🟢 VERDE MENTA
+  "#9FE2BF",
+  "#A8E6CF",
+  "#B7E4C7",
 
-  // 🟢 LIME NEON
-  "#B6FF00",
-  "#8CFF00",
-  "#CCFF00",
+  // 🟢 VERDE CLARO
+  "#B8D8A8",
+  "#C5E1A5",
+  "#AFCFA4",
 
-  // 🔵 ELECTRIC BLUE
-  "#00BFFF",
-  "#008CFF",
-  "#0066FF",
+  // 🔵 AZUL CIELO
+  "#8FD3FF",
+  "#A7DFFF",
+  "#9CCFF2",
 
-  // 🩵 CYAN NEON
-  "#00FFFF",
-  "#00F5FF",
-  "#00E5FF",
+  // 🩵 AZUL AGUA
+  "#8EDDE6",
+  "#A5E5E9",
+  "#9DD9D2",
 
-  // 🟣 LASER PURPLE
-  "#8A2BE2",
-  "#A020F0",
-  "#BF00FF",
+  // 🟣 LAVANDA
+  "#C7B5E3",
+  "#D2C2E8",
+  "#BFA7D9",
 
-  // 💗 HOT PINK
-  "#FF00A8",
-  "#FF1493",
-  "#FF007F",
+  // 💗 ROSA
+  "#F3A6C8",
+  "#F6B6D2",
+  "#EFA8C4",
 
-  // 🌸 ELECTRIC MAGENTA
-  "#FF00FF",
-  "#F000FF",
-  "#D900FF",
+  // 🌸 ROSA PÁLIDO
+  "#F7C6D9",
+  "#F8D0DF",
+  "#EFC1D5",
 
-  // 🔷 ULTRAVIOLET / CYBER
-  "#6A00FF",
-  "#7000FF",
-  "#9D00FF",
+  // 🔷 TURQUESA
+  "#8FD8D2",
+  "#A3E0DA",
+  "#91D5CC",
 
-  // ⚡ SPECIAL NEON
-  "#00FFCC",
-  "#00FFD5",
-  "#FFEA00",
-  "#FF3CAC",
+  // ⚪ BLANCO / MARFIL
+  "#F2F0E6",
+  "#FFF8E7",
+  "#E8E4D8",
 ];
-
 export const shuffleArray = (array) => {
   const arr = [...array];
 

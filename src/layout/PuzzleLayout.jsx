@@ -17,7 +17,7 @@ import {
   COLORS_BASIC,
   COLORS_CARTOON,
   COLORS_CANDY,
-  COLORS_NEON,
+  COLORS_TILES,
 } from "../components/colors";
 
 import { CELL_SIZE } from "../constants";
@@ -378,8 +378,8 @@ initialX = baseX + row2Offset;
       ? COLORS_CARTOON
       : pieceStyle === "candy"
       ? COLORS_CANDY
-      : pieceStyle === "neon"
-      ? COLORS_NEON
+      : pieceStyle === "tiles"
+      ? COLORS_TILES
       : COLORS_BASIC;
 
     const selectedColors = getUniqueColors(
