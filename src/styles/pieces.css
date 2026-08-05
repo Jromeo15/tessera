@@ -40,33 +40,6 @@
   }
   
   
-  /* CURVAS INTERIORES */
-  
-  .piece-cell.type-a,
-  .piece-cell.type-b,
-  .piece-cell.type-c,
-  .piece-cell.type-d {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .piece-cell.type-a {
-    border-top-left-radius: 100%;
-  }
-  
-  .piece-cell.type-b {
-    border-top-right-radius: 100%;
-  }
-  
-  .piece-cell.type-c {
-    border-bottom-right-radius: 100%;
-  }
-  
-  .piece-cell.type-d {
-    border-bottom-left-radius: 100%;
-  }
-  
-  
   /* CURVAS EXTERIORES */
   
   .piece-cell.type-e,
@@ -510,3 +483,30 @@
       12px -8px 0 -4px rgba(70, 40, 20, 0.12),
       -8px 7px 0 -4px rgba(255, 255, 255, 0.08);
   }
+
+
+    /* CURVAS INTERIORES */
+  
+    .piece-cell.type-a,
+    .piece-cell.type-b,
+    .piece-cell.type-c,
+    .piece-cell.type-d {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .piece-cell.type-a {
+      border-radius: 100% 4px 4px 4px;
+    }
+    
+    .piece-cell.type-b {
+      border-radius: 4px 100% 4px 4px;
+    }
+    
+    .piece-cell.type-c {
+      border-radius: 4px 4px 100% 4px;
+    }
+    
+    .piece-cell.type-d {
+      border-radius: 4px 4px 4px 100%;
+    }
