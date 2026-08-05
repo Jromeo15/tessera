@@ -199,6 +199,47 @@ export const COLORS_TILES = [
   "#FFF8E7",
   "#E8E4D8",
 ];
+
+export const COLORS_WOOD = [
+  // 🤍 MADERA BLANCA
+  "#F3EDE2",
+
+  // 🩶 MADERA GRIS CLARA
+  "#D8D0C4",
+
+  // 🩶 GRIS MADERA
+  "#B8ADA0",
+
+  // 🟤 ABEDUL
+  "#D8B98A",
+
+  // 🟤 ROBLE CLARO
+  "#C9A66B",
+
+  // 🟤 MIEL
+  "#C88A4A",
+
+  // 🟤 ROBLE
+  "#A9703F",
+
+  // 🟤 CEDRO
+  "#A45D35",
+
+  // 🟤 CAOBA CLARA
+  "#8F4F32",
+
+  // 🟤 NOGAL
+  "#70452F",
+
+  // 🟤 NOGAL OSCURO
+  "#583A2A",
+
+  // ⚫ MADERA AHUMADA
+  "#40352E",
+
+  // ⚫ ÉBANO
+  "#292522",
+];
 export const shuffleArray = (array) => {
   const arr = [...array];
 

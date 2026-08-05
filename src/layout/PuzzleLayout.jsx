@@ -18,6 +18,7 @@ import {
   COLORS_CARTOON,
   COLORS_CANDY,
   COLORS_TILES,
+  COLORS_WOOD,
 } from "../components/colors";
 
 import { CELL_SIZE } from "../constants";
@@ -379,6 +380,8 @@ initialX = baseX + row2Offset;
       : pieceStyle === "candy"
       ? COLORS_CANDY
       : pieceStyle === "tiles"
+      ? COLORS_WOOD
+      : pieceStyle === "wood"
       ? COLORS_TILES
       : COLORS_BASIC;
 
