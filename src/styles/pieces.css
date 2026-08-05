@@ -405,100 +405,109 @@
     content: none;
   }
 
-/* =========================================
-   WOOD
-========================================= */
-
-.piece-style-wood .piece-cell {
-  background: var(--accent);
-
-  /* Borde de madera ligeramente más claro */
-  border: 0.8px solid color-mix(
-    in srgb,
-    var(--piece-color) 65%,
-    white
-  );
-
-  border-radius: 4px;
-
-  box-sizing: border-box;
-
-  position: relative;
-  overflow: hidden;
-
-  /* Volumen suave */
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.35),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.25);
-
-  /* Vetas de madera */
-  background-image:
-    repeating-linear-gradient(
-      8deg,
-      rgba(70, 40, 20, 0.10) 0px,
-      rgba(70, 40, 20, 0.10) 2px,
-      transparent 2px,
-      transparent 8px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.10),
-      transparent 20%,
-      rgba(0, 0, 0, 0.08) 50%,
-      transparent 80%,
-      rgba(255, 255, 255, 0.08)
+  
+  /* =========================================
+     WOOD
+  ========================================= */
+  
+  .piece-style-wood .piece-cell {
+    background: var(--accent);
+  
+    /* Borde de madera ligeramente más claro */
+    border: 0.8px solid color-mix(
+      in srgb,
+      var(--piece-color) 65%,
+      white
     );
-}
-
-
-/* =========================================
-   VETA PRINCIPAL
-========================================= */
-
-.piece-style-wood .piece-cell::before {
-  content: "";
-
-  position: absolute;
-
-  width: 120%;
-  height: 45%;
-
-  left: -10%;
-  top: 28%;
-
-  border-top: 1px solid rgba(70, 40, 20, 0.22);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-
-  border-radius: 50%;
-
-  transform: rotate(-4deg);
-
-  pointer-events: none;
-}
-
-
-/* =========================================
-   PEQUEÑAS VETAS
-========================================= */
-
-.piece-style-wood .piece-cell::after {
-  content: "";
-
-  position: absolute;
-
-  width: 55%;
-  height: 1px;
-
-  left: 20%;
-  top: 68%;
-
-  background: rgba(70, 40, 20, 0.20);
-
-  transform: rotate(5deg);
-
-  pointer-events: none;
-
-  box-shadow:
-    12px -8px 0 rgba(70, 40, 20, 0.12),
-    -8px 7px 0 rgba(255, 255, 255, 0.08);
-}
+  
+    border-radius: 4px;
+  
+    box-sizing: border-box;
+  
+    position: relative;
+    overflow: hidden;
+  
+    /* Volumen suave */
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.35),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.25);
+  
+    /* Vetas de madera */
+    background-image:
+      repeating-linear-gradient(
+        8deg,
+        rgba(70, 40, 20, 0.10) 0px,
+        rgba(70, 40, 20, 0.10) 2px,
+        transparent 2px,
+        transparent 8px
+      ),
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.10),
+        transparent 20%,
+        rgba(0, 0, 0, 0.08) 50%,
+        transparent 80%,
+        rgba(255, 255, 255, 0.08)
+      );
+  }
+  
+  
+  /* =========================================
+     VETA PRINCIPAL
+  ========================================= */
+  
+  .piece-style-wood .piece-cell::before {
+    content: "";
+  
+    position: absolute;
+  
+    width: 120%;
+    height: 45%;
+  
+    left: -10%;
+    top: 28%;
+  
+    border-top: 1px solid rgba(70, 40, 20, 0.22);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  
+    border-radius: 50%;
+  
+    transform: rotate(-4deg);
+  
+    pointer-events: none;
+  
+    /* Pequeño detalle grisáceo de la madera */
+    box-shadow:
+      42px 8px 0 -6px rgba(115, 115, 105, 0.28);
+  }
+  
+  
+  /* =========================================
+     PEQUEÑAS VETAS
+  ========================================= */
+  
+  .piece-style-wood .piece-cell::after {
+    content: "";
+  
+    position: absolute;
+  
+    width: 55%;
+    height: 10px;
+  
+    left: 20%;
+    top: 64%;
+  
+    /* Veta inferior curva */
+    border-top: 1px solid rgba(70, 40, 20, 0.20);
+  
+    border-radius: 50%;
+  
+    transform: rotate(5deg);
+  
+    pointer-events: none;
+  
+    /* Pequeñas variaciones de la veta */
+    box-shadow:
+      12px -8px 0 -4px rgba(70, 40, 20, 0.12),
+      -8px 7px 0 -4px rgba(255, 255, 255, 0.08);
+  }
