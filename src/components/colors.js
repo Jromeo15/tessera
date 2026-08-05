@@ -76,6 +76,131 @@ export const COLORS_CARTOON = [
   "#7DD3FC",
 ];
 
+export const COLORS_CANDY = [
+  // RED
+  "#FF3B4E",
+
+  // CORAL
+  "#FF6B5A",
+
+  // ORANGE
+  "#FF8A2A",
+
+  // PEACH
+  "#FFB347",
+
+  // YELLOW
+  "#FFD93D",
+
+  // LIME
+  "#B8E62E",
+
+  // GREEN
+  "#4DDE6C",
+
+  // MINT
+  "#35E0A1",
+
+  // TURQUOISE
+  "#24D9D0",
+
+  // CYAN
+  "#32D9FF",
+
+  // SKY BLUE
+  "#4DA6FF",
+
+  // BLUE
+  "#367CFF",
+
+  // INDIGO
+  "#6555FF",
+
+  // PURPLE
+  "#9B4DFF",
+
+  // VIOLET
+  "#C04DFF",
+
+  // MAGENTA
+  "#F044D8",
+
+  // HOT PINK
+  "#FF4FA3",
+
+  // PINK
+  "#FF75C8",
+
+  // CREAM
+  "#FFF1A8",
+
+  // WHITE
+  "#FFFFFF",
+];
+
+export const COLORS_NEON = [
+  // 🔴 LASER RED
+  "#FF1744",
+  "#FF003C",
+  "#FF2A6D",
+
+  // 🟠 NEON ORANGE
+  "#FF5F00",
+  "#FF7A00",
+  "#FF9500",
+
+  // 🟡 ELECTRIC YELLOW
+  "#FFF000",
+  "#FFE600",
+  "#FFD500",
+
+  // 🟢 LASER GREEN
+  "#39FF14",
+  "#00FF66",
+  "#00FF85",
+
+  // 🟢 LIME NEON
+  "#B6FF00",
+  "#8CFF00",
+  "#CCFF00",
+
+  // 🔵 ELECTRIC BLUE
+  "#00BFFF",
+  "#008CFF",
+  "#0066FF",
+
+  // 🩵 CYAN NEON
+  "#00FFFF",
+  "#00F5FF",
+  "#00E5FF",
+
+  // 🟣 LASER PURPLE
+  "#8A2BE2",
+  "#A020F0",
+  "#BF00FF",
+
+  // 💗 HOT PINK
+  "#FF00A8",
+  "#FF1493",
+  "#FF007F",
+
+  // 🌸 ELECTRIC MAGENTA
+  "#FF00FF",
+  "#F000FF",
+  "#D900FF",
+
+  // 🔷 ULTRAVIOLET / CYBER
+  "#6A00FF",
+  "#7000FF",
+  "#9D00FF",
+
+  // ⚡ SPECIAL NEON
+  "#00FFCC",
+  "#00FFD5",
+  "#FFEA00",
+  "#FF3CAC",
+];
+
 export const shuffleArray = (array) => {
   const arr = [...array];
 

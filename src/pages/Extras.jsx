@@ -8,7 +8,7 @@ import {
 import { supabase } from "../lib/supabaseClient";
 import { useAuth } from "../context/AuthContext";
 
-const styles = ["basic", "cartoon"];
+const styles = ["basic", "cartoon", "candy", "neon"];
 
 export default function Extras({ onBack }) {
   const { user } = useAuth();

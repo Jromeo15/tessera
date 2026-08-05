@@ -258,3 +258,165 @@
     box-shadow:
       0px 3px 0 rgba(255, 255, 255, 0.55);
   }
+
+/* CANDY */
+
+.piece-style-candy .piece-cell {
+    background: var(--accent);
+  
+    border: 0.8px solid rgba(0, 0, 0, 0.72);
+    border-radius: 5px;
+  
+    box-sizing: border-box;
+  
+    /* Brillo y volumen tipo caramelo */
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.85),
+      inset 0 -3px 5px rgba(0, 0, 0, 0.18),
+      inset 2px 0 3px rgba(255, 255, 255, 0.18),
+      0 0 7px rgba(255, 255, 255, 0.32),
+      0 3px 7px rgba(0, 0, 0, 0.24);
+  
+    /* Brillo general del caramelo */
+    background-image:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.42),
+        rgba(255, 255, 255, 0.10) 38%,
+        rgba(255, 255, 255, 0.02) 55%,
+        rgba(0, 0, 0, 0.10)
+      );
+  
+    background-blend-mode: normal;
+  
+    position: relative;
+    overflow: hidden;
+  }
+
+
+.piece-style-candy .piece-cell::before {
+  content: "";
+
+  position: absolute;
+
+  width: 145%;
+  height: 10px;
+
+  background: rgba(255, 255, 255, 0.22);
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+
+  pointer-events: none;
+}
+
+
+/* Núcleo blanco de la veta */
+
+.piece-style-candy .piece-cell::after {
+  content: "";
+
+  position: absolute;
+
+  width: 145%;
+  height: 4px;
+
+  background: white;
+
+  top: 50%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(45deg);
+
+  box-shadow:
+    0 0 3px rgba(255, 255, 255, 0.95),
+    0 0 7px rgba(255, 255, 255, 0.55);
+
+  pointer-events: none;
+}
+
+/* =========================================
+   NEON
+========================================= */
+
+.piece-style-neon .piece-cell {
+    background: var(--accent);
+  
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    border-radius: 5px;
+  
+    box-sizing: border-box;
+  
+    position: relative;
+    overflow: hidden;
+  
+    /* Brillo interior + halo exterior MUY reducido */
+    box-shadow:
+      inset 0 0 4px rgba(255, 255, 255, 0.95),
+      inset 0 0 9px rgba(255, 255, 255, 0.40),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.20),
+  
+      /* pequeño brillo blanco del tubo */
+      0 0 2px rgba(255, 255, 255, 0.95),
+  
+      /* halo del color de la pieza */
+      0 0 4px var(--piece-color),
+      0 0 7px var(--piece-color);
+  }
+  
+  
+  /* =========================================
+     TUBO BLANCO CENTRAL
+  ========================================= */
+  
+  .piece-style-neon .piece-cell::before {
+    content: "";
+  
+    position: absolute;
+  
+    inset: 2px;
+  
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 3px;
+  
+    box-shadow:
+      inset 0 0 3px rgba(255, 255, 255, 1),
+      inset 0 0 6px rgba(255, 255, 255, 0.60),
+      0 0 2px rgba(255, 255, 255, 0.9);
+  
+    pointer-events: none;
+  }
+  
+  
+  /* =========================================
+     BRILLO INTERIOR
+  ========================================= */
+  
+  .piece-style-neon .piece-cell::after {
+    content: "";
+  
+    position: absolute;
+  
+    inset: 0;
+  
+    background:
+      radial-gradient(
+        circle at 30% 25%,
+        rgba(255, 255, 255, 0.45),
+        transparent 35%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.18),
+        transparent 40%,
+        rgba(0, 0, 0, 0.16)
+      );
+  
+    pointer-events: none;
+  }

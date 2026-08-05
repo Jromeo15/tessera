@@ -16,7 +16,10 @@ import {
   getUniqueColors,
   COLORS_BASIC,
   COLORS_CARTOON,
+  COLORS_CANDY,
+  COLORS_NEON,
 } from "../components/colors";
+
 import { CELL_SIZE } from "../constants";
 
 const BOARD_COLS = 9;
@@ -371,10 +374,14 @@ initialX = baseX + row2Offset;
     if (!pieceStyle) return;
   
     const colors =
-      pieceStyle === "cartoon"
-        ? COLORS_CARTOON
-        : COLORS_BASIC;
-  
+    pieceStyle === "cartoon"
+      ? COLORS_CARTOON
+      : pieceStyle === "candy"
+      ? COLORS_CANDY
+      : pieceStyle === "neon"
+      ? COLORS_NEON
+      : COLORS_BASIC;
+
     const selectedColors = getUniqueColors(
       colors,
       shapes.length

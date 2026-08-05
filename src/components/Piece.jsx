@@ -541,6 +541,7 @@ setIsTouchingPanel(touching);
       onTouchStart={onTouchStart}
       onClick={onClick}
       style={{
+        "--piece-color": color,
         pointerEvents: "none",
         position: "absolute",
         left: hasBeenMoved
