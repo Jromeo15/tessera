@@ -380,9 +380,9 @@ initialX = baseX + row2Offset;
       : pieceStyle === "candy"
       ? COLORS_CANDY
       : pieceStyle === "tiles"
-      ? COLORS_WOOD
-      : pieceStyle === "wood"
       ? COLORS_TILES
+      : pieceStyle === "wood"
+      ? COLORS_WOOD
       : COLORS_BASIC;
 
     const selectedColors = getUniqueColors(
