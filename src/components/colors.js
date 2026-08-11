@@ -240,6 +240,42 @@ export const COLORS_WOOD = [
   // ⚫ ÉBANO
   "#292522",
 ];
+
+export const COLORS_METAL = [
+  // ⚪ PLATA CLARA
+  "#F2F2F2",
+
+  // ⚪ PLATA
+  "#DCDCDC",
+
+  // 🩶 GRIS MUY CLARO
+  "#C6C6C6",
+
+  // 🩶 GRIS CLARO
+  "#B0B0B0",
+
+  // 🩶 GRIS MEDIO CLARO
+  "#999999",
+
+  // 🩶 GRIS MEDIO
+  "#828282",
+
+  // 🩶 GRIS
+  "#6B6B6B",
+
+  // 🩶 GRIS OSCURO
+  "#555555",
+
+  // ⚫ GRAFITO
+  "#3F3F3F",
+
+  // ⚫ NEGRO GRISÁCEO
+  "#2A2A2A",
+
+  // ⚫ NEGRO
+  "#151515",
+];
+
 export const shuffleArray = (array) => {
   const arr = [...array];
 

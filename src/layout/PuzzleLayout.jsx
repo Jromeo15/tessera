@@ -19,6 +19,7 @@ import {
   COLORS_CANDY,
   COLORS_TILES,
   COLORS_WOOD,
+  COLORS_METAL,
 } from "../components/colors";
 
 import { CELL_SIZE } from "../constants";
@@ -382,7 +383,9 @@ initialX = baseX + row2Offset;
       : pieceStyle === "tiles"
       ? COLORS_TILES
       : pieceStyle === "wood"
-      ? COLORS_WOOD
+      ? COLORS_WOOD      
+      : pieceStyle === "metal"
+      ? COLORS_METAL
       : COLORS_BASIC;
 
     const selectedColors = getUniqueColors(

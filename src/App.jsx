@@ -11,6 +11,7 @@ import Leaderboard from "./pages/Leaderboard";
 import Daily from "./pages/Daily";
 import PuzzleDaily from "./pages/PuzzleDaily";
 import Extras from "./pages/Extras";
+import BackgroundMusic from "./components/BackgroundMusic";
 
 const puzzles = import.meta.glob("./pages/**/Puzzle*.jsx", {
   eager: true,
@@ -176,6 +177,7 @@ export default function App() {
 
   return (
     <>
+    <BackgroundMusic />
       {!isPuzzleScreen && <UserMenu />}
       {content}
     </>

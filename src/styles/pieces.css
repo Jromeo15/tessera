@@ -484,6 +484,115 @@
       -8px 7px 0 -4px rgba(255, 255, 255, 0.08);
   }
 
+  /* =========================================
+   METAL
+========================================= */
+
+.piece-style-metal .piece-cell {
+    background: var(--accent);
+  
+    /* Borde metálico gris oscuro */
+    border: 1px solid rgba(55, 55, 55, 0.95);
+  
+    border-radius: 4px;
+  
+    box-sizing: border-box;
+  
+    position: relative;
+    overflow: hidden;
+  
+    /* Volumen metálico muy sutil */
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.45),
+      inset 0 -2px 3px rgba(0, 0, 0, 0.20);
+  
+    /*
+     * Degradado metálico ligero.
+     *
+     * Además de dar algo de volumen,
+     * aquí colocamos los cuatro puntos
+     * oscuros de las esquinas.
+     */
+    background-image:
+  
+/* Punto superior izquierdo */
+radial-gradient(
+  circle at 18% 18%,
+  rgba(55, 55, 55, 0.95) 0px,
+  rgba(55, 55, 55, 0.95) 2px,
+  transparent 2.1px
+),
+
+/* Punto superior derecho */
+radial-gradient(
+  circle at 82% 18%,
+  rgba(55, 55, 55, 0.95) 0px,
+  rgba(55, 55, 55, 0.95) 2px,
+  transparent 2.1px
+),
+
+/* Punto inferior izquierdo */
+radial-gradient(
+  circle at 18% 82%,
+  rgba(55, 55, 55, 0.95) 0px,
+  rgba(55, 55, 55, 0.95) 2px,
+  transparent 2.1px
+),
+
+/* Punto inferior derecho */
+radial-gradient(
+  circle at 82% 82%,
+  rgba(55, 55, 55, 0.95) 0px,
+  rgba(55, 55, 55, 0.95) 2px,
+  transparent 2.1px
+),
+  }
+  
+  
+  /* =========================================
+     RECUADRO INTERIOR BLANCO
+  ========================================= */
+  
+  .piece-style-metal .piece-cell::before {
+    content: "";
+  
+    position: absolute;
+  
+    inset: 5px;
+  
+    border: 2px solid rgba(255, 255, 255,1);
+  
+    border-radius: 3px;
+  
+    box-sizing: border-box;
+  
+    pointer-events: none;
+  }
+  
+  
+  /* =========================================
+     DOS RAYAS BLANCAS
+     Dirección opuesta a CARTOON
+  ========================================= */
+  
+  .piece-style-metal .piece-cell::after {
+      content: "";
+    
+      position: absolute;
+    
+      width: 38%;
+      height: 3px;
+    
+      background: rgba(255, 255, 255, 1);
+    
+      left: 55%;
+      top: 66%;
+    
+      transform: rotate(-45deg);
+    
+    
+      pointer-events: none;
+  }
 
     /* CURVAS INTERIORES */
   
