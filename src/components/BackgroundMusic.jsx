@@ -9,7 +9,7 @@ export default function BackgroundMusic() {
 
     if (!audio) return;
 
-    audio.volume = 0.25;
+    audio.volume = 0.1;
     audio.loop = true;
 
     const startMusic = () => {

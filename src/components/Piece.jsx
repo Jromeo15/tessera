@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { CELL_SIZE } from "../constants";
 import { Undo, Redo } from "lucide-react";
 import "../styles/pieces.css";
+import { playPiecePlaceSound } from "../components/SoundEffects";
 
 let activePieceId = null;
 
@@ -329,8 +330,12 @@ setIsTouchingPanel(touching);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setTimeout(() => {
+    
+          playPiecePlaceSound();
+    
           onDrop?.({ col: finalCol, row: finalRow });
           forceGlobalOverlapRecalc();
+    
         }, 0);
       });
     });
