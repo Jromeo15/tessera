@@ -2044,3 +2044,68 @@ code {
 
   pointer-events: none;
 }
+
+.settingsOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.settingsModal {
+  width: 320px;
+  padding: 24px;
+
+  background: white;
+  border-radius: 12px;
+
+  box-sizing: border-box;
+}
+
+.settingsModal h3 {
+  margin-top: 0;
+}
+
+.volumeSetting {
+  margin-bottom: 20px;
+}
+
+.volumeSettingHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.volumeSetting input[type="range"] {
+  width: 100%;
+}
+
+/* =========================================
+   EXTRAS DENTRO DEL SIDEBAR
+========================================= */
+
+.extrasModal {
+  width: 360px;
+  max-width: calc(100vw - 40px);
+}
+
+.extrasModal .niveles__title_timeattack {
+  margin: 8px 0 20px;
+}
+
+.extrasModal > div {
+  width: 100%;
+}
+
+.extrasModal .home__button {
+  width: 100%;
+}
+
+.extrasModal .categoryBackBtn {
+  display: none;
+}

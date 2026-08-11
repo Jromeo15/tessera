@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import backgroundMusic from "../assets/audio/music/background.mp3";
+import { getMusicVolume } from "../lib/soundSettings";
 
 export default function BackgroundMusic() {
   const audioRef = useRef(null);
@@ -9,29 +10,38 @@ export default function BackgroundMusic() {
 
     if (!audio) return;
 
-    audio.volume = 0.1;
+    audio.volume = getMusicVolume();
     audio.loop = true;
 
+    const handleVolumeChange = (e) => {
+      audio.volume = e.detail;
+    };
+
     const startMusic = () => {
-      audio.play().catch(() => {
-        // El navegador puede bloquear el autoplay
-      });
+      audio.play().catch(() => {});
 
       document.removeEventListener("pointerdown", startMusic);
       document.removeEventListener("keydown", startMusic);
     };
 
-    // Intentamos reproducir inmediatamente
     audio.play().catch(() => {
-      // Si el navegador bloquea el autoplay,
-      // esperamos a la primera interacción del usuario.
       document.addEventListener("pointerdown", startMusic);
       document.addEventListener("keydown", startMusic);
     });
 
+    window.addEventListener(
+      "music-volume-change",
+      handleVolumeChange
+    );
+
     return () => {
       document.removeEventListener("pointerdown", startMusic);
       document.removeEventListener("keydown", startMusic);
+
+      window.removeEventListener(
+        "music-volume-change",
+        handleVolumeChange
+      );
     };
   }, []);
 
