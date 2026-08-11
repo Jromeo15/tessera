@@ -195,7 +195,7 @@ export default function UserMenu() {
                 setOpenSettings(true);
               }}
             >
-              Configuración
+              Ajustes
             </button>
 
             <button
@@ -217,7 +217,7 @@ export default function UserMenu() {
       className="settingsModal"
       onClick={(e) => e.stopPropagation()}
     >
-      <h3>Configuración</h3>
+      <h3>Ajustes</h3>
 
       <div className="volumeSetting">
         <div className="volumeSettingHeader">

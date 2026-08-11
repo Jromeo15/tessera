@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Home from "./pages/Home";
 import Levels from "./pages/Levels";
@@ -44,6 +44,16 @@ export default function App() {
   const [randomCount, setRandomCount] = useState(2);
 
   const [timeAttackConfig, setTimeAttackConfig] = useState(null);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+  
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
 
   let content = null;
 
