@@ -172,36 +172,38 @@ export default function UserMenu() {
               </div>
             </div>
 
+           {/*
             <button className="sidebarBtn">
-  Mis niveles
-</button>
+              Mis niveles
+            </button>
+            */}
 
-<button
-  className="sidebarBtn"
-  onClick={() => {
-    setOpenMenu(false);
-    setOpenExtras(true);
-  }}
->
-  Extras
-</button>
+            <button
+              className="sidebarBtn"
+              onClick={() => {
+                setOpenMenu(false);
+                setOpenExtras(true);
+              }}
+            >
+              Extras
+            </button>
 
-<button
-  className="sidebarBtn"
-  onClick={() => {
-    setOpenMenu(false);
-    setOpenSettings(true);
-  }}
->
-  Configuración
-</button>
+            <button
+              className="sidebarBtn"
+              onClick={() => {
+                setOpenMenu(false);
+                setOpenSettings(true);
+              }}
+            >
+              Configuración
+            </button>
 
-<button
-  className="sidebarBtn sidebarBtn--danger"
-  onClick={handleLogout}
->
-  Cerrar sesión
-</button>
+            <button
+              className="sidebarBtn sidebarBtn--danger"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </button>
           </div>
         </>
       )}

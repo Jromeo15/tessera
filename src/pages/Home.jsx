@@ -98,14 +98,6 @@ export default function Home({
           Clasificación
         </button>
 
-        <button
-          className="home__button"
-          onClick={onExtras}
-        >
-          <Star size={18} style={{ marginRight: 8 }} />
-          Extras
-        </button>
-
       </div>
 
       {/* POPUP RANDOM */}
