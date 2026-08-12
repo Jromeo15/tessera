@@ -22,6 +22,8 @@ import {
   COLORS_METAL,
 } from "../components/colors";
 
+import { playVictorySound } from "../components/SoundEffects";
+
 import { CELL_SIZE } from "../constants";
 
 const BOARD_COLS = 9;
@@ -49,6 +51,7 @@ export default function PuzzleLayout({
   const [hasRegistered, setHasRegistered] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
+  const [victoryParticles, setVictoryParticles] = useState([]);
   const panelRef = useRef(null);
   const [panelVisible, setPanelVisible] = useState(true);
   const [hiddenPieces, setHiddenPieces] = useState({});
@@ -221,8 +224,19 @@ initialX = baseX + row2Offset;
     );
     
     setShowVictory(win);
-    
+
     if (win) {
+      const particles = Array.from({ length: 28 }, (_, i) => ({
+        id: i,
+        x: 50 + (Math.random() - 0.5) * 70,
+        y: 48 + (Math.random() - 0.5) * 30,
+        rotation: Math.random() * 360,
+        delay: Math.random() * 0.25,
+        duration: 0.8 + Math.random() * 0.8,
+      }));
+    
+      setVictoryParticles(particles);
+    
       onVictory?.();
     }
   };
@@ -330,6 +344,8 @@ initialX = baseX + row2Offset;
   useEffect(() => {
     if (!showVictory) return;
     if (hasRegistered) return;
+
+    playVictorySound();
   
     setRunning(false);
     setHasRegistered(true);
@@ -881,20 +897,43 @@ onPointerDown={(e) => {
         </div>
       )}
       {/* MODAL VICTORIA */}
-{showVictory && (
+      {showVictory && (
   <div className="victoryOverlay">
+
+    {/* PARTÍCULAS */}
+    <div className="victoryParticles">
+      {victoryParticles.map((particle) => (
+        <span
+          key={particle.id}
+          className="victoryParticle"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            transform: `rotate(${particle.rotation}deg)`,
+            animationDelay: `${particle.delay}s`,
+            animationDuration: `${particle.duration}s`,
+          }}
+        />
+      ))}
+    </div>
+
+    {/* DESTELLO CENTRAL */}
+    <div className="victoryFlash" />
+
     <div className="victoryPopup">
 
-    <button
-  onClick={onBack}
-  className="victoryClose"
->
+      <button
+        onClick={onBack}
+        className="victoryClose"
+      >
         ×
       </button>
 
       <div className="victoryIcon">
-        {/* ✨ */}
+        ✨
       </div>
+
+      <div style={{ height: "18px" }} />
 
       <h2 className="victoryTitle">
         ¡VICTORIA!
@@ -905,9 +944,10 @@ onPointerDown={(e) => {
       <p className="victoryText">
         Has completado el puzzle correctamente
       </p>
+
       <p className="victoryTime">
-  Tiempo: {formatTime(time)}
-</p>
+        Tiempo: {formatTime(time)}
+      </p>
 
       <button
         onClick={onBack}
@@ -915,6 +955,7 @@ onPointerDown={(e) => {
       >
         Volver al menú
       </button>
+
     </div>
   </div>
 )}
