@@ -135,9 +135,15 @@ export default function App() {
   // ---------------- PUZZLE NORMAL ----------------
   else if (screen === "puzzle") {
     const Puzzle = selectedPuzzle;
-
+  
     content = (
-      <Puzzle onBack={() => setScreen("category")} />
+      <Puzzle
+        onBack={() => setScreen("category")}
+        puzzles={groupedPuzzles}
+        onNextPuzzle={(nextPuzzle) => {
+          setSelectedPuzzle(() => nextPuzzle);
+        }}
+      />
     );
   }
 

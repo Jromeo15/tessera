@@ -34,6 +34,8 @@ export default function PuzzleLayout({
   category,
   puzzleIndex,
   onBack,
+  puzzles,
+  onNextPuzzle,
   children,
   externalTimer = null,
   hideInternalTimer = false,
@@ -286,6 +288,34 @@ initialX = baseX + row2Offset;
   };
   
   const checkCellFilled = isFilled || defaultIsFilled;
+
+  const categoryPuzzles = puzzles?.[category] || [];
+
+const hasNextPuzzle = categoryPuzzles.some((puzzle) => {
+  const match = puzzle.name.match(/Puzzle(\d+)/);
+
+  return (
+    match &&
+    Number(match[1]) === puzzleIndex + 1
+  );
+});
+
+const goToNextPuzzle = () => {
+  const nextPuzzle = categoryPuzzles.find((puzzle) => {
+    const match = puzzle.name.match(/Puzzle(\d+)/);
+
+    return (
+      match &&
+      Number(match[1]) === puzzleIndex + 1
+    );
+  });
+
+  if (!nextPuzzle) {
+    return;
+  }
+
+  onNextPuzzle?.(nextPuzzle.component);
+};
 
   const registerProgress = async () => {
     if (!user) return;
@@ -949,12 +979,29 @@ onPointerDown={(e) => {
         Tiempo: {formatTime(time)}
       </p>
 
-      <button
-        onClick={onBack}
-        className="victoryButton"
-      >
-        Volver al menú
-      </button>
+      {hasNextPuzzle && (
+    <button
+      onClick={goToNextPuzzle}
+      className="victoryButton"
+      style={{
+        width: "100%",
+        marginTop: 10,
+      }}
+    >
+      Siguiente puzzle
+    </button>
+  )}
+
+  <button
+    onClick={onBack}
+    className="victoryButton"
+    style={{
+      width: "100%",
+      marginTop: 10,
+    }}
+  >
+    Volver al menú
+  </button>
 
     </div>
   </div>

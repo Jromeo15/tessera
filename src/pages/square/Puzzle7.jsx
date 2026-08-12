@@ -1,7 +1,11 @@
 import PuzzleLayout from "../../layout/PuzzleLayout";
-import { SHAPES } from "./shapes/shapes-logo";
+import { SHAPES } from "./shapes/shapes7";
 
-export default function App({ onBack }) {
+export default function App({
+  onBack,
+  puzzles,
+  onNextPuzzle,
+}) {
   return (
     <PuzzleLayout
       title="Puzzle 7"
@@ -9,6 +13,8 @@ export default function App({ onBack }) {
       puzzleIndex={7}
       shapes={SHAPES}
       onBack={onBack}
+      puzzles={puzzles}
+      onNextPuzzle={onNextPuzzle}
     />
   );
 }
