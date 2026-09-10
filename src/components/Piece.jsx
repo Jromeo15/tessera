@@ -272,20 +272,75 @@ export default function Piece({
     if (dx > 3 || dy > 3) {
       moved.current = true;
   
-      const pieceHeight = rotatedShape.length * CELL_SIZE;
+      const pieceWidth = rotatedShape[0].length;
+      const pieceHeight = rotatedShape.length;
+  
+      const boardElement = document.querySelector(".puzzleContent > div > div");
+  
+      if (!boardElement) return;
+  
+      const boardRect = boardElement.getBoundingClientRect();
+  
+      const zoomValue = zoom || 1;
+  
+      // Posición del tablero en coordenadas sin zoom.
+      const boardLeft = boardRect.left / zoomValue;
+      const boardTop = boardRect.top / zoomValue;
+  
+      // Coordenadas del dedo respecto al tablero.
+      const fingerY =
+      (clientY - boardRect.top) / zoomValue;
+    
+      // Posición deseada de la pieza dentro del tablero.
+      let col = Math.round(
+        (clientX - offset.current.x) / CELL_SIZE
+      );
+      
+      let row = Math.round(
+        (fingerY - pieceHeight * CELL_SIZE - 50) / CELL_SIZE
+      );
+  
+      // Bordes reales de la pantalla, convertidos a coordenadas del tablero.
+      const screenLeft =
+        (0 - boardRect.left) / zoomValue;
+  
+      const screenTop =
+        (0 - boardRect.top) / zoomValue;
+  
+      const screenRight =
+        (window.innerWidth - boardRect.left) / zoomValue;
+  
+      const screenBottom =
+        (window.innerHeight - boardRect.top) / zoomValue;
+  
+      const minCol = Math.ceil(
+        screenLeft / CELL_SIZE
+      );
+  
+      const minRow = Math.ceil(
+        screenTop / CELL_SIZE
+      );
+  
+      const maxCol = Math.floor(
+        (screenRight - pieceWidth * CELL_SIZE) / CELL_SIZE
+      );
+  
+      const maxRow = Math.floor(
+        (screenBottom - pieceHeight * CELL_SIZE) / CELL_SIZE
+      );
+  
+      col = Math.max(minCol, Math.min(maxCol, col));
+      row = Math.max(minRow, Math.min(maxRow, row));
   
       setGridPos({
-        col: Math.round(
-          (clientX - offset.current.x) / CELL_SIZE
-        ),
-        row: Math.round(
-          (clientY - pieceHeight - 300) / CELL_SIZE
-        ),
+        col,
+        row,
       });
   
       forceGlobalOverlapRecalc();
     }
   };
+
   const endDrag = () => {
     dragging.current = false;
     setIsDragging(false);
