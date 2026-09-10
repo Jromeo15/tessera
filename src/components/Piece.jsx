@@ -259,7 +259,7 @@ export default function Piece({
   
     offset.current = {
       x: clientX - currentX,
-      y: 450,
+      y: 0,
     };
   };
 
@@ -272,12 +272,14 @@ export default function Piece({
     if (dx > 3 || dy > 3) {
       moved.current = true;
   
+      const pieceHeight = rotatedShape.length * CELL_SIZE;
+  
       setGridPos({
         col: Math.round(
           (clientX - offset.current.x) / CELL_SIZE
         ),
         row: Math.round(
-          (clientY - offset.current.y) / CELL_SIZE
+          (clientY - pieceHeight - 100) / CELL_SIZE
         ),
       });
   
