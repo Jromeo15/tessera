@@ -230,7 +230,7 @@ export default function Piece({
       }
     }
   
-setIsTouchingPanel(touching);
+  setIsTouchingPanel(touching);
   };
 
   // -------------------------
