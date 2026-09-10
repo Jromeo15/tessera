@@ -254,7 +254,7 @@ setIsTouchingPanel(touching);
 
     offset.current = {
       x: clientX - (hasBeenMoved ? gridPos.col * CELL_SIZE : initialX),
-      y: clientY - (hasBeenMoved ? gridPos.row * CELL_SIZE : initialY),
+      y: clientY - (hasBeenMoved ? gridPos.row * CELL_SIZE : initialY) + 100,
     };
   };
 
