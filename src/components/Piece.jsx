@@ -279,7 +279,7 @@ export default function Piece({
           (clientX - offset.current.x) / CELL_SIZE
         ),
         row: Math.round(
-          (clientY - pieceHeight - 100) / CELL_SIZE
+          (clientY - pieceHeight - 300) / CELL_SIZE
         ),
       });
   
