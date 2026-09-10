@@ -240,21 +240,39 @@ export default function Piece({
     dragging.current = true;
     setIsDragging(true);
     moved.current = false;
+  
     if (!hasBeenMoved) {
       setHasBeenMoved(true);
     }
-
+  
     activePieceId = id;
     setTopPieceId?.(id);
-
+  
     start.current = {
       x: clientX,
       y: clientY,
     };
-
+  
+    // Buscar la fila más baja que contiene una celda de la pieza
+    let bottomRow = 0;
+  
+    rotatedShape.forEach((row, r) => {
+      if (row.some((cell) => cell !== 0)) {
+        bottomRow = r;
+      }
+    });
+  
+    const currentX = hasBeenMoved
+      ? gridPos.col * CELL_SIZE
+      : initialX;
+  
+    const currentY = hasBeenMoved
+      ? gridPos.row * CELL_SIZE
+      : initialY;
+  
     offset.current = {
-      x: clientX - (hasBeenMoved ? gridPos.col * CELL_SIZE : initialX),
-      y: clientY - (hasBeenMoved ? gridPos.row * CELL_SIZE : initialY) + 100,
+      x: clientX - currentX,
+      y: clientY - currentY + 50 + bottomRow * CELL_SIZE,
     };
   };
 
