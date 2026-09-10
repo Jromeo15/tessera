@@ -253,45 +253,35 @@ export default function Piece({
       y: clientY,
     };
   
-    // Buscar la fila más baja que contiene una celda de la pieza
-    let bottomRow = 0;
-  
-    rotatedShape.forEach((row, r) => {
-      if (row.some((cell) => cell !== 0)) {
-        bottomRow = r;
-      }
-    });
-  
     const currentX = hasBeenMoved
       ? gridPos.col * CELL_SIZE
       : initialX;
   
-    const currentY = hasBeenMoved
-      ? gridPos.row * CELL_SIZE
-      : initialY;
-  
     offset.current = {
       x: clientX - currentX,
-      y: clientY - currentY + 50 + bottomRow * CELL_SIZE,
+      y: 450,
     };
   };
 
   const moveDrag = (clientX, clientY) => {
     if (!dragging.current) return;
-
+  
     const dx = Math.abs(clientX - start.current.x);
     const dy = Math.abs(clientY - start.current.y);
-
+  
     if (dx > 3 || dy > 3) {
       moved.current = true;
-    
+  
       setGridPos({
-        col: Math.round((clientX - offset.current.x) / CELL_SIZE),
-        row: Math.round((clientY - offset.current.y) / CELL_SIZE),
+        col: Math.round(
+          (clientX - offset.current.x) / CELL_SIZE
+        ),
+        row: Math.round(
+          (clientY - offset.current.y) / CELL_SIZE
+        ),
       });
-
-    forceGlobalOverlapRecalc();
-      
+  
+      forceGlobalOverlapRecalc();
     }
   };
   const endDrag = () => {
