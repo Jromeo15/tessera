@@ -130,6 +130,7 @@ export default function Piece({
   }));
 
   const [rot, setRot] = useState(0);
+  const touchingBoardAtStart = useRef(false);
   const [showRotateButtons, setShowRotateButtons] = useState(false);
   const [isOverlapping, setIsOverlapping] = useState(false);
   const initialGridRef = useRef({
@@ -144,6 +145,8 @@ export default function Piece({
 
   const offset = useRef({ x: 0, y: 0 });
   const start = useRef({ x: 0, y: 0 });
+  const moveDragRef = useRef(null);
+  const endDragRef = useRef(null);
   const [isTouchingPanel, setIsTouchingPanel] = useState(true);
   const [hasBeenMoved, setHasBeenMoved] = useState(false);
 
@@ -257,10 +260,49 @@ export default function Piece({
       ? gridPos.col * CELL_SIZE
       : initialX;
   
-    offset.current = {
-      x: clientX - currentX,
-      y: 0,
-    };
+      offset.current = {
+        x: clientX - currentX,
+        y: clientY - (
+          hasBeenMoved
+            ? gridPos.row * CELL_SIZE
+            : initialY
+        ),
+      };
+  
+    // Comprobar si la pieza TOCABA el board antes de empezar a moverla.
+    const boardElement = document.querySelector(
+      ".puzzleContent > div > div"
+    );
+  
+    const myCells = document.querySelectorAll(
+      `.piece-${id} .piece-cell`
+    );
+  
+    if (!boardElement || !myCells.length) {
+      touchingBoardAtStart.current = false;
+      return;
+    }
+  
+    const boardRect = boardElement.getBoundingClientRect();
+  
+    touchingBoardAtStart.current = false;
+  
+    for (const cell of myCells) {
+      const rect = cell.getBoundingClientRect();
+  
+      const intersect =
+        !(
+          rect.right <= boardRect.left ||
+          rect.left >= boardRect.right ||
+          rect.bottom <= boardRect.top ||
+          rect.top >= boardRect.bottom
+        );
+  
+      if (intersect) {
+        touchingBoardAtStart.current = true;
+        break;
+      }
+    }
   };
 
   const moveDrag = (clientX, clientY) => {
@@ -272,10 +314,64 @@ export default function Piece({
     if (dx > 3 || dy > 3) {
       moved.current = true;
   
+      let col;
+      let row;
+  
+      if (touchingBoardAtStart.current) {
+        // =========================================
+        // LA PIEZA YA TOCABA EL BOARD AL EMPEZAR
+        // =========================================
+  
+        col = Math.round(
+          (clientX - offset.current.x) / CELL_SIZE
+        );
+  
+        row = Math.round(
+          (clientY - offset.current.y) / CELL_SIZE
+        );
+  
+      } else {
+        // =========================================
+        // LA PIEZA NO TOCABA EL BOARD AL EMPEZAR
+        // =========================================
+  
+        const pieceHeight = rotatedShape.length;
+  
+        const boardElement = document.querySelector(
+          ".puzzleContent > div > div"
+        );
+  
+        if (!boardElement) return;
+  
+        const boardRect = boardElement.getBoundingClientRect();
+  
+        const zoomValue = zoom || 1;
+  
+        const fingerY =
+          (clientY - boardRect.top) / zoomValue;
+  
+        col = Math.round(
+          (clientX - offset.current.x) / CELL_SIZE
+        );
+  
+        const verticalOffset = 50;
+  
+        row = Math.round(
+          (fingerY - pieceHeight * CELL_SIZE - verticalOffset) /
+            CELL_SIZE
+        );
+      }
+  
+      // =========================================
+      // LIMITAR LA PIEZA A LA PANTALLA
+      // =========================================
+  
       const pieceWidth = rotatedShape[0].length;
       const pieceHeight = rotatedShape.length;
   
-      const boardElement = document.querySelector(".puzzleContent > div > div");
+      const boardElement = document.querySelector(
+        ".puzzleContent > div > div"
+      );
   
       if (!boardElement) return;
   
@@ -283,24 +379,6 @@ export default function Piece({
   
       const zoomValue = zoom || 1;
   
-      // Posición del tablero en coordenadas sin zoom.
-      const boardLeft = boardRect.left / zoomValue;
-      const boardTop = boardRect.top / zoomValue;
-  
-      // Coordenadas del dedo respecto al tablero.
-      const fingerY =
-      (clientY - boardRect.top) / zoomValue;
-    
-      // Posición deseada de la pieza dentro del tablero.
-      let col = Math.round(
-        (clientX - offset.current.x) / CELL_SIZE
-      );
-      
-      let row = Math.round(
-        (fingerY - pieceHeight * CELL_SIZE - 50) / CELL_SIZE
-      );
-  
-      // Bordes reales de la pantalla, convertidos a coordenadas del tablero.
       const screenLeft =
         (0 - boardRect.left) / zoomValue;
   
@@ -332,12 +410,17 @@ export default function Piece({
       col = Math.max(minCol, Math.min(maxCol, col));
       row = Math.max(minRow, Math.min(maxRow, row));
   
-      setGridPos({
-        col,
-        row,
-      });
-  
-      forceGlobalOverlapRecalc();
+      if (
+        col !== gridPos.col ||
+        row !== gridPos.row
+      ) {
+        setGridPos({
+          col,
+          row,
+        });
+      
+        forceGlobalOverlapRecalc();
+      }
     }
   };
 
@@ -405,6 +488,9 @@ export default function Piece({
       });
     });
   };
+
+  moveDragRef.current = moveDrag;
+  endDragRef.current = endDrag;
 
   const onMouseDown = (e) => {
     const cell = getCellFromPoint(e.clientX, e.clientY);
@@ -474,28 +560,32 @@ export default function Piece({
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      moveDrag(e.clientX, e.clientY);
+      moveDragRef.current?.(e.clientX, e.clientY);
     };
-
+  
     const handleTouchMove = (e) => {
       const t = e.touches[0];
-
-      moveDrag(t.clientX, t.clientY);
+      moveDragRef.current?.(t.clientX, t.clientY);
     };
-
-    const handleMouseUp = () => endDrag();
-    const handleTouchEnd = () => endDrag();
-
+  
+    const handleMouseUp = () => {
+      endDragRef.current?.();
+    };
+  
+    const handleTouchEnd = () => {
+      endDragRef.current?.();
+    };
+  
     window.addEventListener(
       "mousemove",
       handleMouseMove
     );
-
+  
     window.addEventListener(
       "mouseup",
       handleMouseUp
     );
-
+  
     window.addEventListener(
       "touchmove",
       handleTouchMove,
@@ -503,34 +593,34 @@ export default function Piece({
         passive: false,
       }
     );
-
+  
     window.addEventListener(
       "touchend",
       handleTouchEnd
     );
-
+  
     return () => {
       window.removeEventListener(
         "mousemove",
         handleMouseMove
       );
-
+  
       window.removeEventListener(
         "mouseup",
         handleMouseUp
       );
-
+  
       window.removeEventListener(
         "touchmove",
         handleTouchMove
       );
-
+  
       window.removeEventListener(
         "touchend",
         handleTouchEnd
       );
     };
-  }, [gridPos, rot]);
+  }, []);
 
 
   useEffect(() => {
@@ -552,34 +642,25 @@ export default function Piece({
   }, [showRotateButtons, id]);
 
   useEffect(() => {
-    let raf;
-  
     const update = () => {
-      cancelAnimationFrame(raf);
-  
-      raf = requestAnimationFrame(() => {
-        setIsOverlapping(checkOverlap());
-      });
+      setIsOverlapping(checkOverlap());
     };
   
     window.addEventListener("global-overlap", update);
   
     return () => {
       window.removeEventListener("global-overlap", update);
-      cancelAnimationFrame(raf);
     };
   }, []);
 
   useEffect(() => {
-    updatePanelTouch();
-  
-    requestAnimationFrame(() => {
+    const raf = requestAnimationFrame(() => {
       updatePanelTouch();
     });
   
-    setTimeout(() => {
-      updatePanelTouch();
-    }, 50);
+    return () => {
+      cancelAnimationFrame(raf);
+    };
   }, [gridPos, rot]);
 
   useEffect(() => {

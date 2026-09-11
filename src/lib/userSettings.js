@@ -12,7 +12,5 @@ export async function getUserPieceStyle(userId) {
     return "basic";
   }
 
-  console.log("USER SETTINGS:", { userId, data });
-
   return data?.piece_style ?? "basic";
 }

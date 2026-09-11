@@ -39,7 +39,6 @@ export async function getBestTimeAttackScore(
     .eq("user_id", userId)
     .order("score", { ascending: false });
 
-  console.log("RAW DATA:", data);
   console.log("ERROR:", error);
 
   return {

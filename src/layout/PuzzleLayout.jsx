@@ -411,7 +411,6 @@ const goToNextPuzzle = () => {
   
     const loadPieceStyle = async () => {
       const style = await getUserPieceStyle(user.id);
-      console.log("PIECE STYLE EN LAYOUT:", style);
       setPieceStyle(style);
     };
   
