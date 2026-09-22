@@ -1,5 +1,5 @@
 import PuzzleLayout from "../../layout/PuzzleLayout";
-import { SHAPES } from "./shapes/shapes5";
+import { SHAPES, HINT } from "./shapes/shapes5";
 
 export default function App({
   onBack,
@@ -12,6 +12,7 @@ export default function App({
       category="square"
       puzzleIndex={5}
       shapes={SHAPES}
+      hint={HINT}
       onBack={onBack}
       puzzles={puzzles}
       onNextPuzzle={onNextPuzzle}

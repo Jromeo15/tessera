@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   ZoomIn,
   ZoomOut,
+  KeyRound,
 } from "lucide-react";
 
 import { supabase } from "../lib/supabaseClient";
@@ -41,6 +42,7 @@ export default function PuzzleLayout({
   hideInternalTimer = false,
   isFilled,
   shapes,
+  hint,
   pieceProps = {},
   onVictory,
 }) {
@@ -62,6 +64,7 @@ export default function PuzzleLayout({
   const [disappearingPieces, setDisappearingPieces] = useState({});
   const [topPieceId, setTopPieceId] = useState(null);
   const [refreshPieces, setRefreshPieces] = useState(0);
+  const [hintIndex, setHintIndex] = useState(0);
   const [piecesReady, setPiecesReady] = useState(false);
   const [pieceStyle, setPieceStyle] = useState(null);
 
@@ -276,7 +279,7 @@ initialX = baseX + row2Offset;
       return false;
     }
   
-    if (parts.includes("1")) {
+    if (parts.includes(1) || parts.includes("1")) {
       return true;
     }
   
@@ -284,10 +287,41 @@ initialX = baseX + row2Offset;
       return false;
     }
   
-    return compatiblePairs[parts[0]] === parts[1];
+    const first = String(parts[0]);
+    const second = String(parts[1]);
+  
+    return compatiblePairs[first] === second;
   };
   
   const checkCellFilled = isFilled || defaultIsFilled;
+
+// PuzzleLayout.jsx
+const placeLargestPiece = () => {
+  if (!hint || hint.length === 0) {
+    return;
+  }
+
+  const placement = hint[hintIndex];
+
+  if (!placement) {
+    return;
+  }
+
+  window.dispatchEvent(
+    new CustomEvent("place-piece", {
+      detail: {
+        id: placement.id,
+        row: placement.row,
+        col: placement.col,
+        rot: placement.rot,
+      },
+    })
+  );
+
+  setHintIndex((current) =>
+    Math.min(current + 1, hint.length)
+  );
+};
 
   const categoryPuzzles = puzzles?.[category] || [];
 
@@ -548,6 +582,28 @@ const goToNextPuzzle = () => {
     zIndex: 50,
   }}
 >
+
+<button
+    onClick={placeLargestPiece}
+    style={{
+      width: 42,
+      height: 42,
+      borderRadius: 12,
+      border: "1px solid rgba(255,255,255,0.15)",
+      background: "#3aafe0",
+      backdropFilter: "blur(12px)",
+      boxShadow:
+        "0 8px 20px rgba(0,157,255,0.45), inset 0 1px 0 rgba(255,255,255,0.2)",
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "#ffffff",
+      transition: "all 0.2s ease",
+    }}
+  >
+    <KeyRound size={18} strokeWidth={2.5} />
+  </button>
   {/*
 <button
   onClick={zoomOut}

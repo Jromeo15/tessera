@@ -3,19 +3,20 @@ import { supabase } from "./supabaseClient";
 export async function getDailyPuzzle(id) {
   const { data, error } = await supabase
     .from("daily_puzzles")
-    .select("shapes")
+    .select("shapes, hint")
     .eq("id", id)
     .maybeSingle();
 
   return { data, error };
 }
 
-export async function createDailyPuzzle(id, shapes) {
+export async function createDailyPuzzle(id, shapes, hint) {
   const { data, error } = await supabase
     .from("daily_puzzles")
     .insert({
       id,
       shapes,
+      hint,
     })
     .select()
     .single();
@@ -38,6 +39,5 @@ export async function setDailyCompleted(userId, puzzleId) {
     .select();
 
   console.log(error);
-
   return { data, error };
 }

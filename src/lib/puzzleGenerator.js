@@ -229,21 +229,20 @@ const generatePieces = (count) => {
   return pieces.map((p) => {
     const minR = Math.min(...p.cells.map(([r]) => r));
     const minC = Math.min(...p.cells.map(([, c]) => c));
-
     const maxR = Math.max(...p.cells.map(([r]) => r));
     const maxC = Math.max(...p.cells.map(([, c]) => c));
-
+    
     const shape = Array.from(
       { length: maxR - minR + 1 },
       () => Array(maxC - minC + 1).fill(0)
     );
-
+    
     p.cells.forEach(([r, c]) => {
       shape[r - minR][c - minC] = 1;
     });
-
+    
     let rotatedShape = shape;
-
+    
     // 0, 1, 2 o 3 rotaciones (0º, 90º, 180º, 270º)
     const rotations = Math.floor(Math.random() * 4);
     
@@ -251,11 +250,19 @@ const generatePieces = (count) => {
       rotatedShape = rotateMatrix(rotatedShape);
     }
     
+    // Rotación necesaria para devolver la pieza a su orientación original.
+    const hintRot = (4 - rotations) % 4;
+    
     return {
       id: p.id,
       color: p.color,
       shape: rotatedShape,
       shapeMode: "square",
+      hint: {
+        row: minR,
+        col: minC,
+        rot: hintRot,
+      },
     };
   });
 };

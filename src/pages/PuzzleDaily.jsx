@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef } from "react";
+
 import { createPortal } from "react-dom";
 
 import { CELL_SIZE } from "../constants";
+
 import PuzzleLayout from "../layout/PuzzleLayout";
 
 import {
-    getDailyPuzzle,
-    createDailyPuzzle,
-    setDailyCompleted,
-  } from "../lib/dailyPuzzle";
-  
+  getDailyPuzzle,
+  createDailyPuzzle,
+  setDailyCompleted,
+} from "../lib/dailyPuzzle";
+
 import { useAuth } from "../context/AuthContext";
 
 import { generatePieces } from "../lib/puzzleGenerator";
@@ -37,35 +39,28 @@ const COLORS = [
 ];
 
 function getTodayId() {
-    const d = new Date();
-  
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-  
-    return `${year}${month}${day}`;
-  }
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+
+  return `${year}${month}${day}`;
+}
 
 export default function PuzzleDaily({ onBack }) {
-
   const { user } = useAuth();
 
   const [pieces, setPieces] = useState([]);
-
+  const [hints, setHints] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [resetKey, setResetKey] = useState(0);
-
   const [time, setTime] = useState(0);
-
   const [finished, setFinished] = useState(false);
 
   const solvedRef = useRef(false);
 
   useEffect(() => {
-
     async function loadPuzzle() {
-
       const today = getTodayId();
 
       const { data, error } = await getDailyPuzzle(today);
@@ -73,103 +68,103 @@ export default function PuzzleDaily({ onBack }) {
       console.log("ID buscado:", today);
       console.log("DATA:", data);
       console.log("ERROR:", error);
-      
+
       if (error) {
         console.error(error);
         return;
       }
-      
+
       let shapes;
-      
+      let dailyHints;
+
       if (data) {
-      
         // Ya existe el puzzle diario
         shapes = data.shapes;
-      
+        dailyHints = data.hint || [];
       } else {
-      
         // No existe -> lo generamos
-      
         const piecesCount =
           Math.floor(Math.random() * 3) + 8;
-      
+
         const generatedPieces =
           generatePieces(piecesCount);
-      
+
         shapes = generatedPieces.map(
           (p) => p.shape
         );
-      
+
+        // Cogemos 3 hints de las piezas generadas
+        dailyHints = generatedPieces
+          .slice(0, 3)
+          .map((p) => ({
+            id: p.id,
+            row: p.hint.row,
+            col: p.hint.col,
+            rot: p.hint.rot,
+          }));
+
         const { error: insertError } =
-        await createDailyPuzzle(
-          today,
-          shapes
-        );
-      
-      if (insertError) {
-      
-        if (insertError.code === "23505") {
-      
-          // Otro cliente (o el segundo useEffect de React)
-          // ya lo ha creado. Lo volvemos a leer.
-      
-          const { data } = await getDailyPuzzle(today);
-      
-          if (!data) {
-            console.error("No se pudo recuperar el puzle.");
+          await createDailyPuzzle(
+            today,
+            shapes,
+            dailyHints
+          );
+
+        if (insertError) {
+          if (insertError.code === "23505") {
+            // Otro cliente ya lo ha creado.
+            // Lo volvemos a leer.
+            const { data } =
+              await getDailyPuzzle(today);
+
+            if (!data) {
+              console.error(
+                "No se pudo recuperar el puzle."
+              );
+              return;
+            }
+
+            shapes = data.shapes;
+            dailyHints = data.hint || [];
+          } else {
+            console.error(insertError);
             return;
           }
-      
-          shapes = data.shapes;
-      
-        } else {
-      
-          console.error(insertError);
-          return;
-      
         }
       }
-      }
-      
-      const loadedPieces = shapes.map((shape, index) => ({
-        id: index + 1,
-        color: COLORS[index % COLORS.length],
-        shape,
-      }));
+
+      const loadedPieces = shapes.map(
+        (shape, index) => ({
+          id: index + 1,
+          color: COLORS[index % COLORS.length],
+          shape,
+        })
+      );
 
       setPieces(loadedPieces);
-
+      setHints(dailyHints);
       setLoading(false);
     }
 
     loadPuzzle();
-
   }, []);
 
   useEffect(() => {
-
     if (loading) return;
-
     if (finished) return;
 
     const interval = setInterval(() => {
-
       setTime((t) => t + 1);
-
     }, 1000);
 
     return () => clearInterval(interval);
-
   }, [loading, finished]);
 
   const formatTime = (t) => {
-
     const min = Math.floor(t / 60);
-
     const sec = t % 60;
 
     return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-
   };
 
   const reset = () => {
@@ -210,25 +205,29 @@ export default function PuzzleDaily({ onBack }) {
         showVictory={finished}
         onCloseVictory={() => {}}
         shapes={pieces.map((p) => p.shape)}
+        hint={hints}
         onVictory={async () => {
+          console.log("ON VICTORY DAILY");
 
-            console.log("ON VICTORY DAILY");
-            if (solvedRef.current) return;
-          
-            solvedRef.current = true;
-          
-            if (user) {
-               console.log("user id dentro", user.id);
-               
-               const today = getTodayId();
+          if (solvedRef.current) return;
 
-               await setDailyCompleted(user.id, today);
-            } else{
-                console.log("No hay user");
-            }
-          
-            setFinished(true);
-          }}
+          solvedRef.current = true;
+
+          if (user) {
+            console.log("user id dentro", user.id);
+
+            const today = getTodayId();
+
+            await setDailyCompleted(
+              user.id,
+              today
+            );
+          } else {
+            console.log("No hay user");
+          }
+
+          setFinished(true);
+        }}
       />
 
       {createPortal(

@@ -34,4 +34,24 @@ export const SHAPES = [
       [1,1,1,1,1,1],
     ],
   ];
-  
+
+export const HINT = [
+    {
+      id: 1,
+      row: 0,
+      col: 0,
+      rot: 0,
+    },
+    {
+      id: 2,
+      row: 0,
+      col: 0,
+      rot: 2,
+    },
+    {
+      id: 3,
+      row: 2,
+      col: 2,
+      rot: 1,
+    },
+];

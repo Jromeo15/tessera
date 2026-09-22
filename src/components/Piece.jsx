@@ -670,6 +670,37 @@ export default function Piece({
 
   useEffect(() => {
     const handler = (e) => {
+      if (e.detail?.id !== id) return;
+
+      setGridPos({
+        col: e.detail.col,
+        row: e.detail.row,
+      });
+
+      setRot(e.detail.rot);
+
+      setHasBeenMoved(true);
+      setIsTouchingPanel(false);
+      setShowRotateButtons(false);
+      setTopPieceId?.(id);
+
+      requestAnimationFrame(() => {
+        forceGlobalOverlapRecalc();
+      });
+    };
+
+    window.addEventListener("place-piece", handler);
+
+    return () => {
+      window.removeEventListener(
+        "place-piece",
+        handler
+      );
+    };
+  }, [id, setTopPieceId]);
+
+  useEffect(() => {
+    const handler = (e) => {
       if (e.detail !== id) return;
   
       setGridPos({

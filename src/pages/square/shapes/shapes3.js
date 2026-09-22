@@ -47,4 +47,8 @@ export const SHAPES = [
       [1,1,1,0,0,0,0,0],
     ],
   ];
-  
+  export const HINT = [
+    { id: 5, row: 0, col: 0, rot: 2 },
+    { id: 3, row: 0, col: 4, rot: 3 },
+    { id: 1, row: 5, col: 0, rot: 1 },
+  ];
